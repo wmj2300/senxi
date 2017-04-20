@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>我的钱包</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<script src="js/const.js"></script>
+		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script>
+			mui.init();
+		</script>
+			
+		<style>
+			.purse_img img{
+				width: 112px;
+				height: 112px;
+			}
+			#btn_recharge{
+				margin: 46px auto;
+				text-align: center;
+			}
+			#btn_recharge button{
+				background-image:-webkit-linear-gradient(top, #ffd900 0%, #ffb100 100%);
+				border-radius:4px;
+				width:80%;
+				height:50px;
+				font-size: 18px;
+			}
+			.recharge_des{
+				position: fixed;
+				bottom: 0px;
+				margin: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>我的钱包</b></h1>
+			<a id="btn_add_address" class="mui-btn mui-btn-link mui-pull-right goto-page" style="color: white;" data-href="view_0016_purselog.html">余额明细</a>
+		</header>
+		<div class="mui-content">
+			<div class="purse_img" style="width: 90%;text-align: center;margin: 20px auto;margin-bottom: 26px;">
+				<img src="images/purse_chongzhi.png"/>
+			</div>
+			<div style="text-align: center;">
+				<span>我的余额</span>
+				<div id="balance_num" style="font-size:32px;color:#4a4a4a;margin-top: 15px;">...</div>
+			</div>
+			<div id="btn_recharge" class="goto-page" data-href="view_0016_purse_recharge.html">
+				<button class="mui-btn mui-btn-warning">充值</button>
+			</div>
+			<div class="recharge_des">
+				<img src="images/purse_recharge_des.png" style="float: left;width: 46px;height: 46px;"/>
+				<div style="margin-left: 70px;font-size:14px;color:#4a4a4a;">
+					<div>一次性充值满<span id="vip_num">5000</span>元，开通VIP会员</div>
+					<div>自营区商品八折优惠</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>
+<script>
+	function gotoPage(url){
+		mui.openWindow({
+		    url:url,
+		    id:url,
+		    show:{
+		      aniShow:'pop-in'
+		    }
+		});
+	}
+	mui.plusReady(function(){
+		view=plus.webview.currentWebview();
+		view.addEventListener("show", function(e){
+			getPurseMoney();
+//			getVipLimit();
+		    console.log( "Webview Showed："+view.id );
+		    mui.preload({
+				url:'view_0016_purselog.html',
+				id:'view_0016_purselog.html'
+			});
+			 mui.preload({
+				url:'view_0016_purse_recharge.html',
+				id:'view_0016_purse_recharge.html'
+			});
+		}, false);
+		mui("body").on('tap','.goto-page',function(){
+            var href = this.getAttribute('data-href');
+            gotoPage(href);
+       });
+	});
+	
+	function getPurseMoney(){
+			var authToken = plus.storage.getItem('authToken');
+           
+            mui.ajax(SERVER_HOST+'user/info',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						parseData(data);
+//						parseData_Vip(data.data)
+					}else{
+						plus.ui.toast(data.msg);
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	function parseData(data){
+		document.getElementById("balance_num").innerText='￥'+parseFloat(data.data.balance).toFixed(2);
+	}
+	
+//	function getVipLimit(){
+//			var authToken = plus.storage.getItem('authToken');
+//         
+//          mui.ajax(SERVER_HOST+'user/info',{
+//				data:{
+//					time:TIME,
+//					token:TOKEN,
+//					authToken:authToken
+//				},
+//				dataType:'json',//服务器返回json格式数据
+//				type:'post',//HTTP请求类型
+//				timeout:10000,//超时时间设置为5秒；
+//				success:function(data){
+//					console.log(JSON.stringify(data));
+//					if(data.status==1){
+//						parseData_Vip(data);
+//					}else{
+//						plus.ui.toast(data.msg);
+//					}
+//				},
+//				error:function(xhr,type,errorThrown){
+//					plus.ui.toast("网络请求超时");
+//				}
+//			});
+//	}
+	
+//	function parseData_Vip(data){
+//		document.getElementById("vip_num").innerText=parseFloat(data.money/100).toFixed(2);
+//	}
+</script>
+<script src="js/immersed.js"></script>

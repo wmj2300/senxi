@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/icons-extra.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+
+		<script>
+			mui.init();
+		</script>
+		<style>
+			
+			.mui-content {
+				background-color: white;
+			}
+			
+			a:hover {
+				text-decoration: none;
+			}
+			
+			.good_detail {
+				margin-left: 100px;
+			}
+			
+			.good_img {
+				width: 88px;
+				height: 88px;
+				float: left;
+			}
+			
+			.good_name {
+				font-size: 14px;
+				color: #4a4a4a;
+			}
+			
+			.good_standard_des {
+				margin-top: 5px;
+			}
+			
+			.good_price {
+				margin-top: 5px;
+				color: #ffb100;
+				font-size: 14px;
+			}
+			
+			.good_rest_text{
+				font-size: 12px;
+				color: #9b9b9b;
+				vertical-align: middle;
+			}
+			
+			.good_rest img{
+				width:35px;
+				height:16px;
+				margin-left: 10px;
+				vertical-align: middle;
+			}
+			
+			.btn_select {
+				border: 0px;
+			}
+			
+			.btn_select:enabled:active {
+				background-color: wheat;
+			}
+			
+			.list_null {
+				font-size: 14px;
+				color: rgba(0, 0, 0, 0.48);
+				text-align: center;
+				background-color: transparent;
+			}
+			.mui-pull-bottom-tips{
+				display: none;
+			}
+			
+			.good_item{
+				min-height: 108px;
+				margin-top: 10px;
+				border-bottom: 1px solid #F6F6F6;
+			}
+	
+			#search_way{
+				position: relative;
+				top: 44px;
+				z-index: 99;
+				background: white;
+				border-bottom: 1px solid #F6F6F6;
+			}
+			#goods_list{
+				padding: 15px;
+				padding-top: 44px;
+			}
+			.search_div {
+				background: #ffffff;
+				border-radius: 6px;
+				width: 68%;
+				height: 29px;
+				margin: 6px 0;
+				float: left;
+				position:relative;
+			}
+			
+			#search_input {
+				background: url(images/search.png) no-repeat 10px;
+				padding-left: 30px;
+				border: 0px;
+				font-size:14px;
+				position: absolute;  
+            	top: 0; left: 0; bottom: 0; right: 0; 
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<!--侧滑菜单容器-->
+		<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable mui-slide-in">
+			<!--菜单部分-->
+			<aside id="offCanvasSide" class="mui-off-canvas-right" style="background-color: white;">
+				<div id="offCanvasSideScroll" class="mui-scroll-wrapper" style="padding: 10px;margin-right: 100px;">
+					<div class="mui-scroll">
+						<div class="mui-row menu_title">
+							<button id="btn_screen_cancel" class="mui-col-xs-4 mui-col-sm-4 mui-btn-link" style="color: #9D9D9D;">取消</button>
+							<span class="mui-col-xs-4 mui-col-sm-4"  style="text-align: center;">筛选</span>
+							<button id="btn_screen_ok" class="mui-col-xs-4 mui-col-sm-4 mui-btn-link" style="color: #019757;">完成</button>
+						</div>
+						<br/>
+						<div class="menu_price">
+							<p>价位</p>
+							<div>
+								<input id="price_low" type="number" placeholder="最低价" style="width: 40%;" /> ~
+								<input id="price_high" type="number" placeholder="最高价" style="width: 40%;" />
+							</div>
+						</div>
+						<div class="menu_type">
+							<p>分类</p>
+							<div class="mui-content mui-card">
+								<ul id="goods_catalog_list" class="mui-table-view">
+									<div class="list_null">加载中...</div>
+									<!--<li class="mui-table-view-cell mui-collapse">
+										<a class="mui-navigate-right">水果</a>
+										<ul class="mui-table-view mui-table-view-chevron">
+											<li class="mui-table-view-cell">
+												苹果
+											</li>
+											<li class="mui-table-view-cell">
+												梨子
+											</li>
+										</ul>
+									</li>-->
+								</ul>
+								
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</aside>
+			<div class="mui-inner-wrap">
+				<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;width: 12%;margin-right:0px"></a>
+					<div class="search_div">
+						<input id="search_input" readonly="readonly"/>
+					</div>
+					<button id="btn_search" class="mui-pull-right mui-btn-nav mui-btn mui-btn-warning" style="color: white;width: 20%;padding-top: 5px;padding-bottom: 5px;"><b>搜索</b></button>
+				</header>
+				<div id="search_way" class="mui-row">
+							<button id="is_official" type="button" class="btn_select mui-col-sm-3 mui-col-xs-3 mui-icon" style="padding: 10px;font-size: 14px;">
+								<img id="is_official_img" src="images/ziying_img.png" style="width: 22px;height: 22px;margin-right: 10px;vertical-align: middle;"/>
+								<span style="vertical-align: middle;">自营</span>
+							</button>
+							<button id="sales" type="button" class="btn_select mui-col-sm-3 mui-col-xs-3 mui-icon mui-icon-arrowdown mui-right" style="padding: 14px;font-size: 14px;">按销量</button>
+							<button id="price" type="button" class="btn_select mui-col-sm-3 mui-col-xs-3 mui-icon mui-icon-arrowdown mui-right" style="padding: 14px;font-size: 14px;border-right: 1px solid #F6F6F6;">按价格</button>
+							<button id="offCanvasShow" type="button" class="btn_select mui-col-sm-3 mui-col-xs-3 mui-icon mui-icon-extra mui-icon-extra-filter mui-right" style="padding: 12px;font-size: 14px;">筛选</button>
+				</div>
+				<div id="offCanvasContentScroll" class="mui-content mui-scroll-wrapper">
+					
+					<div id="goods_list" class="mui-scroll">
+								<!--<div class="good_item" shop_id="11" good_id="1122">
+									<img class="good_img" src="img_tmp/favorites_good_pic1.png"/>
+									<div class="good_detail">
+										<div class='good_name'>德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</div>
+										<div class='good_price'>￥119.00</div>
+										<div class='good_rest'>
+											<span class='good_rest_text'>库存：99件</span>
+											<img src="images/ziying_kuang.png" />
+										</div>
+									</div>
+								</div>
+								<div class="good_item" shop_id="11" good_id="1122">
+									<img class="good_img" src="img_tmp/favorites_good_pic1.png"/>
+									<div class="good_detail">
+										<div class='good_name'>德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</div>
+										<div class='good_price'>￥119.00</div>
+										<div class='good_rest'>
+											<span class='good_rest_text'>库存：99件</span>
+										</div>
+									</div>
+								</div>-->
+					</div>
+				</div>
+				<!-- off-canvas backdrop -->
+				<div class="mui-off-canvas-backdrop"></div>
+			</div>
+		</div>
+	</body>
+
+</html>
+
+<script>
+	
+	var tmp_is_official=null;
+	var tmp_cat_id=null;
+	var tmp_url=null;
+	
+	var page = 1;
+	var amount = 5;
+	var total=0;
+	var is_official = -1;
+	var multi_search = '0';
+	
+	var cat_id='';
+	
+	document.getElementById('goods_list').addEventListener('scrollbottom',function(){
+		
+		if(page*amount<total){
+			page++;
+			getSearchGoods(tmp_is_official,tmp_cat_id,tmp_url,true);
+		}
+	});
+			
+	function gotoPage(url) {
+		mui.openWindow({
+			url: url,
+			id: url,
+			show: {
+				aniShow: 'pop-in'
+			}
+		});
+	}
+	
+	
+	document.getElementById("btn_search").addEventListener('tap', function() {
+			console.log(document.getElementById("search_input").value);
+			document.getElementById('price_high').value='';
+			document.getElementById('price_low').value='';
+			if(multi_search=='1'){
+				getSearchGoods(is_official,cat_id,'goods/goods-lists');
+			}else{
+				getSearchGoods(is_official,cat_id,null);
+			}
+	});                 //head搜索框
+
+	mui.plusReady(function() {
+
+		view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+			mui.preload({
+				url: 'view_0003_good_detail.html',
+				id: 'view_0003_good_detail.html'
+			});
+			mui.preload({
+				url: 'view_0003_good_detail_groupbuy.html',
+				id: 'view_0003_good_detail_groupbuy.html'
+			});
+//			multi_search=plus.storage.getItem('multi_search');
+//			if(multi_search=='1'){
+//				
+//			}else{
+//				multi_search='0';
+//			}
+		}, false);
+
+		mui("body").on('tap', '.good_item', function() {
+			var good_id = this.getAttribute('good_id');
+			var shop_id = this.getAttribute('shop_id');
+			var good_detail = plus.webview.getWebviewById('view_0003_good_detail.html');
+			if('1'==multi_search){
+				good_detail = plus.webview.getWebviewById('view_0003_good_detail_groupbuy.html');
+			}
+			mui.fire(good_detail, 'refreshData', {
+				good_id: good_id,
+				shop_id: shop_id
+			});
+			good_detail.show('pop-in');
+		});
+		
+		mui("body").on('tap', '.good_cat_two', function() {
+			var cat_id = this.getAttribute('cat_id');
+			offCanvasWrapper.offCanvas('close');
+			getSearchGoods(tmp_is_official,cat_id,tmp_url);
+		});
+
+		document.addEventListener('searchGoods', function(e) {
+			var keywords = e.detail.keywords;
+			if(null==keywords){
+				keywords="";
+			}
+			document.getElementById("search_input").value =keywords;
+			document.getElementById('price_high').value='';
+			document.getElementById('price_low').value='';
+			if(null==e.detail.cat_id){
+				cat_id='';
+			}else{
+				cat_id  = e.detail.cat_id;
+			}
+			if(null==e.detail.multi_search){
+				multi_search='0';
+			}
+			console.log(e.detail.multi_search)
+			multi_search = 	e.detail.multi_search		
+//			multi_search=plus.storage.getItem('multi_search');
+			if(multi_search=='1'){
+				getSearchGoods(is_official,cat_id,'goods/goods-lists');
+			}else{
+				getSearchGoods(is_official,cat_id,null);
+			}
+		});
+		
+		document.addEventListener('searchGoodsByAd', function(e) {
+			var  aid  = e.detail.aid;
+			getSearchGoods(is_official,cat_id,null,'','',aid);
+		})
+
+		
+
+		document.getElementById("search_input").addEventListener('tap', function() {
+			document.getElementById("search_input").value = '';
+			gotoPage('view_0001_search.html');
+//			var searchPage = plus.webview.getWebviewById('view_0001_search.html');
+//			mui.fire(searchPage, 'setsearch_input', {
+//				search_input: document.getElementById("search_input").value
+//			});
+//			document.getElementById("search_input").value = '';
+//			setTimeout(function() {
+//				searchPage.show('pop-in');
+//			}, 100);
+
+		});
+		document.getElementById('offCanvasShow').addEventListener('tap', function() {
+			offCanvasWrapper.offCanvas('show');
+			getGoodsCatalogList();
+		});
+		document.getElementById('btn_screen_cancel').addEventListener('tap', function() {
+			offCanvasWrapper.offCanvas('close');
+		});
+		document.getElementById('btn_screen_ok').addEventListener('tap', function() {
+			offCanvasWrapper.offCanvas('close');
+			console.log("筛选");
+			getSearchGoods(tmp_is_official,tmp_cat_id,tmp_url);
+			document.getElementById('price_low').innerHTML = '';
+			document.getElementById('price_high').innerHTML = '';
+		});
+		
+		document.getElementById('is_official').addEventListener('tap', function() {
+			if(is_official == -1) {
+				is_official = 0;
+				document.getElementById('is_official_img').setAttribute('src', 'images/ziying_select_is.png');
+			} else {
+				is_official = -1;
+				document.getElementById('is_official_img').setAttribute('src', 'images/ziying_img.png');
+			}
+			console.log(multi_search);
+			if(multi_search=='1'){
+				getSearchGoods(is_official,cat_id,'goods/goods-lists');
+			}else{
+				getSearchGoods(is_official,cat_id,null);
+			}
+		});
+
+		document.getElementById('sales').addEventListener('tap', function() {
+			if(multi_search=='1'){
+				getSearchGoods(is_official,cat_id,'goods/goods-lists','', 1);
+			}else{
+				getSearchGoods(is_official,cat_id,'goods/goods-lists','', 1);
+			}
+		});
+		
+		document.getElementById('price').addEventListener('tap', function() {
+			if(this.classList.contains('mui-icon-arrowdown')) {
+				this.classList.remove('mui-icon-arrowdown');
+				this.classList.add('mui-icon-arrowup');
+				if(multi_search=='1'){
+					getSearchGoods(is_official,cat_id,'goods/goods-lists','', 2);
+				}else{
+					getSearchGoods(is_official,cat_id,'goods/goods-lists','', 2);
+				}
+				
+			} else {
+				this.classList.remove('mui-icon-arrowup');
+				this.classList.add('mui-icon-arrowdown');
+				if(multi_search=='1'){
+					getSearchGoods(is_official,cat_id,'goods/goods-lists','', 3);
+				}else{
+					getSearchGoods(is_official,cat_id,'goods/goods-lists','', 3);
+				}
+			}
+		});
+
+	});
+	
+	//是否自营 分类 url(排序等)
+	function getSearchGoods(is_official,cat_id,url,is_more,sort,aid) {
+		if(!url){
+			url='goods/goods-lists';
+		}
+		if(!is_more){
+			is_more=false;
+			page=1;
+			document.getElementById("goods_list").innerHTML='';
+		}
+		tmp_is_official=is_official;
+		tmp_cat_id=cat_id;
+		tmp_url=url;
+		
+//		document.getElementById("goods_list").innerHTML='<div class="list_null">搜索中...</div>';
+		var time = Date.parse(new Date()) / 1000;
+		var token = CryptoJS.MD5('SenXi' + time).toString();
+		var authToken = plus.storage.getItem('authToken');
+		var price_max = parseInt(parseFloat(document.getElementById('price_high').value));
+		var price_min = parseInt(parseFloat(document.getElementById('price_low').value));
+		var keyword = document.getElementById("search_input").value;
+		if(!price_max){
+			price_max='';
+		}
+		if(!price_min){
+			price_min='';
+		}
+		
+		console.log(cat_id);
+		mui.ajax(SERVER_HOST + url, {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken:authToken,
+				page: page,
+				aid: aid,
+				type2:cat_id,
+				high_price: price_max,
+				low_price: price_min,
+				shop_id:is_official,
+				sort:sort,
+				keyword: keyword,
+				sale_way:multi_search,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					parseData_SearchGoods(data,is_more);
+				} else {
+					plus.ui.toast(data.msg);
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				plus.ui.toast("网络请求超时");
+			}
+		});
+	}
+
+	function parseData_SearchGoods(data,is_more) {
+		var goods_list = document.getElementById("goods_list");
+		var html_str = '';
+		if(data.data.models.length > 0) {
+			var fragment = document.createDocumentFragment();
+			for(var i = 0; i < data.data.models.length; i++) {
+				var div=document.createElement('div');
+				if(data.data.models.shop_id == 0) {
+					div.innerHTML = '<div class="good_item" shop_id="'+data.data.models[i].shop_id+'" good_id="'+data.data.models[i].gid+'">'+
+												'<img class="good_img" src="'+staticUrl+'/'+data.data.models[i].img_path+'"/>'+
+												'<div class="good_detail">'+
+													'<div class="good_name">'+data.data.models[i].title+'</div>'+
+													'<div class="good_price">￥'+parseFloat(data.data.models[i].price_retail).toFixed(2) + '</div>'+
+													'<div class="good_rest">'+
+														'<span class="good_rest_text">库存：' + data.data.models[i].total_stock + '件</span>'+
+														'<img src="images/ziying_kuang.png" />'+
+													'</div>'+
+												'</div>'+
+											'</div>';
+				} else {
+					div.innerHTML = '<div class="good_item" shop_id="'+data.data.models[i].shop_id+'" good_id="'+data.data.models[i].gid+'">'+
+												'<img class="good_img" src="'+staticUrl+'/'+data.data.models[i].img_path+'"/>'+
+												'<div class="good_detail">'+
+													'<div class="good_name">'+data.data.models[i].goods_name+'</div>'+
+													'<div class="good_price">￥'+parseFloat(data.data.models[i].price_retail).toFixed(2) + '</div>'+
+													'<div class="good_rest">'+
+														'<span class="good_rest_text">库存：' + data.data.models[i].total_stock + '件</span>'+
+													'</div>'+
+												'</div>'+
+											'</div>';;
+				}
+				fragment.appendChild(div);
+			}
+			
+			goods_list.appendChild(fragment);
+			if(page*amount>=data.data.totalPage){
+				var div=document.createElement('div');
+				div.className = 'list_null';
+				div.id="up_to_more";
+				div.innerText="无更多结果";
+				goods_list.appendChild(div);
+			}
+			if(!is_more){
+				total=data.data.totalPage;
+				mui('.mui-scroll-wrapper').scroll()[1].scrollTo(0,0,100);
+			}
+			return;
+		} else {
+			html_str = '<div class="list_null">无搜索结果</div>';
+			goods_list.innerHTML = html_str;
+		}
+		
+	}
+
+	function getGoodsCatalogList() {
+		var time = Date.parse(new Date()) / 1000;
+		var token = CryptoJS.MD5(time+"ttouch2016").toString();
+		var authToken = plus.storage.getItem('authToken');
+		mui.ajax(SERVER_HOST + 'goods/get-types', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: authToken,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					parseData_GoodsCatalog(data);
+				} else {
+					plus.ui.toast(data.msg);
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				plus.ui.toast("网络请求超时");
+			}
+		});
+	}
+
+	function parseData_GoodsCatalog(data) {
+		var goods_catalog_list = document.getElementById("goods_catalog_list");
+		var html_str = '';
+		if(data.data.length > 0) {
+			for(var i = 0; i < data.data.length; i++) {
+					html_str = html_str + '<li class="mui-table-view-cell mui-collapse">'+
+												'<a class="mui-navigate-right">'+data.data[i].name+'</a>'+
+												'<ul class="mui-table-view mui-table-view-chevron">';
+					for(var j = 0; j < data.data[i].child.length; j++) {
+						html_str = html_str + 		'<li cat_id="'+data.data[i].child[j].tid+'" class="good_cat_two mui-table-view-cell">'+data.data[i].child[j].name+'</li>';
+					}
+					html_str = html_str +		'</ul>'+
+										'</li>';
+			}
+		} else {
+			html_str = '<div class="list_null">暂无分类</div>';
+		}
+
+		goods_catalog_list.innerHTML = html_str;
+	}
+
+	//侧滑容器父节点
+	var offCanvasWrapper = mui('#offCanvasWrapper');
+	//主界面容器
+	var offCanvasInner = offCanvasWrapper[0].querySelector('.mui-inner-wrap');
+	//菜单容器
+	var offCanvasSide = document.getElementById("offCanvasSide");
+
+	//主界面和侧滑菜单界面均支持区域滚动；
+	mui('#offCanvasSideScroll').scroll();
+	mui('#offCanvasContentScroll').scroll();
+</script>
+<script src="js/immersed.js"></script>

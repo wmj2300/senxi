@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>确认订单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		
+		<script>
+			mui.init();
+		</script>
+
+		<style>
+			.change_line {
+				white-space: normal!important;
+				text-overflow: ellipsis;
+				word-wrap: break-word;
+			}
+			
+			#good_img {
+				width: 80px;
+				height: 80px;
+			}
+			
+			#good_name {
+				font-size: 14px;
+				color: #4a4a4a;
+				text-align: left;
+				margin-left: 10px;
+			}
+			#btn_sure_pay {
+				background: #ffb100;
+				border-radius: 3px;
+				width: 104px;
+				height: 40px;
+			}
+			.mui-radio input[type=radio]:checked:before{
+				color: #07985B;
+			}
+			.list_null{
+				font-size:14px;
+				color:rgba(0,0,0,0.48);
+				text-align: center;
+				background-color: #efeff4;
+			}
+			#pay_way{
+				color: #9b9b9b;
+				font-size: 16px;
+			}
+			.address_null{
+				padding: 10px 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>确认订单</b></h1>
+		</header>
+		<div class="mui-content">
+			<img src="images/dizhilan.png" class="mui-pull-top-tips" style="width: 100%;" />
+			<div>
+				<ul id="select_address" class="mui-table-view">
+					<div class="mui-table-view-cell mui-media">
+						<a class="mui-navigate-right">
+							<div class="mui-row">
+								<div class="mui-col-sm-2 mui-col-xs-2">
+									<span><img src="images/dinwei.png" style="width: 18px;height: 18px;margin:10px;"></span>
+								</div>
+								<div id="defualt_addr" class="mui-col-sm-9 mui-col-xs-9 change_line">
+									<p style="color: black;">收货人：
+										<span id="addr_name">...</span>
+										<span id="addr_phone">...</span>
+									</p>
+									<p style="font-size: 12px;">收货地址：
+										<span id="addr_province">...</span>
+										<span id="addr_city">...</span>
+										<span id="addr_district">...</span>
+										<span id="addr_detail">...</span>
+									</p>
+								</div>
+							</div>
+						</a>
+					</div>
+				</ul>
+				<ul class="mui-table-view" style="margin-top: 8px;">
+					
+					<div class="mui-table-view-cell mui-media mui-row">
+						<div class="mui-col-sm-3 mui-col-xs-3">
+							<img id="good_img" src="images/lazyloadimg.jpg"></img>
+						</div>
+						<div class="mui-col-sm-9 mui-col-xs-9">
+							<p><span id="good_name">...</span></p>
+						</div>
+					</div>
+				</ul>
+				<ul class="mui-table-view" style="margin-top: 8px;">
+					<div class="mui-table-view-cell mui-row">
+						<p style="color: black;"><span style="vertical-align: middle;">消耗积分</span><span id="good_ponit" style="float:right;margin-right: 20px;vertical-align: middle;color: #FFB100;">...</span></p>
+					</div>
+				</ul>
+				
+					
+				
+				
+				<ul class="mui-table-view" style="position:fixed;bottom:0;width:100%;z-index: 999;">
+					<ul class="mui-table-view" style="">
+						<div class="mui-table-view-cell">
+								<span class="mui-pull-left" style="margin-top: 5px;">计：<spanstyle="font-size:18px;color: #FFB100;" id="good_ponit_pop">144.00</span></span>
+								<button id="btn_sure_pay" type="button" class="mui-btn mui-btn-warning mui-pull-right">确认兑换</button>
+						</div>
+					</ul>
+				</ul>
+			</div>
+	</body>
+
+</html>
+<script>
+	function gotoPage(url) {
+		mui.openWindow({
+			url: url,
+			id: url,
+			show: {
+				aniShow: 'pop-in'
+			}
+		});
+	}
+	var addr_list_id='';
+	var good_id='';
+	mui.plusReady(function() {
+		view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+			mui.preload({
+				url: 'view_0015_myorder_trade_done.html',
+				id: 'view_0015_myorder_trade_done.html'
+			});
+			mui.preload({
+				url: 'view_0003_login.html',
+				id: 'view_0003_login.html'
+			});
+		}, false);
+		
+		document.addEventListener('refreshData', function(event) {
+			if(!event.detail.data_good){
+				mui.toast("缺少参数");
+				mui.back();
+				return;
+			}
+			parseData_GoodDetail(event.detail.data_good);
+			good_id=event.detail.data_good.data.sid;
+			getAddressList();
+		});
+		
+		document.addEventListener('refreshDataAddr', function(event) {
+			var addr_list=document.getElementById("defualt_addr");
+			var html_str='';
+			html_str='<p style="color: black;">收货人：'+
+										'<span id="addr_name">'+event.detail.addr_name+'</span>'+
+										'<span id="addr_phone">'+event.detail.addr_phone+'</span>'+
+									'</p>'+
+									'<p style="font-size: 12px;">收货地址：'+
+										'<span id="addr_province">'+event.detail.addr_province+'</span>'+
+										'<span id="addr_city">'+event.detail.addr_city+'</span>'+
+										'<span id="addr_district">'+event.detail.addr_district+'</span>'+
+										'<span id="addr_detail">'+event.detail.addr_detail+'</span>'+
+									'</p>';
+			addr_list.innerHTML = html_str
+			
+//			document.getElementById("addr_name").innerText=event.detail.addr_name;
+//			document.getElementById("addr_phone").innerText=event.detail.addr_phone;
+//			document.getElementById("addr_province").innerText=event.detail.addr_province;
+//			document.getElementById("addr_city").innerText=event.detail.addr_city;
+//			document.getElementById("addr_district").innerText=event.detail.addr_district;
+//			document.getElementById("addr_detail").innerText=event.detail.addr_detail;
+			addr_list_id=event.detail.addr_list_id
+		});
+		
+		document.getElementById('btn_sure_pay').addEventListener('tap', function() {
+			if(addr_list_id == ''){
+				mui.toast('请添加配货地址~');
+				return false;
+			}
+			var authToken = plus.storage.getItem('authToken');
+            mui.ajax(SERVER_HOST+'point-goods/buy-point-goods',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken,
+					goods_id:good_id,
+					address_id:addr_list_id,
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						mui.toast(data.msg);
+						mui.back();
+						return;
+					}else{
+						if("authToken错误" == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							mui.toast(data.msg);
+						}
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+			
+		});
+		document.getElementById('select_address').addEventListener('tap', function() {
+			plus.storage.setItem('select_addr_url',view.id);
+			gotoPage('view_0008_address_manager.html');
+		});
+		
+	});
+	
+	function parseData_GoodDetail(data) {
+		document.getElementById('good_name').innerText = data.data.title;
+		document.getElementById('good_ponit').innerText = data.data.point;
+		document.getElementById('good_ponit_pop').innerText = data.data.point;
+		document.getElementById('good_img').src = staticUrl +'/'+ data.data.img;
+	}
+	
+	function getAddressList(){
+		var authToken = plus.storage.getItem('authToken');
+            mui.ajax(SERVER_HOST+'user/address-list',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						parseData_AddressList(data.data);
+					}else{
+						if("authToken错误" == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							mui.toast(data.msg);
+						}
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	function parseData_AddressList(data) {
+		var addr_list=document.getElementById("defualt_addr");
+		var html_str='';
+		
+		if(data.length>0){
+			for(var i = 0; i < data.length; i++) {
+				if(data[i].is_default==1){
+					document.getElementById("addr_name").innerText=data[i].uname;
+					document.getElementById("addr_phone").innerText=data[i].mobile;
+					document.getElementById("addr_province").innerText=data[i].province;
+					document.getElementById("addr_city").innerText=data[i].city;
+					document.getElementById("addr_district").innerText=data[i].town;
+					document.getElementById("addr_detail").innerText=data[i].street;
+					addr_list_id=data[i].address_id;
+				}else{
+					html_str='<div class="address_null">您尚未设置默认地址</div>';
+					addr_list.innerHTML = html_str;
+				}
+		}
+		}else{
+			html_str='<div class="address_null">您尚未添加地址</div>';
+			addr_list.innerHTML = html_str;
+		}
+	}
+	
+</script>
+<script src="js/immersed.js"></script>

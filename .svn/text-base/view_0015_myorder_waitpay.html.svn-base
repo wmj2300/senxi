@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>等待付款</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+	</head>
+
+	<body>
+		<style>
+			.left {
+				width: 75px;
+				float: left;
+				margin-right: 20px;
+			}
+			
+			.right {
+				width: 200px;
+				float: left;
+			}
+			
+			#shop_name {
+				font-family: MicrosoftYaHei;
+				font-size: 12px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			#good_name {
+				font-family: MicrosoftYaHei;
+				font-size: 14px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				line-height: 22px;
+				text-align: left;
+			}
+			#price{
+				float: right;
+				padding-right: 20px;
+			}
+			button {
+				background-image: linear-gradient(-180deg, #ffffff 0%, #fafafa 100%);
+				border-radius: 4px;
+				width: 91px;
+				height: 35px;
+				text-align: center;
+			}
+		</style>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;">交易详情</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view" style="margin-top: 8px;">
+				<div class="mui-table-view-cell mui-media">
+					<p><span id="shop_name">GODVIA歌帝梵亚太总代</span></p>
+				</div>
+				<div class="mui-table-view-cell mui-media" id="goodsList">
+					<div class="left">
+						<img src="img_tmp/buy_good_pic.png" id="img_path"></img>
+					</div>
+					<div class="right">
+						<p><span id="good_name">Godiva 歌帝梵 比利时72%黑巧克力36片礼盒装</span></p>
+						<p style="margin-top: 5px;"><span>规格：36片/盒</span></p>
+					</div>
+				</div>
+				<div class="mui-table-view-cell mui-row" style="text-align: center;background-color: #EFEFF4;">
+					<div class="mui-col-sm-4 mui-col-xs-4">
+						<!--<p><span>精装礼包版</span></p>-->
+					</div>
+					<div class="mui-col-sm-4 mui-col-xs-4">
+						<p><span id="num">×1</span></p>
+					</div>
+					<div class="mui-col-sm-4 mui-col-xs-4">
+						<p><span id="price">¥129.00</span></p>
+					</div>
+				</div>
+				<div class="mui-table-view-cell mui-row">
+					<p><span style="margin-left: 20px;">运费</span><span id="post-price" style="float:right;margin-right: 20px;">¥20.00</span></p>
+				</div>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 8px;">
+				<div class="mui-table-view-cell mui-media">
+					<div class="mui-col-sm-8 mui-col-xs-8" id="order_log">
+						<p>订单编号：21212313121234</p>
+						<p>创建时间：2016-06-08 09:30:21</p>
+					</div>
+				</div>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 8px;">
+				<div class="mui-table-view-cell mui-media">
+					<div class="mui-pull-right">
+						<button id="goto_pay" type="button" class="mui-btn mui-pull-right" style="color: #ffb100;">去付款</button>
+					</div>
+				</div>
+			</ul>
+		</div>
+		<script src="js/const.js"></script>
+		<script src="js/mui.min.js"></script>
+		<script>
+			var goodsData = ''
+			mui.init({
+				swipeBack: false
+			});
+			document.getElementById('goto_pay').addEventListener('tap', function() {
+				
+				var data_good={orders: [],total_pay_price: ''};
+				data_good.orders[0]=goodsData;
+				data_good.total_pay_price=goodsData.total_pay_price;
+				var good_buy=plus.webview.getWebviewById('view_0003_good_buy.html');
+				mui.fire(good_buy,'refreshData',{
+					data_good:data_good,
+				});
+				good_buy.show('pop-in');
+			});			
+			mui.plusReady(function() {			
+				var view = plus.webview.currentWebview();
+				view.addEventListener("show", function(e) {
+					console.log("Webview Showed：" + view.id);
+					mui.preload({
+						url: 'view_0003_good_buy.html',
+						id: 'view_0003_good_buy.html'
+					});				
+			}, false);
+		
+			document.addEventListener('refreshOrderData', function(event) {
+				if(!event.detail.order_id){
+					plus.ui.toast('缺少参数！');
+					mui.back();
+					return;
+				}
+				getOrderDetail(event.detail.order_id);
+			});
+				
+			})
+			
+			function getOrderDetail(order_id){
+				
+				var authToken = plus.storage.getItem('authToken');
+				mui.ajax(SERVER_HOST + 'order/order-detail', {
+					data: {
+						time: TIME,
+						token: TOKEN,
+						authToken: authToken,
+						order_id:order_id,
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					timeout: 10000, //超时时间设置为5秒；
+					success: function(data) {							
+							console.log(JSON.stringify(data));
+						
+						if(data.status == 1) {
+					
+							parseData(data)
+							
+						} else {
+							if("authToken错误" == data.msg) {
+								gotoPage('view_0003_login.html');
+								return;
+							} else {
+								plus.ui.toast(data.msg);
+							}
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+					
+						plus.ui.toast("网络请求超时");
+					}
+				});
+			}
+
+			function parseData(data){
+				goodsData = data.data;
+				//console.log(data.data.shop_avatar)
+				document.getElementById('shop_name').innerText = data.data.shop_name;
+				document.getElementById('num').innerText = 'x'+ data.data.total_goods_num;
+				document.getElementById('price').innerText = data.data.real_price;
+				document.getElementById('post-price').innerText = data.data.post_price;
+				document.getElementById('img_path').setAttribute("src",data.data.shop_avatar);
+				
+				var logList = document.getElementById('order_log');
+				html_str = '';
+				html_str = html_str+'<p>订单编号：'+data.data.order_sn+'</p>';
+				if(data.data.order_log.length>0){
+					mui.each(data.data.order_log,function(index,log){
+						html_str = html_str +'<p>'+log.order_status_title+'：'+TimeToData(log.created_at)+'</p>';
+					})
+				}
+				logList.innerHTML = html_str;
+				
+				var goodsList = document.getElementById('goodsList');
+				html_con = '';
+				if(data.data.orderInfo.length>0){
+					mui.each(data.data.orderInfo,function(index,info){
+						html_con = html_con +'<div class="left">'+
+								'<img src="'+(staticUrl+info.goods_thumb)+'" id="img_path" width="75"></img>'+
+							'</div>'+
+							'<div class="right">'+
+								'<p><span id="good_name">'+info.goods_name+'</span></p>'+
+								'<p style="margin-top: 5px;"><span>'+info.propertyTags+'</span></p>'+
+							'</div>';
+					})
+				}
+				goodsList.innerHTML = html_con;
+				
+				
+			}
+
+			function gotoPage(url) {
+				mui.openWindow({
+					url: url,
+					id: url
+				});
+			}
+			
+			function TimeToData(time){
+				var date = new Date(time*1000);
+				Y = date.getFullYear() + '-';
+				M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+				D = date.getDate() < 10 ?'0'+date.getDate():date.getDate();
+				h = date.getHours() + ':';
+				m = date.getMinutes() + ':';
+				s = date.getSeconds(); 
+				return (Y+M+D+' '+h+m+s);
+			}
+		</script>
+
+	</body>
+
+</html>
+<script src="js/immersed.js"></script>

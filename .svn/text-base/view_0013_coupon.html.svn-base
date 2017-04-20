@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>收藏</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script>
+			mui.init();
+		</script>
+		
+		<style>
+			.list_null{
+				text-align: center;
+				font-size:14px;
+				color:#4a4a4a;
+				margin: 10px;
+			}
+			#coupon_list{
+				min-height: 450px;
+			}
+			.coupon{
+				margin: 10px 15px;
+				background-color: white;
+				border-radius: 3px;
+			}
+			.coupon_num_des{
+				font-size: 14px;
+				color:#4a4a4a;
+			}
+			.coupon_type_des{
+				margin-top: 5px;
+				color:#ffb100;
+				font-size:14px;
+			}
+			.good_time{
+				font-size:12px;
+				color:#9b9b9b;
+			}
+			.coupon_detail{
+				padding-left: 100px;
+				height:108px;
+				padding-top: 15px;
+				background-image:linear-gradient(-180deg, #ffffff 0%, #fafafa 100%);
+				box-shadow:0px 0px 1px 0px rgba(0,0,0,0.08);
+			}
+			.coupon_left{
+				float: left;
+				text-align: center;
+				background-image: -webkit-linear-gradient(-180deg, #ffd900 0%, #ffb100 100%);
+				box-shadow:0px 0px 1px 0px rgba(0,0,0,0.12);
+				border-radius:3px;
+				width:86px;
+				height:108px;
+				padding: 19px 0px;
+			}
+			.coupon_type{
+				font-size:14px;
+				color:#ffffff;
+				margin-bottom: 16px;
+			}
+			.coupon_num{
+				font-size:32px;
+				color:#ffffff;
+				letter-spacing:0px;
+				text-shadow:0px 1px 2px #fa632d;
+			}
+			.coupon_unit{
+				color:#ffffff;
+				text-shadow:0px 1px 2px #fa632d;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>我的优惠券</b></h1>
+		</header>
+		<div class="mui-content">
+			<div id="coupon_list">
+				<div class="list_null">加载中...</div>
+				<!--<div class="coupon">
+					<div class="coupon_left">
+						<div class="coupon_type">通用类</div>
+						<div class="coupon_num_unit">
+							<span class="coupon_num">5</span><span class="coupon_unit">元</span>
+						</div>
+					</div>
+					<div class="coupon_detail">
+						<p class='coupon_num_des'>满100可用5元</p>
+						<p class='coupon_type_des'>通用类优惠券</p>
+						<p class='coupon_time'>有效期至：2016.11.26</p>
+					</div>
+				</div>
+				-->
+				
+			</div>
+			<div style="text-align: center;font-size:12px;color:#4a4a4a;">
+				<span class="goto-page" data-href="view_0014_coupon_useinfo.html">优惠券使用说明</span>  |  <span class="goto-page" data-href="view_0014_coupon_dateout.html">查看过期优惠券</span>
+			</div>
+		</div>
+	</body>
+	
+</html>
+<script>
+		
+	var order_id = '';
+	var order_ids = ''
+	function gotoPage(url){
+		mui.openWindow({
+		    url:url,
+		    id:url,
+		    show:{
+		      aniShow:'pop-in'
+		    }
+		});
+	}
+	function preloadPage(){
+		mui.preload({
+			url:'view_0014_coupon_dateout.html',
+			id:'view_0014_coupon_dateout.html'
+		});
+		mui.preload({
+			url:'view_0014_coupon_useinfo.html',
+			id:'view_0014_coupon_useinfo.html'
+		});
+	}
+
+mui.plusReady(function(){
+		
+		
+		document.addEventListener('orderId', function(event) {
+			order_id = event.detail.order_id;
+			order_ids = event.detail.order_ids;
+		});
+		
+		var view=plus.webview.currentWebview();
+		
+		view.addEventListener("show", function(e){
+			
+		    console.log( "Webview Showed："+view.id );
+		    preloadPage();
+		    var select_coupon_url=plus.storage.getItem('select_coupon_url');
+		    if(order_id!=''){
+		    	getCouponOrderList();
+		    }else{
+		    	getCouponList();
+		    }
+		}, false );
+		
+		
+		mui("body").on('tap','.goto-page',function(){
+	            var href = this.getAttribute('data-href');
+	            gotoPage(href);
+	   });
+	   mui("body").on('tap','.coupon',function(e){
+//	            gotoPage('view_0006_pointmarket_buy.html');
+			if(order_id==''&&order_ids==''){
+				return false;
+			}
+			e.stopPropagation();
+			var addr_item=this;
+			var coupon_id=addr_item.querySelector('.coupon_num').getAttribute('dec_money_id');
+			var doc_money = addr_item.querySelector('.coupon_num').getAttribute('dec_money');
+			console.log(coupon_id);
+	        var select_coupon_url=plus.storage.getItem('select_coupon_url');
+			if(select_coupon_url!=null){
+				var authToken = plus.storage.getItem('authToken');
+	        	mui.ajax(SERVER_HOST+'order/choose-voucher',{
+					data:{
+						time:TIME,
+						token:TOKEN,
+						authToken:authToken,
+						order_id: order_id,
+						order_ids: order_ids,
+						vid: coupon_id,
+					},
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					timeout:10000,//超时时间设置为5秒；
+					success:function(data){
+						console.log(JSON.stringify(data));
+						if(data.status==1){
+							var wv=plus.webview.getWebviewById(select_coupon_url);
+							mui.fire(wv,'refreshDataCoupon',{
+								dec_money: doc_money,
+								total_pay_price: data.data.total_pay_price,
+							});
+							mui.back();
+						}else{
+							plus.ui.toast(data.msg);
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						plus.ui.toast("网络请求超时");
+					}
+				});
+				
+//				
+			}
+	   });
+});
+
+	function getCouponList(){
+		var authToken = plus.storage.getItem('authToken');
+            mui.ajax(SERVER_HOST+'user/voucher',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+//					phone:u_phone,
+					authToken:authToken
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						parseData(data);
+					}else{
+						plus.ui.toast(data.msg);
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	function getCouponOrderList(){
+		var authToken = plus.storage.getItem('authToken');
+            mui.ajax(SERVER_HOST+'order/get-vouchers-by-order',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken,
+					order_id: order_id
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						parseData(data);
+					}else{
+						plus.ui.toast(data.msg);
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	function parseData(data){
+		var coupon_list=document.getElementById("coupon_list");
+		var html_str='';
+		var type = ['', '通用', '店铺', '商品'];
+		console.log(data.data)
+			if(data.data.length>0){
+				for(var i = 0; i < data.data.length; i++) {
+					html_str=html_str+'<div class="coupon" coupon_id="'+data.data[i].vid+'">'+
+											'<div class="coupon_left">'+
+//												'<div class="coupon_type">'+type[data.data[i].type]+'类</div>'+
+												'<div class="coupon_type">通用类</div>'+
+												'<div class="coupon_num_unit">'+
+													'<span dec_money="'+data.data[i].dec_money+'" dec_money_id="'+data.data[i].id+'" class="coupon_num">'+(data.data[i].dec_money)+'</span><span class="coupon_unit">元</span>'+
+												'</div>'+
+											'</div>'+
+											'<div class="coupon_detail">'+
+												'<p class="coupon_num_des">满'+data.data[i].full_money+'可用'+data.data[i].dec_money+'元</p>'+
+//												'<p class="coupon_type_des">'+data.data[i].title+'</p>'+
+												'<p class="coupon_type_des">通用类优惠券</p>'+
+												'<p class="coupon_time">有效期至：'+TimeToData(data.data[i].effective_time)+'</p>'+
+											'</div>'+
+										'</div>';
+				}
+			}else{
+				html_str='<div class="list_null">您的优惠券为空</div>';
+			}
+			coupon_list.innerHTML=html_str;
+	}
+	
+	function TimeToData(time){
+		var date = new Date(time*1000);
+		Y = date.getFullYear() + '.';
+		M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '.';
+		D = date.getDate() < 10 ?'0'+date.getDate():date.getDate();
+//		h = date.getHours() + ':';
+//		m = date.getMinutes() + ':';
+//		s = date.getSeconds(); 
+		console.log(Y+M+D);
+		return (Y+M+D);
+	}
+</script>
+<script src="js/immersed.js"></script>

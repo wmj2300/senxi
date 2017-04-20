@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>我的订单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.pullToRefresh.css">
+		<link href="css/icons-extra.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<style>
+			.left {
+				width: 75px;
+				float: left;
+				margin-right: 20px;
+			}
+			
+			.right {
+				width: 200px;
+				float: left;
+			}
+			
+			#shop_name {
+				font-family: MicrosoftYaHei;
+				font-size: 12px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			#good_name {
+				font-family: MicrosoftYaHei;
+				font-size: 14px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				line-height: 22px;
+				text-align: left;
+			}
+			
+			#order_status {
+				font-family: PingFangSC-Medium;
+				font-size: 12px;
+				color: #9b9b9b;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			button {
+				background-image: linear-gradient(-180deg, #ffffff 0%, #fafafa 100%);
+				border-radius: 4px;
+				width: 91px;
+				height: 35px;
+				text-align: center;
+			}
+		</style>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;">我的订单</h1>
+		</header>
+		<div  class="mui-scroll-wrapper"> 
+							<div class="mui-scroll">
+								<div class="mui-content" id="refundList">
+								</div>
+							</div>
+						</div>
+		
+			<!--<ul class="mui-table-view" style="margin-top: 8px;" >
+		<div  class="mui-scroll-wrapper"> 
+			<div class="mui-scroll">
+				<div class="content"  id="refundList">
+				</div>
+			</div>
+		</div>
+		<div class="mui-content" id="refundList">
+			<!--<ul class="mui-table-view" style="margin-top: 8px;" >
+				<div class="mui-table-view-cell mui-media">
+					<div class="mui-row">
+						<div class="mui-col-sm-8 mui-col-xs-8">
+							<p><span class="shop_name">GODVIA歌帝梵亚太总代</span></p>
+						</div>
+						<div class="mui-col-sm-4 mui-col-xs-4">
+							<p class="mui-pull-right"><span><a id="order_status" href="#" style="color: #ffb100;">退款成功</a></span></p>
+						</div>
+					</div>
+				</div>
+				<div id="backmoney_list1" class="mui-table-view-cell mui-media">
+					<div class="left">
+						<img src="img_tmp/buy_good_pic.png"></img>
+					</div>
+					<div class="right">
+						<p><span id="good_name">Godiva 歌帝梵 比利时72%黑巧克力36片礼盒装</span></p>
+						<p style="margin-top: 5px;"><span>规格：36片/盒</p>
+										</div>
+									</div>
+									<div class="mui-table-view-cell mui-media">
+										<p><span class="mui-pull-left">交易金额：¥399.00</span><span class="mui-pull-right">退款金额：¥399.00</span></p>
+					</div>
+					<div class="mui-table-view-cell">
+						<div class="mui-pull-right">
+							<button id="contact_cserver1" type="button" class="mui-btn mui-pull-right">联系客服</button>
+						</div>
+					</div>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 8px;">
+				<div class="mui-table-view-cell mui-media">
+					<div class="mui-row">
+						<div class="mui-col-sm-8 mui-col-xs-8">
+							<p><span class="shop_name">GODVIA歌帝梵亚太总代</span></p>
+						</div>
+						<div class="mui-col-sm-4 mui-col-xs-4">
+							<p class="mui-pull-right"><span><a id="order_status" href="#">退款失败</a></span></p>
+						</div>
+					</div>
+				</div>
+				<div id="backmoney_list2" class="mui-table-view-cell mui-media">
+					<div class="left">
+						<img src="img_tmp/buy_good_pic.png"></img>
+					</div>
+					<div class="right">
+						<p><span id="good_name">Godiva 歌帝梵 比利时72%黑巧克力36片礼盒装</span></p>
+						<p style="margin-top: 5px;"><span>规格：36片/盒</p>
+										</div>
+									</div>
+									<div class="mui-table-view-cell mui-media">
+										<p><span class="mui-pull-left">交易金额：¥399.00</span><span class="mui-pull-right">退款金额：¥399.00</span></p>
+					</div>
+					<div class="mui-table-view-cell">
+						<div class="mui-pull-right">
+							<button id="contact_cserver2" type="button" class="mui-btn mui-pull-right">联系客服</button>
+						</div>
+					</div>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 8px;">
+				<div class="mui-table-view-cell mui-media">
+					<div class="mui-row">
+						<div class="mui-col-sm-8 mui-col-xs-8">
+							<p><span class="shop_name">GODVIA歌帝梵亚太总代</span></p>
+						</div>
+						<div class="mui-col-sm-4 mui-col-xs-4">
+							<p class="mui-pull-right"><span><a id="order_status" href="#" style="color: #ffb100;">退款成功</a></span></p>
+						</div>
+					</div>
+				</div>
+				<div id="backmoney_list3" class="mui-table-view-cell mui-media">
+					<div class="left">
+						<img src="img_tmp/buy_good_pic.png"></img>
+					</div>
+					<div class="right">
+						<p><span id="good_name">Godiva 歌帝梵 比利时72%黑巧克力36片礼盒装</span></p>
+						<p style="margin-top: 5px;"><span>规格：36片/盒</p>
+										</div>
+									</div>
+									<div class="mui-table-view-cell mui-media">
+										<p><span class="mui-pull-left">交易金额：¥399.00</span><span class="mui-pull-right">退款金额：¥399.00</span></p>
+					</div>
+					<div class="mui-table-view-cell">
+						<div class="mui-pull-right">
+							<button id="contact_cserver3" type="button" class="mui-btn mui-pull-right">联系客服</button>
+						</div>
+					</div>
+			</ul>-->
+			<!--</div>-->
+			<div class="refreshContainer"></div>
+			</body>
+</html>
+			<script src="js/mui.min.js"></script>
+			<script src="js/const.js"></script>
+			<script src="js/mui.pullToRefresh.js"></script>
+			<script src="js/mui.pullToRefresh.material.js"></script>
+			<script>
+				
+				var page=0;
+				var is_down = true;
+				var is_pullRefresh=true;
+				var pullOj = null;
+				var data_goods = '';
+				mui.init();	
+				var deceleration = mui.os.ios?0.003:0.0009;
+				
+				(function($) {
+					
+					$('.mui-scroll-wrapper').scroll({
+						bounce: false,
+						indicators: true, //是否显示滚动条
+						deceleration:deceleration
+					});
+					
+//					page = 0;
+//					pullRefreshList();
+					
+				//	
+				//	//循环初始化所有下拉刷新，上拉加载。
+					
+	
+					
+					
+					
+//					document.getElementById('backmoney_list1').addEventListener('tap', function() {
+//						gotoPage('view_0015_order_backmoney.html');
+//					});
+//					document.getElementById('backmoney_list2').addEventListener('tap', function() {
+//						gotoPage('view_0015_order_backmoney.html');
+//					});
+//					document.getElementById('backmoney_list3').addEventListener('tap', function() {
+//						gotoPage('view_0015_order_backmoney.html');
+//					});
+//					document.getElementById('contact_cserver1').addEventListener('tap', function() {
+//						gotoPage('view_0012_message.html');
+//					});
+//					document.getElementById('contact_cserver2').addEventListener('tap', function() {
+//						gotoPage('view_0012_message.html');
+//					});
+//					document.getElementById('contact_cserver3').addEventListener('tap', function() {
+//						gotoPage('view_0012_message.html');
+//					});
+					
+				})(mui);
+				
+				mui.plusReady(function() {
+					
+					mui.each(document.querySelectorAll('.mui-scroll'), function(index, pullRefreshEl) {
+						mui(pullRefreshEl).pullToRefresh({
+							down: {
+								callback: function() {
+									pullOj = this;
+									is_down = true;
+									page = 0;
+									pullRefreshList();
+								}
+							},
+							up: {
+				
+						      height:50,//可选.默认50.触发上拉加载拖动距离
+								 contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+								 contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+								callback: function() {
+									pullOj = this;
+									is_down = false;
+									pullRefreshList();
+								}
+							},
+						});
+					});
+					
+					var sliderSegmentedControl = document.getElementById('sliderSegmentedControl');
+					mui('.mui-input-group').on('change', 'input', function() {
+						if(this.checked) {
+							sliderSegmentedControl.className = 'mui-slider-indicator mui-segmented-control mui-segmented-control-inverted mui-segmented-control-' + this.value;
+							//force repaint
+							sliderProgressBar.setAttribute('style', sliderProgressBar.getAttribute('style'));
+						}
+					});
+				
+				var view = plus.webview.currentWebview();
+				
+				view.addEventListener("show", function(e) {
+					//console.log("Webview Showed：" + view.id);
+					mui.preload({
+						url: 'view_0015_order_after_service_info.html',
+						id: 'view_0015_order_after_service_info.html'
+					});
+					is_down = true;
+					page = 0;
+//					mui.preload({
+//						url: 'view_0006_pointmarket_buy.html',
+//						id: 'view_0006_pointmarket_buy.html'
+//					});
+					pullRefreshList();
+			}, false);
+			
+				mui('body').on('tap', '.refunedInfo',function(){
+					var rid = this.getAttribute('rid');
+					var page = 'view_0015_order_after_service_info.html';
+					var order_info = plus.webview.getWebviewById(page);
+					mui.fire(order_info, 'refreshOrderData', {
+						rid: rid
+					});
+					gotoPage(page);
+				})
+		
+			
+				
+			})
+				function pullRefreshList(){	
+					page++;
+					refundList();
+				}
+				
+				
+				function refundList(){
+					var authToken = plus.storage.getItem('authToken');
+					console.log(page)
+					mui.ajax(SERVER_HOST + 'order/refund-list', {
+						data: {
+							time: TIME,
+							token: TOKEN,
+							authToken: authToken,
+							page:page,
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为5秒；
+						success: function(data) {							
+								console.log(JSON.stringify(data));
+							
+							if(data.status == 1) {
+								
+								if(page<data.data.totalPage){
+									parseData(data,false)
+								}else{
+									parseData(data,true)
+								}
+								
+							} else {
+								if("authToken错误" == data.msg) {
+									gotoPage('view_0003_login.html');
+									return;
+								} else {
+									plus.ui.toast(data.msg);
+								}
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							if(is_down){
+									pullOj.endPullDownToRefresh();
+							}else{
+								pullOj.endPullUpToRefresh();
+							}
+							plus.ui.toast("网络请求超时");
+						}
+					});
+				}
+				function refundList(){
+					var authToken = plus.storage.getItem('authToken');
+					mui.ajax(SERVER_HOST + 'order/refund-list', {
+						data: {
+							time: TIME,
+							token: TOKEN,
+							authToken: authToken,
+							page:page,
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为5秒；
+						success: function(data) {							
+								console.log(JSON.stringify(data));
+							
+							if(data.status == 1) {
+								if(page<data.data.totalPage){
+									parseData(data,false)
+								}else{
+									parseData(data,true)
+								}
+								
+								
+							} else {
+								if("authToken错误" == data.msg) {
+									gotoPage('view_0003_login.html');
+									return;
+								} else {
+									plus.ui.toast(data.msg);
+								}
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							if(is_down){
+									pullOj.endPullDownToRefresh();
+							}else{
+								pullOj.endPullUpToRefresh();
+							}
+							plus.ui.toast("网络请求超时");
+						}
+					});
+				}
+
+				function parseData(data,is_more){
+					console.log(JSON.stringify(data.data));
+					var refundList = document.getElementById('refundList');
+					var html_str = '';
+					var status = ['', '处理中', '已同意', '已拒绝' ,'退款成功'];
+					
+					var fragment = document.createDocumentFragment();
+					var div=document.createElement('div');
+					if(data.data.models.length>0){
+						mui.each(data.data.models,function(index,order){
+							html_str+='<div class="mui-table-view-cell mui-media">'+
+											'<div class="mui-row">'+
+												'<div class="mui-col-sm-8 mui-col-xs-8">'+
+													'<p><span class="shop_name">'+order.shop_name+'</span></p>'+
+												'</div>'+
+												'<div class="mui-col-sm-4 mui-col-xs-4">'+
+													'<p class="mui-pull-right"><span><a id="order_status" href="#">'+status[order.status]+'</a></span></p>'+
+												'</div>'+
+											'</div>'+
+										'</div>'+
+										'<div id="backmoney_list'+(index+1)+'" rid="'+order.rid+'" class="mui-table-view-cell mui-media refunedInfo">'+
+											'<div class="left">'+
+												'<img src="'+(staticUrl+order.goods_avatar)+'" width="75"></img>'+
+											'</div>'+
+											'<div class="right">'+
+												'<p><span id="good_name">'+order.goods_name+'</span></p>'+
+												'<p style="margin-top: 5px;"><span>规格：'+order.size+order.goods_specifications+'</p>'+
+																'</div>'+
+															'</div>'+
+															'<div class="mui-table-view-cell mui-media">'+
+																'<p><span class="mui-pull-left">交易金额：¥'+order.order_price+'</span><span class="mui-pull-right">退款金额：¥'+order.refund_price+'</span></p>'+
+											'</div>'+
+											'<div class="mui-table-view-cell">'+
+												'<div class="mui-pull-right">'+
+													'<button id="contact_cserver2" type="button" class="mui-btn mui-pull-right">联系客服</button>'+
+												'</div>'+
+											'</div>';
+						})
+					}
+				
+					div.innerHTML = html_str;
+		
+					fragment.appendChild(div);	
+					
+					if(is_down){
+			
+						refundList.innerHTML = '';
+						
+						refundList.appendChild(fragment);
+					}else{
+						refundList.innerHTML = '';
+						
+						refundList.appendChild(fragment);
+						
+					}
+					
+					if(pullOj&&pullOj.loading) {
+						if(is_down){
+							console.log(is_more);
+							pullOj.endPullDownToRefresh();
+							pullOj.refresh(true);
+						}else{
+							console.log('up----'+is_more)
+							pullOj.endPullUpToRefresh(is_more);
+						}
+					}
+				}
+
+				function gotoPage(url) {
+					mui.openWindow({
+						url: url,
+						id: url
+					});
+				}
+			</script>
+
+	
+<script src="js/immersed.js"></script>

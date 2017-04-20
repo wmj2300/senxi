@@ -1,0 +1,326 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<style>
+			.mui-content>.mui-table-view:first-child {
+			    margin-top: 0px;
+			}
+			.mui-table-view:before {
+			    background-color: transparent;
+			}
+			.mui-table-view:after {
+			    background-color: transparent;
+			}
+			/*.mui-table-view-cell:after{
+			    background-color: transparent;
+			}*/
+			#shop_img {
+				width: 48px;
+				height: 48px;
+				border-radius: 50%;
+				float: left;
+			}
+			
+			.shop_detail {
+				margin-left: 60px;
+			}
+			
+			#shop_name {
+				font-size: 14px;
+				color: #2a2a2a;
+			}
+			
+			.shop_score {
+				font-size: 12px;
+				color: #9b9b9b;
+			}
+			
+			#shop_star img {
+				height: 18px;
+				width: 18px;
+				margin-top: 9px;
+			}
+			
+			#shop_boss img {
+				height: 17px;
+				vertical-align: middle;
+			}
+			
+			.shop_collect {
+				text-align: right;
+				font-size: 10px;
+				color: #9b9b9b;
+				padding-top:4px;
+			}
+			
+			.shop_collect img {
+				width: 18px;
+				height: 18px;
+			}
+			
+			.left {
+				float: left;
+			}
+			
+			.right {
+				float: right;
+			}
+			p {
+				color: black;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">店铺介绍</h1>
+		</header>
+		<input id="shop_id" type="hidden" />
+		<div class="mui-content">
+			<ul id="shop_info" class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<div class="shop">
+						<img id="shop_img" src="images/lazyloadimg.jpg" />
+						<div class="shop_detail">
+							<div id='shop_name'>...</div>
+							<div class="shop_score">
+								<span  style="position:relative;top:-10px">店铺评分</span>
+								<span id="shop_star" style="margin-left: 6px;position:relative;top:-5px">
+													<!--<img src="images/shop_score.png" />
+													<img src="images/shop_score.png" />
+													<img src="images/shop_score.png" />
+													<img src="images/shop_score.png" />
+													<img src="images/shop_score_dark.png" />-->
+													...
+								</span>
+								<span id="shop_collect" is_collected="0" class="shop_collect mui-pull-right">
+										<img id="shop_collect_img" style="vertical-align: middle;" src="images/collected_no.png" />
+										<span id="shop_collect_text" style="vertical-align: middle;">未关注</span>
+								</span>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 8px;">
+				<li class="mui-table-view-cell mui-media">
+					<div>
+						<div class="left">
+							<p>好评率</p>
+						</div>
+						<div class="right">
+							<p><span id="socre_rate"></span></p>
+						</div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<div>
+						<div class="left">
+							<p>开店时间</p>
+						</div>
+						<div class="right">
+							<p><span id="time_register"></span></p>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 8px;">
+				<li class="mui-table-view-cell mui-media">
+					<div>
+						<div class="left">
+							<p>资质</p>
+						</div>
+						<div class="right">
+							<p id="recognizance_money">已缴纳<span >...</span>保证金</p>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<ul id="conect_seller" class="mui-table-view" style="margin-top: 8px;">
+				<li class="mui-table-view-cell mui-media">
+					<div>
+						<div class="left">
+							<p>店掌柜</p>
+						</div>
+						<div class="right">
+							<p><span id="shop_title">...</span><img src="images/good_detail_conect_seller.png" style="margin-left:10px;width:18px;height:17px;"></img>
+							</p>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</body>
+
+</html>
+<script>
+	mui.init();
+
+	var fid = '';
+	mui.plusReady(function() {
+		view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+		}, false);
+		
+		document.addEventListener('refreshData',function(e){
+			getShop(e.detail.shop_id);
+			document.getElementById("shop_id").value=e.detail.shop_id
+		});
+		document.getElementById('conect_seller').addEventListener('tap', function() {
+	//		gotoPage('view_0003_chat_window.html');
+			if(!fid){
+				return;
+			}
+			var fromName = plus.webview.getWebviewById('view_0003_chat_window.html');
+			mui.fire(fromName, 'refreshData', {
+				fid: fid
+			});
+			fromName.show('pop-in');
+		});
+		document.getElementById("shop_collect").addEventListener('tap', function() {
+		
+			var url='user/collect';
+			
+			var authToken = plus.storage.getItem('authToken');
+			
+			var shop_id = document.getElementById("shop_id").value;
+			mui.ajax(SERVER_HOST + url, {
+				data: {
+					time: TIME,
+					token: TOKEN,
+					authToken: authToken,
+					gid: shop_id,
+					type:2,
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						if(data.msg=='已收藏'){
+							document.getElementById('shop_collect_img').setAttribute('src', 'images/collected_yes.png');
+							document.getElementById('shop_collect').setAttribute('is_collected', '1');
+							document.getElementById('shop_collect_text').innerText='已关注';
+							plus.ui.toast('已关注');
+						}else{
+							document.getElementById('shop_collect_img').setAttribute('src', 'images/collected_no.png');
+							document.getElementById('shop_collect').setAttribute('is_collected', '0');
+							document.getElementById('shop_collect_text').innerText='未关注';
+							plus.ui.toast('已取消关注');
+						}
+						
+					} else {
+						if('authToken错误'==data.msg){
+							gotoPage("view_0003_login.html");
+							return;
+						}
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.ui.toast("网络请求超时");
+				}
+			});
+		});
+	});
+	
+	function getShop(shop_id) {
+		plus.nativeUI.showWaiting();
+		var authToken = plus.storage.getItem('authToken');
+		mui.ajax(SERVER_HOST + 'goods/shop-info', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken:authToken,
+				sid: shop_id,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				plus.nativeUI.closeWaiting();
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					parseData(data);
+				} else {
+					plus.ui.toast(data.msg);
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				plus.nativeUI.closeWaiting();
+				plus.ui.toast("网络请求超时");
+			}
+		});
+	}
+
+	function parseData(data) {
+		document.getElementById('socre_rate').innerText = (parseInt(data.data.shop.good_comments)*100)+'%';
+		document.getElementById('time_register').innerText = TimeToData(data.data.shop.created_at);
+		
+		if(data.data.shop.is_pay_service_fee == 1) {
+			document.getElementById('recognizance_money').innerHTML = '已缴纳保证金';
+		}else{
+			document.getElementById('recognizance_money').innerHTML = '未缴纳保证金';
+		}
+		
+		
+		document.getElementById('shop_title').innerHTML = data.data.shop.name;
+		
+		document.getElementById("shop_img").src=staticUrl+'/'+data.data.shop.avatar_path;
+		document.getElementById('shop_name').innerHTML = data.data.shop.shop_name;
+		fid = data.data.shop.hx_account;
+		var shop_star = document.getElementById("shop_star");
+		var star_num=parseInt(data.data.shop.grade);
+		var html_str = '';
+		for(var i = 0; i < star_num; i++){
+			html_str +='<img src="images/shop_score.png" />';
+		}
+		for(var i = 0; i < 5-star_num; i++){
+			html_str +='<img src="images/shop_score_dark.png" />';
+		}
+		shop_star.innerHTML=html_str;
+		
+		if(data.data.is_collect == 1) {
+			document.getElementById('shop_collect_img').setAttribute('src', 'images/collected_yes.png');
+			document.getElementById("shop_collect_text").innerText='已关注';
+			document.getElementById('shop_collect').setAttribute('is_collected', '1');
+		}else{
+			document.getElementById('shop_collect_img').setAttribute('src', 'images/collected_no.png');
+			document.getElementById("shop_collect_text").innerText='未关注';
+			document.getElementById('shop_collect').setAttribute('is_collected', '0');
+		}
+	}
+
+	function gotoPage(url) {
+		mui.openWindow({
+			url: url,
+			id: url
+		});
+	}
+	
+	function TimeToData(time){
+		var date = new Date(time*1000);
+		Y = date.getFullYear() + '.';
+		M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '.';
+		D = date.getDate() < 10 ?'0'+date.getDate():date.getDate();
+		h = date.getHours() + ':';
+		m = date.getMinutes() + ':';
+		s = date.getSeconds(); 
+		return (Y+M+D+" "+h+m+s);
+	}
+</script>
+<script src="js/immersed.js"></script>

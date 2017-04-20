@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>我的订单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.pullToRefresh.css">
+
+	</head>
+
+	<body>
+		<style>
+			.left {
+				width: 75px;
+				float: left;
+				margin-right: 20px;
+			}
+			
+			.right {
+				width: 200px;
+				float: left;
+			}
+			
+			#shop_name {
+				font-size: 12px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			#good_img {
+				width: 80px;
+				height: 80px;
+			}
+			
+			#shop_name {
+				font-size: 12px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			#good_name {
+				font-size: 14px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				line-height: 22px;
+				text-align: left;
+			}
+			
+			#order_status {
+				font-size: 12px;
+				color: #9b9b9b;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			#fee_for_order {
+				font-size: 14px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				line-height: 22px;
+				text-align: left;
+			}
+			
+			button {
+				background-image: linear-gradient(-180deg, #ffffff 0%, #fafafa 100%);
+				border-radius: 4px;
+				width: 91px;
+				height: 35px;
+				text-align: center;
+			}
+			/*选项卡选中颜色*/
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+				color: #FFB100;
+			}
+			
+			.multi_buy{
+				color: white;
+				background:#009963;
+				border-radius:2px;
+				padding: 1px 4px;
+			}
+		</style>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;">我的订单</h1>
+		</header>
+		<div class="mui-content bind-pay">
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item mui-active" href="#item1mobile" status="">
+						全部
+					</a>
+					<a class="mui-control-item" href="#item2mobile" status="0">
+						待付款
+					</a>
+					<a class="mui-control-item" href="#item3mobile" status="1">
+						待发货
+					</a>
+					<a class="mui-control-item" href="#item4mobile" status="2">
+						待收货
+					</a>
+					<a class="mui-control-item" href="#item5mobile" status="3">
+						待评价
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar" style="width: 20%;background-color: #FFB100;"></div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div  class="mui-scroll-wrapper"> 
+							<div class="mui-scroll">
+								<div class="content"  id="scroll1">
+								</div>
+							</div>
+						</div>
+						<div class="refreshContainer"></div>
+					</div>
+					
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="content"  id="scroll2">
+								</div>
+							</div>
+						</div>
+						<div class="refreshContainer"></div>
+					</div>
+					
+					<div id="item3mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="content"  id="scroll3">
+								</div>
+							</div>
+						</div>
+						<div class="refreshContainer"></div>
+					</div>
+					
+					<div id="item4mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="content"  id="scroll4">
+								</div>
+							</div>
+						</div>
+						<div class="refreshContainer"></div>
+					</div>
+					
+					<div id="item5mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="content"  id="scroll5">
+								</div>
+							</div>
+						</div>
+						<div class="refreshContainer"></div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		</body>
+</html>
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/mui.pullToRefresh.js"></script>
+<script src="js/mui.pullToRefresh.material.js"></script>
+<script>
+
+var page=0;
+var is_down = true;
+var is_pullRefresh=true;
+var pullOj = null;
+mui.init({
+            swipeBack:false //关闭右滑关闭功能
+        });	
+var status_url = "";
+var deceleration = mui.os.ios?0.003:0.0009;
+var data_models = '';
+
+var type = [
+		'待付款',
+        '等待买家发货',
+        '买家已发货',
+        '交易成功',//待评价
+        '已评价',
+        '申请退款退货',//只有发货后才可以申请退款退货
+        '同意退款退货',
+        '拒绝退款退货',
+        '已退款-退款退货',
+        '未发货申请退款',
+        '未发货同意退款',
+        '未发货拒绝退款',
+        '已退款-未发货',
+        '已发货申请退款',
+        '已发货同意退款',
+        '已发货拒绝退款',
+        '已退款-已发货',
+        '已关闭',//已取消
+        '用户已删除',
+	];
+(function($) {
+	$('.mui-scroll-wrapper').scroll({
+		bounce: false,
+		indicators: true, //是否显示滚动条
+		deceleration:deceleration
+	});
+		
+})(mui)	
+			
+mui.plusReady(function(){
+	
+	//循环初始化所有下拉刷新，上拉加载。
+	mui.each(document.querySelectorAll('.mui-scroll'), function(index, pullRefreshEl) {
+		mui(pullRefreshEl).pullToRefresh({
+			down: {
+				callback: function() {
+					pullOj = this;
+					is_down = true;
+					page = 0;
+					pullRefreshList(status_url);
+				}
+			},
+			up: {
+
+		      height:50,//可选.默认50.触发上拉加载拖动距离
+				 contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+				 contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+				callback: function() {
+					pullOj = this;
+					is_down = false;
+					pullRefreshList(status_url);
+				}
+			},
+		});
+	});
+	
+	view = plus.webview.currentWebview();
+	view.addEventListener("show", function(e) {
+		console.log("Webview Showed：" + view.id);
+		preloadPage();
+
+//		console.log('-----show-----');
+
+	}, false);
+
+	
+	document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+		
+		is_down = true;
+
+		console.log('切换----'+event.detail.slideNumber);
+		switch(event.detail.slideNumber){
+		  	
+			case 0:
+				status_url = "";
+		  	break;
+		  	case 1:
+				status_url = 0;
+		  	break;
+		  	case 2:
+				status_url = 1;
+		  	break;
+		  	case 3:
+				status_url = 2;
+		  	break;
+		  	case 4:
+				status_url = 3;
+		  	break;
+		  	
+		  	
+		}	  	
+		page = 0;
+		
+		pullRefreshList(status_url);
+
+	});
+	
+	mui(".bind-pay").on("tap","#goto_pay2",function(){
+		var data = '';
+		var order_id= this.getAttribute('data');
+		for(var i=0;i<data_models.length;i++){
+			if(data_models[i].order_id == order_id){
+				data = data_models[i];
+			}
+		}
+		var data_good={orders: [],total_pay_price: ''};
+		data_good.orders[0]=data;
+		data_good.total_pay_price=data.total_pay_price;
+		var good_buy=plus.webview.getWebviewById('view_0003_good_buy.html');
+		mui.fire(good_buy,'refreshData',{
+			data_good:data_good,
+		});
+		good_buy.show('pop-in');
+	})
+	mui(".bind-pay").on('tap','#goto_evaluate1',function(){
+		var data = '';
+		var order_id= this.getAttribute('data');
+		for(var i=0;i<data_models.length;i++){
+			if(data_models[i].order_id == order_id){
+				data = data_models[i];
+			}
+		}
+		var good_buy=plus.webview.getWebviewById('view_0015_myorder_evaluate.html');
+		mui.fire(good_buy,'refreshData',{
+			data_good:data,
+		});
+		good_buy.show('pop-in');
+	})
+	
+	page = 0;
+	pullRefreshList(status_url);
+	
+	
+	mui('body').on('tap', '.order-for-info', function(){
+		var order_id = this.getAttribute('oid');
+		var status = this.getAttribute('status');
+		
+		if(status == 0){
+			var page = 'view_0015_myorder_waitpay.html';
+			var order_info = plus.webview.getWebviewById(page);
+			mui.fire(order_info, 'refreshOrderData', {
+				order_id: order_id
+			});
+			order_info.show('pop-in');
+			
+		}else if(status == 1){
+			var page = 'view_0015_myorder_waitdelgood.html';
+			var order_info = plus.webview.getWebviewById(page);
+			mui.fire(order_info, 'refreshOrderData', {
+				order_id: order_id
+			});
+			order_info.show('pop-in');
+		}else if(status == 3){
+			var page = 'view_0015_myorder_trade_done.html';
+			var order_info = plus.webview.getWebviewById(page);
+			mui.fire(order_info, 'refreshOrderData', {
+				order_id: order_id
+			});
+			order_info.show('pop-in');
+		}else if(status == 2){
+			var page = 'view_0015_myorder_waitreceive.html';
+			var order_info = plus.webview.getWebviewById(page);
+			mui.fire(order_info, 'refreshOrderData', {
+				order_id: order_id
+			});
+			order_info.show('pop-in');
+		}else if(status == 4){
+			var page = 'view_0015_myorder_trade_close.html';
+			var order_info = plus.webview.getWebviewById(page);
+			mui.fire(order_info, 'refreshOrderData', {
+				order_id: order_id
+			});
+			order_info.show('pop-in');
+		}
+	})
+	
+	mui(".bind-pay").on("tap","#deleteOrder",function(){
+		var order_id = this.getAttribute('oid');
+		plus.nativeUI.confirm("确定删除该订单?", function(e) {
+			var tapIndex = e.index;  
+		    if(tapIndex == 0){
+		    		var authToken = plus.storage.getItem('authToken');
+				mui.ajax(SERVER_HOST + 'order/delete-order', {
+				data: {
+					time: TIME,
+					token: TOKEN,
+					authToken:authToken,
+					order_id: order_id,
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					if(data.status == 1) {
+						plus.ui.toast(data.msg);
+						location.reload();
+					} else {
+						if("authToken错误" == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							plus.ui.toast(data.msg);
+						}
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					if(pullOj&&pullOj.loading) {
+						pullOj.endPullDownToRefresh();
+					}
+					plus.ui.toast("网络请求超时");
+				}
+			}); 
+		    }else{
+		    		plus.nativeUI.closeWaiting(); 
+		    }
+		    
+			
+		}, "提示", ["确定", "取消"]);
+	})
+
+	mui(".bind-pay").on("tap","#clearOrder",function(){
+		var order_id = this.getAttribute('oid');
+		plus.nativeUI.confirm("确定取消该订单?", function(e) {
+			var tapIndex = e.index;
+			if(tapIndex == 0){
+		    		var authToken = plus.storage.getItem('authToken');
+				mui.ajax(SERVER_HOST + 'order/cancel-order', {
+				data: {
+					time: TIME,
+					token: TOKEN,
+					authToken:authToken,
+					order_id: order_id,
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						plus.ui.toast(data.msg);
+						RefreshPage(data,order_id);
+//						location.reload();
+					} else {
+						if("authToken错误" == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							plus.ui.toast(data.msg);
+						}
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					if(pullOj&&pullOj.loading) {
+						pullOj.endPullDownToRefresh();
+					}
+					plus.ui.toast("网络请求超时");
+				}
+			}); 
+		    }else{
+		    		plus.nativeUI.closeWaiting(); 
+		    }
+		}, "", ["确定", "取消"]);
+	})
+		
+	mui(".bind-pay").on("tap","#comfireOrder",function(){
+		var order_id = this.getAttribute('oid');
+		plus.nativeUI.confirm("是否确定该订单?", function(e) {
+			var tapIndex = e.index;
+			if(tapIndex == 0){
+				var authToken = plus.storage.getItem('authToken');
+			mui.ajax(SERVER_HOST + 'order/confirm-receive-goods', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken:authToken,
+				order_id: order_id,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				if(data.status == 1) {
+					plus.ui.toast(data.msg);
+					location.reload();
+				} else {
+					if("authToken错误" == data.msg) {
+						gotoPage('view_0003_login.html');
+						return;
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				if(pullOj&&pullOj.loading) {
+					pullOj.endPullDownToRefresh();
+				}
+				plus.ui.toast("网络请求超时");
+			}
+		});
+			}else{
+				plus.nativeUI.closeWaiting(); 
+			}
+			
+		}, "", ["确定", "取消"]);
+	})
+	
+	mui(".bind-pay").on("tap","#logistics",function(){
+		var post_sn = this.getAttribute('postSn')
+		mui.openWindow({
+			url: 'view_9000_webview.html',
+			id: 'view_9000_webview.html',
+			extras: {
+				url: "https://m.kuaidi100.com/result.jsp?nu="+post_sn
+			}
+		});
+	});
+	
+	
+//	mui("#sliderSegmentedControl").on('tap', 'a', function() {
+//		var status = this.getAttribute('status');
+//		status_url=status
+//		console.log(status);
+//		if(!isLogin()) {
+//			gotoPage('view_0003_login.html');
+//			return;
+//		}
+//		if(page==0){
+//			myOrderList(status);
+//		}
+//	});
+//				
+})
+
+function pullRefreshList(status) {
+	page++;
+	myOrderList(status);			 
+}
+
+function myOrderList(status){
+	
+		var authToken = plus.storage.getItem('authToken');
+		console.log('page----'+page)
+		mui.ajax(SERVER_HOST + 'order/my-orders', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: authToken,
+				status:status,
+				page:page
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {							
+					console.log(JSON.stringify(data));
+				
+				if(data.status == 1) {
+					
+					if(page<data.data.totalPage){
+						parseData_myOrderList(data,status,false)
+					}else{
+						parseData_myOrderList(data,status,true)
+					}
+					
+				} else {
+					if("authToken错误" == data.msg) {
+						gotoPage('view_0003_login.html');
+						return;
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				if(is_down){
+						pullOj.endPullDownToRefresh();
+				}else{
+					pullOj.endPullUpToRefresh();
+				}
+				plus.ui.toast("网络请求超时");
+			}
+	});
+}
+	
+function preloadPage() {
+	
+	mui.preload({
+		url: 'view_0015_myorder_evaluate.html',
+		id: 'view_0015_myorder_evaluate.html'
+	});
+	mui.preload({
+		url: 'view_0015_myorder_trade_close.html',
+		id: 'view_0015_myorder_trade_close.html'
+	});
+	mui.preload({
+		url: 'view_0015_myorder_trade_done.html',
+		id: 'view_0015_myorder_trade_done.html'
+	});
+	mui.preload({
+		url: 'view_0015_myorder_waitpay.html',
+		id: 'view_0015_myorder_waitpay.html'
+	});
+	mui.preload({
+		url: 'view_0015_myorder_waitreceive.html',
+		id: 'view_0015_myorder_waitreceive.html'
+	});
+	mui.preload({
+		url: 'view_0015_myorder_waitdelgood.html',
+		id: 'view_0015_myorder_waitdelgood.html'
+	});
+	console.log('loaded');
+}
+	
+function parseData_myOrderList(data,status,is_more){	
+	
+	data_models=data.data.models;
+	
+	var order_list = document.getElementById("scroll1");
+
+	if(status===0){
+	
+		order_list = document.getElementById("scroll2");
+	}else if(status==1){
+	
+		order_list = document.getElementById("scroll3");
+	}else if(status==2){
+
+		order_list = document.getElementById("scroll4");
+	}else if(status==3){
+		order_list = document.getElementById("scroll5");
+	}else{
+		order_list = document.getElementById("scroll1");
+	}
+	var html_str = '';	
+	
+	var fragment = document.createDocumentFragment();
+	var div=document.createElement('div');
+	if(data_models.length>0){
+		for(var i = 0; i < data_models.length; i++){
+			html_str = html_str+'<ul class="mui-table-view" style="margin-top: 8px;">'+
+					'<div class="mui-table-view-cell mui-media">'+
+						'<div class="mui-row">'+
+							'<div class="mui-col-sm-8 mui-col-xs-8">'+
+								'<span class="shop_name">'+data_models[i].shop_name+'</span>'+
+							'</div>'+
+							'<div class="mui-col-sm-4 mui-col-xs-4">'+
+								'<p class="mui-pull-right"><span><a id="order_status" href="#" ';
+								if(data_models[i].status == 0){html_str = html_str+'style="color: #ffb100;"'}
+								html_str = html_str+'>'+type[data_models[i].status]+'</a></span></p>'+
+							'</div>'+
+						'</div>'+
+					'</div>';
+					mui.each(data_models[i].orderInfo,function(index,order){
+						
+						html_str+='<div oid="'+data_models[i].order_id+'" status="'+data_models[i].status+'" class="mui-table-view-cell mui-media order-for-info">'+
+								'<div class="left" style="width:25%">'+
+									'<img src="'+staticUrl+order.goods_thumb+'"></img>'+
+								'</div>'+
+								'<div class="right" style="width:65%">'+
+									'<p><span id="good_name">'+order.goods_name+'</span></p>'+
+									'<p style="margin-top: 5px;"><span>'+order.propertyTags+'</span>';
+						if(order.is_group==2){
+							html_str =  html_str+'<span class="mui-pull-right" style="background-image: url(images/group.png);color: white;">团</span>';
+						}
+						html_str =  html_str+'</p>'+
+							'</div></div>';
+						
+					})
+					html_str =  html_str+'<div class="mui-table-view-cell mui-media">'+
+										'<p class="mui-pull-right" id="fee_for_order" style="margin-left: 64px;">'+
+										'<span id="shop_name">共'+
+										'<span style="color: #FFB100;">'+data_models[i].total_goods_num+'</span>件商品 合计'+ 
+										'<span style="color: #FFB100;font-size:20px;">'+data_models[i].total_pay_price+'</span> (含运费¥'+data_models[i].post_price+')</span>'+
+										'</p>'+
+										'</div>';
+					html_str = html_str + '<div class="mui-table-view-cell mui-media">'+
+										'<div class="mui-row btnList" order_id="'+data_models[i].order_id+'">';
+					if(data_models[i].status == 0){
+						
+						html_str = html_str + '<div class="mui-col-sm-6 mui-col-xs-6">'+
+												'<button id="clearOrder" type="button" oid="'+data_models[i].order_id+'" class="mui-btn mui-pull-left">取消订单</button>'+
+											'</div>'+
+											'<div class="mui-col-sm-6 mui-col-xs-6">'+
+												'<button id="goto_pay2" type="button" data="'+data_models[i].order_id+'" class="mui-btn mui-pull-right" style="color: #ffb100;">去付款</button>'+   //待付款页面
+											'</div>';
+						
+					}else if(data_models[i].status == 1){
+												html_str = html_str + '<div class="mui-col-sm-6 mui-col-xs-6">'+
+												'<button id="clearOrder" oid="'+data_models[i].order_id+'" type="button" class="mui-btn mui-pull-left">取消订单</button>'+
+											'</div>'+
+											'<div class="mui-col-sm-6 mui-col-xs-6">'+
+//												'<button id="goto_pay2" type="button" data="'+data_models[i].order_id+'" class="mui-btn mui-pull-right" style="color: #ffb100;">去付款</button>'+
+											'</div>';
+					}else if(data_models[i].status == 2){
+						html_str = html_str + '<div class="mui-col-sm-6 mui-col-xs-6">'+
+												'<button id="logistics" type="button" postSn="'+data_models[i].post_sn+'" class="mui-btn mui-pull-right">查看物流</button>'+
+											'</div>'+
+											'<div class="mui-col-sm-6 mui-col-xs-6">'+
+												'<button id="comfireOrder" oid="'+data_models[i].order_id+'" type="button" class="mui-btn mui-pull-right">确认收货</button>'+
+											'</div>';
+					}else if(data_models[i].status == 3){
+						html_str = html_str + '<div class="mui-col-sm-4 mui-col-xs-4">'+
+												'<button id="deleteOrder" oid="'+data_models[i].order_id+'" type="button" class="mui-btn mui-pull-right">删除订单</button>'+
+											'</div>'+
+											'<div class="mui-col-sm-4 mui-col-xs-4">'+
+												'<button id="logistics" type="button" postSn="'+data_models[i].post_sn+'" class="mui-btn mui-pull-right">查看物流</button>'+
+											'</div>'+
+											'<div class="mui-col-sm-4 mui-col-xs-4">'+
+												'<button id="goto_evaluate1" data="'+data_models[i].order_id+'" type="button" class="mui-btn mui-pull-right" style="color: #ffb100;">去评价</button>'+
+											'</div>';
+					}else if(data_models[i].status == 4 || data_models[i].status == 17){
+						html_str = html_str + '<div class="mui-col-sm-6 mui-col-xs-6">'+
+//												'<button type="button" class="mui-btn mui-pull-right">查看物流</button>'+
+											'</div>'+
+											'<div class="mui-col-sm-6 mui-col-xs-6">'+
+												'<button id="deleteOrder" oid="'+data_models[i].order_id+'" type="button" class="mui-btn mui-pull-right">删除订单</button>'+
+											'</div>';
+					}
+					html_str =  html_str+'</div></div>';
+			html_str =  html_str+'</ul>';
+		}
+			
+	}
+	div.innerHTML = html_str;
+		
+	fragment.appendChild(div);		
+		console.log('is_down----'+is_down)
+		
+		if(is_down){
+			
+			order_list.innerHTML = '';
+			
+			order_list.appendChild(fragment);
+		}else{
+			order_list.innerHTML = '';
+			
+			order_list.appendChild(fragment);
+			
+		}
+		
+		if(pullOj&&pullOj.loading) {
+			if(is_down){
+				console.log('1_1');
+				pullOj.endPullDownToRefresh();
+				pullOj.refresh(true);
+			}else{
+				console.log('2_2');
+				console.log('up----'+is_more)
+				pullOj.endPullUpToRefresh(is_more);
+				
+			}
+		}
+	
+}
+
+function gotoPage(url) {
+	mui.openWindow({
+		url: url,
+		id: url,
+		show: {
+				aniShow: 'pop-in'
+			}
+	});
+	
+}
+
+function RefreshPage(data,order_id){
+	console.log(status_url);
+	if(status_url == '0'){
+		console.log('1');
+		pullRefreshList(status_url);
+		
+	}else if(!status_url){
+		console.log('2');
+		mui('.btnList').each(function(index,order){
+		var oid = order.getAttribute('order_id');
+		if(oid == order_id){
+			
+			order.innerHTML ='<div class="mui-col-sm-6 mui-col-xs-6">'+
+				//'<button type="button" class="mui-btn mui-pull-right">查看物流</button>'+
+				'</div>'+ 
+				'<div class="mui-col-sm-6 mui-col-xs-6">'+
+				'<button id="deleteOrder" oid="'+order_id+'" type="button" class="mui-btn mui-pull-right">删除订单</button>'+
+			'</div>';
+			}
+		});
+	}
+	
+}
+
+var isLogin = function() {
+	var authToken = plus.storage.getItem('authToken');
+	var u_phone = plus.storage.getItem('u_phone');
+	if(!u_phone || !authToken) {
+		return false;
+	} else {
+		return true;
+	}
+}
+			
+//			0=>'未支付',
+//          1=>'已支付',
+//          2=>'已发货',
+//          3=>'已收货',//待评价
+//          4=>'已评价',
+//          5=>'申请退款退货',//只有发货后才可以申请退款退货
+//          6=>'同意退款退货',
+//          7=>'拒绝退款退货',
+//          8=>'已退款-退款退货',
+//          9=>'未发货申请退款',
+//          10=>'未发货同意退款',
+//          11=>'未发货拒绝退款',
+//          12=>'已退款-未发货',
+//          13=>'已发货申请退款',
+//          14=>'已发货同意退款',
+//          15=>'已发货拒绝退款',
+//          16=>'已退款-已发货',
+//          17=>'已关闭',//已取消
+//          18=>'用户已删除',
+	</script>
+<script src="js/immersed.js"></script>

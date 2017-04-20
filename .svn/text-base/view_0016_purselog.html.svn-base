@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script>
+			mui.init();
+		</script>
+
+		<style>
+			body,
+			.mui-content {
+				background-color: #F5F5F5;
+			}
+			#points_num{
+				font-size:44px;
+				color:#ffb100;
+				margin: 10px auto;
+			}
+			.date{
+				font-size:14px;
+				color:#9b9b9b;
+			}
+			.reason{
+				font-size:18px;color:#53575e;
+			}
+			.point_more{
+				font-size:18px;
+				color:#ffb100;
+				float: right;
+			}
+			.point_less{
+				font-size:18px;
+				color:#4a4a4a;
+				float: right;
+			}
+			.list_null{
+				font-size:14px;
+				color:rgba(0,0,0,0.48);
+				text-align: center;
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;" class="goto-page" data-href="view_0016_purselog.html"><b>余额明细</b></h1>
+		</header>
+		<div class="mui-content">
+			<div>
+				<ul id="purse_log_list" class="mui-table-view">
+					<div class="list_null">加载中...</div>
+					 <!--<li class="mui-table-view-cell">
+					 	<div class="reason">余额充值</div>
+					 	<div class="date">2016-10-11 12:22:22<span class="point_more">+5000.00</span></div>
+					 </li>
+			        <li class="mui-table-view-cell">
+					 	<div class="reason">支付订单</div>
+					 	<div class="date">2016-10-11 12:22:22<span class="point_less">-5000.00</span></div>
+					 </li>
+					 <li class="mui-table-view-cell">
+					 	<div class="reason">余额充值</div>
+					 	<div class="date">2016-10-11 12:22:22<span class="point_more">+5000.00</span></div>
+					 </li>
+			        <li class="mui-table-view-cell">
+					 	<div class="reason">订单退款</div>
+					 	<div class="date">2016-10-11 12:22:22<span class="point_more">+200.00</span></div>
+					 </li>-->
+				</ul>
+			</div>
+		</div>
+	</body>
+
+</html>
+<script>
+	mui.plusReady(function(){
+		view=plus.webview.currentWebview();
+		view.addEventListener("show", function(e){
+			getPurseLogList();
+		    console.log( "Webview Showed："+view.id );
+		    mui.preload({
+				url:'view_0016_purselog.html',
+				id:'view_0016_purselog.html'
+			});
+			 mui.preload({
+				url:'view_0016_purse_recharge.html',
+				id:'view_0016_purse_recharge.html'
+			});
+		}, false);
+		mui("body").on('tap','.goto-page',function(){
+            var href = this.getAttribute('data-href');
+            gotoPage(href);
+       });
+	});
+	
+	function getPurseLogList(){
+		var authToken = plus.storage.getItem('authToken');
+            mui.ajax(SERVER_HOST+'home/balance-log',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						parseData(data);
+					}else{
+						plus.ui.toast(data.msg);
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	function parseData(data){
+		var purse_log_list=document.getElementById("purse_log_list");
+		var html_str='';
+			if(data.data.models.length>0){
+				for(var i = 0; i < data.data.models.length; i++) {
+					var point_class='point_more';
+//					var value=parseFloat(data.data.models[i].amount_desc).toFixed(2);
+					if(data.data.models[i].amount<=0){
+						point_class='point_less';
+					}
+					html_str=html_str+'<li class="mui-table-view-cell">'+
+								 	'<div class="reason">'+data.data.models[i].title+'</div>'+
+								 	'<div class="date">'+TimeToData(data.data.models[i].created_at)+'<span class="'+point_class+'">'+data.data.models[i].amount_desc+'</span></div>'+
+								 '</li>';
+				}
+			}else{
+				html_str='<div class="list_null">没有记录</div>';
+			}
+			purse_log_list.innerHTML=html_str;
+	}
+	
+	function TimeToData(time){
+		var date = new Date(time*1000);
+		Y = date.getFullYear() + '-';
+		M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+		D = date.getDate() < 10 ?'0'+date.getDate():date.getDate();
+		h = date.getHours() + ':';
+		m = date.getMinutes() + ':';
+		s = date.getSeconds(); 
+		return (Y+M+D+' '+h+m+s);
+	}
+	
+</script>
+<script src="js/immersed.js"></script>

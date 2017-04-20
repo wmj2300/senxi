@@ -1,0 +1,1235 @@
+{
+  "index.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "tab_main.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "tab_sub_home.html",
+      "fonts/mui.ttf",
+      "fonts/mui-icons-extra.ttf",
+      "css/icons-extra.css",
+      "js/jquery.min.js",
+      "tab_sub_user.html",
+      "tab_sub_shoppingcart.html",
+      "js/websql.js",
+      "css/iconfont.css",
+      "images/menu_home_def.png",
+      "images/menu_home_sel.png",
+      "images/menu_user_sel.png",
+      "images/menu_sp_def.png",
+      "images/menu_user_def.png",
+      "images/menu_car_def.png",
+      "images/menu_car_sel.png",
+      "images/menu_sp_sel.png"
+    ],
+    "refer": [
+      "tab_sub_user.html",
+      "tab_sub_waybill.html",
+      "tab_sub_msg.html",
+      "tab_sub_contact.html",
+      "tab_sub_home.html",
+      "tab_sub_shoppingcart.html",
+      "tab_sub_goods.html",
+      "view_0003_login.html",
+      "view_0013_coupon.html",
+      "view_0015_myorder_trade_done.html",
+      "view_0015_myorder_all.html"
+    ]
+  },
+  "tab_sub_user.html": {
+    "resources": [
+      "js/mui.min.js",
+      "images/avatar.png",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "css/icons-extra.css",
+      "fonts/mui-icons-extra.ttf",
+      "images/goods_hot_pic1.png",
+      "images/goods_hot_pic2.png",
+      "images/goods_hot_pic4.png",
+      "images/goods_hot_pic3.png",
+      "images/goods_hot_pic5.png",
+      "images/user_order_pic1.png",
+      "images/user_order_pic4.png",
+      "images/user_order_pic3.png",
+      "images/user_order_pic2.png",
+      "images/user_fun_pic3.png",
+      "images/user_fun_pic4.png",
+      "images/user_fun_pic2.png",
+      "images/user_fun_pic5.png",
+      "images/user_fun_pic1.png",
+      "images/user_fun_pic6.png",
+      "plugin/layer/layer.css",
+      "plugin/layer/layer.js",
+      "js/jquery.min.js",
+      "images/user_order_pic5.png",
+      "images/point_upload.png",
+      "images/back_b.png",
+      "images/xiugai.png",
+      "js/immersed.js",
+      "images/userimg.png",
+      "js/const.js",
+      "js/md5.js",
+      "images/lazyloadimg.jpg",
+      "js/mui.pullToRefresh.js",
+      "js/mui.pullToRefresh.material.js",
+      "css/mui.pullToRefresh.css",
+      "css/iconfont.css",
+      "images/xiaoxi_dian.png",
+      "images/qiandao.png",
+      "plugin/im/strophe-1.2.8.min.js",
+      "plugin/im/websdk-1.4.5.min.js",
+      "js/hx_login.js",
+      "plugin/im/webim.config.js",
+      "images/purse_recharge_des.png",
+      "images/default.png"
+    ],
+    "refer": [
+      "view_0003_login.html",
+      "view_0004_reg.html",
+      "view_0008_address_manager.html",
+      "view_0010_setting.html",
+      "view_0011_favorites.html",
+      "view_0012_message.html",
+      "view_0013_coupon.html",
+      "view_0015_myorder_all.html",
+      "view_0016_purse.html",
+      "view_0015_order_backmoney_list.html",
+      "view_0015_order_after_service.html",
+      "view_0006_pointmarket.html"
+    ]
+  },
+  "tab_sub_home.html": {
+    "resources": [
+      "images/cbd.jpg",
+      "images/muwu.jpg",
+      "images/yuantiao.jpg",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "images/shuijiao.jpg",
+      "images/home_slider_pic1.jpg",
+      "images/home_slider_pic3.jpg",
+      "images/home_slider_pic2.jpg",
+      "images/home_slider_pic4.jpg",
+      "images/home_grid_pic2.png",
+      "images/home_midle_pic3.png",
+      "images/home_midle_pic1.png",
+      "images/home_grid_pic3.png",
+      "images/home_grid_pic1.png",
+      "images/home_midle_pic2.png",
+      "images/home_grid_pic4.png",
+      "images/home_brand_pic1.png",
+      "images/home_brand_pic3.png",
+      "images/home_brand_pic4.png",
+      "images/home_brand_pic2.png",
+      "images/home_brand_pic5.png",
+      "images/home_brand_pic6.png",
+      "images/home_activity_pic3.png",
+      "images/home_activity_pic2.png",
+      "images/home_activity_pic1.png",
+      "images/home_store_pic2.png",
+      "images/home_store_pic3.png",
+      "images/home_store_pic1.png",
+      "images/home_end_pic1.png",
+      "fonts/mui.ttf",
+      "images/avatar.png",
+      "js/jquery.min.js",
+      "img_tmp/home_slider_pic4.png",
+      "img_tmp/home_slider_pic1.png",
+      "img_tmp/home_slider_pic2.png",
+      "img_tmp/home_slider_pic3.png",
+      "img_tmp/home_brand_pic1.png",
+      "img_tmp/home_brand_pic2.png",
+      "img_tmp/home_brand_pic5.png",
+      "img_tmp/home_brand_pic6.png",
+      "img_tmp/home_brand_pic4.png",
+      "img_tmp/home_brand_pic7.png",
+      "img_tmp/home_brand_pic8.png",
+      "img_tmp/home_brand_pic9.png",
+      "plugin/layer_mobile/layer.js",
+      "plugin/layer_mobile/layer.css",
+      "plugin/layer/layer.css",
+      "plugin/layer/layer.js",
+      "js/mui.picker.min.js",
+      "css/mui.picker.min.css",
+      "js/city.data-3.js",
+      "js/immersed.js",
+      "tab_sub_home_content.html",
+      "js/const.js",
+      "js/md5.js",
+      "js/mui.lazyload.img.js",
+      "js/mui.lazyload.js",
+      "images/search.png",
+      "images/lazyloadimg.jpg",
+      "js/mui.pullToRefresh.js",
+      "js/mui.pullToRefresh.material.js",
+      "css/mui.pullToRefresh.css",
+      "js/websql.js",
+      "plugin/im/strophe-1.2.8.min.js",
+      "plugin/im/websdk-1.4.5.min.js",
+      "plugin/im/webim.config.js",
+      "js/hx_login.js",
+      "images/default.png"
+    ],
+    "refer": [
+      "view_9001_help.html",
+      "view_0001_search.html",
+      "view_0003_good_detail.html",
+      "view_0006_pointmarket.html",
+      "view_0003_login.html",
+      "view_0012_message.html",
+      "view_0002_search_result.html",
+      "view_0015_myorder_all.html",
+      "view_0016_purse.html",
+      "view_0008_address_manager.html",
+      "view_0011_favorites.html",
+      "view_0015_order_after_service.html",
+      "view_0013_coupon.html",
+      "view_0010_setting.html",
+      "view_9000_webview.html",
+      "view_0004_seller_settlein.html",
+      "view_0003_shop_home.html",
+      "view_0015_order_backmoney.html"
+    ]
+  },
+  "tab_sub_contact.html": {
+    "resources": [
+      "images/60x60.gif"
+    ],
+    "refer": []
+  },
+  "tab_sub_shoppingcart.html": {
+    "resources": [
+      "images/60x60.gif",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "js/jquery.min.js",
+      "img_tmp/shooping_cart_pic1.png",
+      "images/good_detail_conect_seller.png",
+      "images/delete.png",
+      "images/shixiao_shopcar.png",
+      "images/alone_delete.png",
+      "js/immersed.js",
+      "img_tmp/favorites_good_pic1.png",
+      "plugin/layer/layer.js",
+      "plugin/layer/layer.css",
+      "plugin/pulldown/pulldown.js",
+      "plugin/pulldown/pulldown.css",
+      "js/md5.js",
+      "js/const.js",
+      "js/mui.pullToRefresh.js",
+      "js/mui.pullToRefresh.material.js",
+      "css/mui.pullToRefresh.css",
+      "images/shopping_car_empt.png"
+    ],
+    "refer": [
+      "view_0006_pointmarket_buy.html",
+      "view_0003_login.html",
+      "view_0003_good_buy.html"
+    ]
+  },
+  "tab_sub_goods.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/home_grid_pic2.png",
+      "images/home_grid_pic3.png",
+      "images/home_grid_pic1.png",
+      "images/home_grid_pic4.png",
+      "images/goods_hot_pic1.png",
+      "images/goods_hot_pic2.png",
+      "images/goods_hot_pic4.png",
+      "images/goods_hot_pic3.png",
+      "images/goods_hot_pic5.png",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js",
+      "plugin/pulldown/pulldown.js",
+      "plugin/pulldown/pulldown.css",
+      "js/mui.pullToRefresh.js",
+      "js/mui.pullToRefresh.material.js",
+      "css/mui.pullToRefresh.css"
+    ],
+    "refer": [
+      "view_0002_search_result.html"
+    ]
+  },
+  "view_9001_help.html": {
+    "refer": [
+      "tab_sub_home.html",
+      "view_0003_login.html"
+    ],
+    "resources": [
+      "images/store_in.png",
+      "tab_sub_home.html",
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ]
+  },
+  "view_0003_login.html": {
+    "refer": [
+      "view_0004_reg.html",
+      "view_0005_findpwd.html",
+      "tab_main.html"
+    ],
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/login_logo.png",
+      "images/login_phone.png",
+      "images/login_pwd.png",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ]
+  },
+  "view_0004_reg.html": {
+    "refer": [
+      "view_0005_findpwd.html",
+      "view_0004_reg.html",
+      "view_0010_setting_help_useragreement.html"
+    ],
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/login_logo.png",
+      "images/login_pwd.png",
+      "images/login_phone.png",
+      "js/immersed.js",
+      "js/const.js",
+      "js/md5.js"
+    ]
+  },
+  "view_0005_findpwd.html": {
+    "refer": [
+      "view_0005_findpwd.html",
+      "view_0003_login.html"
+    ],
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/login_pwd.png",
+      "images/login_phone.png",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ]
+  },
+  "view_0001_search.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js",
+      "images/search.png"
+    ],
+    "refer": [
+      "view_0002_search_result.html",
+      "tab_main.html"
+    ]
+  },
+  "view_0002_search_result.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/icons-extra.css",
+      "fonts/mui-icons-extra.ttf",
+      "img_tmp/goods_result_list_pic1.png",
+      "img_tmp/favorites_good_pic1.png",
+      "img_tmp/shooping_cart_pic1.png",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js",
+      "images/ziying_kuang.png",
+      "images/ziying_img.png",
+      "images/ziying_select_is.png",
+      "images/search.png",
+      "js/mui.pullToRefresh.js",
+      "css/mui.pullToRefresh.css",
+      "js/mui.pullToRefresh.material.js"
+    ],
+    "refer": [
+      "view_0003_good_detail.html",
+      "view_0003_groupgood_detail.html",
+      "view_0003_good_detail_groupbuy.html"
+    ]
+  },
+  "view_0003_good_detail.html": {
+    "resources": [
+      "img_tmp/good_detail_img.png",
+      "images/back_b.png",
+      "images/shopcar_b.png",
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/icons-extra.css",
+      "images/good_detail_collect.png",
+      "images/good_detail_conect_seller.png",
+      "images/shop_score.png",
+      "images/vertical_line.png",
+      "images/shop_score_dark.png",
+      "img_tmp/good_detail_dianpu.png",
+      "img_tmp/buy_good_pic.png",
+      "img_tmp/good_size_blackground.png",
+      "css/app.css",
+      "images/tuangou_jiantou.png",
+      "images/tuangou_back.png",
+      "images/Collect_yes.png",
+      "js/const.js",
+      "js/md5.js",
+      "images/Rectangle 9.jpg",
+      "images/lazyloadimg.jpg",
+      "images/collected_no.png",
+      "images/collected_yes.png",
+      "images/alone_delete.png",
+      "js/isLogin.js"
+    ],
+    "refer": [
+      "view_0005_findpwd.html",
+      "view_0004_reg.html",
+      "view_0003_good_graphic_details.html",
+      "view_0003_shop_home.html",
+      "view_0003_chat_window.html",
+      "view_0003_good_buy.html",
+      "view_0003_groupgood_detail.html",
+      "view_0003_good_detail_groupbuy.html"
+    ]
+  },
+  "view_0006_pointmarket.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/user_fun_pic1.png",
+      "img_tmp/point_market_goods_item.png",
+      "img_tmp/point_market_goods_item4.png",
+      "img_tmp/point_market_goods_item2.png",
+      "img_tmp/point_market_goods_item1.png",
+      "img_tmp/point_market_goods_item3.png",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": [
+      "view_0007_pointlog.html",
+      "view_0006_pointmarket_good_detail.html",
+      "view_0006_pointmarket_buy.html"
+    ]
+  },
+  "view_0007_pointlog.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": []
+  },
+  "view_0008_address_manager.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": [
+      "view_0009_address_add.html",
+      "view_0006_pointmarket_buy.html",
+      "view_0009_address_addedit.html",
+      "view_0009_address_edit.html"
+    ]
+  },
+  "view_0009_address_add.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.picker.min.js",
+      "css/mui.picker.min.css",
+      "js/city.data-3.js",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js",
+      "js/mui.poppicker.js"
+    ],
+    "refer": []
+  },
+  "view_0010_setting.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/city.data-3.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/mui.picker.min.css",
+      "js/immersed.js",
+      "images/pyq.png",
+      "images/qq.png",
+      "images/wechat.png",
+      "plugin/im/strophe-1.2.8.min.js",
+      "plugin/im/websdk-1.4.5.min.js",
+      "js/hx_login.js",
+      "plugin/im/webim.config.js"
+    ],
+    "refer": [
+      "view_0003_login.html",
+      "view_0010_setting_help.html",
+      "view_0005_editpwd.html"
+    ]
+  },
+  "view_0011_favorites.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "img_tmp/shooping_cart_pic1.png",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "img_tmp/favorites_good_pic1.png",
+      "images/shop_score.png",
+      "images/shop_score_dark.png",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": [
+      "view_0003_shop_home.html"
+    ]
+  },
+  "view_0012_message.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "img_tmp/shooping_cart_pic1.png",
+      "css/mui.min.css",
+      "img_tmp/message_chat_pic1.png",
+      "img_tmp/message_chat_pic2.png",
+      "img_tmp/message_chat_pic3.png",
+      "images/message_system_pic1.png",
+      "images/message_system_pic2.png",
+      "js/immersed.js",
+      "js/websql.js",
+      "plugin/im/strophe-1.2.8.min.js",
+      "plugin/im/websdk-1.4.5.min.js",
+      "js/hx_login.js",
+      "plugin/im/webim.config.js",
+      "js/const.js",
+      "js/mui.pullToRefresh.js",
+      "js/mui.pullToRefresh.material.js",
+      "css/mui.pullToRefresh.css"
+    ],
+    "refer": [
+      "view_0003_chat_window.html",
+      "view_0012_message_order.html",
+      "view_0012_message_sys.html"
+    ]
+  },
+  "view_0010_setting_help.html": {
+    "resources": [
+      "js/mui.min.js",
+      "js/mui.picker.min.js",
+      "js/city.data-3.js",
+      "fonts/mui.ttf",
+      "js/immersed.js",
+      "css/mui.picker.min.css",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "view_0010_setting_help_shopprocess.html",
+      "view_0010_setting_help_privacystatement.html",
+      "view_0010_setting_help_about.html",
+      "view_0010_setting_help_useragreement.html"
+    ]
+  },
+  "view_0013_coupon.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "img_tmp/shooping_cart_pic1.png",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": [
+      "view_0014_coupon_dateout.html",
+      "view_0006_pointmarket_buy.html",
+      "view_0014_coupon_useinfo.html"
+    ]
+  },
+  "view_0014_coupon_dateout.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/coupon_dateout.png",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": []
+  },
+  "view_0003_good_graphic_details.html": {
+    "resources": [
+      "img_tmp/graphic_details1.png",
+      "js/mui.min.js",
+      "fonts/mui-icons-extra.ttf",
+      "images/shop_score.png",
+      "images/shop_score_dark.png",
+      "img_tmp/good_detail_dianpu.png",
+      "images/good_detail_conect_seller.png",
+      "fonts/mui.ttf",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js",
+      "css/icons-extra.css",
+      "img_tmp/good_size_blackground.png",
+      "css/mui.min.css",
+      "images/lazyloadimg.jpg"
+    ],
+    "refer": [
+      "view_0003_chat_window.html"
+    ]
+  },
+  "view_0003_shop_home.html": {
+    "resources": [
+      "images/guanzhu.png",
+      "images/share.png",
+      "images/rank_triangle.png",
+      "js/mui.min.js",
+      "images/shop_score.png",
+      "fonts/mui.ttf",
+      "img_tmp/shooping_cart_pic1.png",
+      "img_tmp/home_slider_pic3.png",
+      "img_tmp/good_detail_dianpu.png",
+      "css/icons-extra.css",
+      "images/good_detail_conect_seller.png",
+      "img_tmp/home_slider_pic4.png",
+      "img_tmp/home_slider_pic2.png",
+      "img_tmp/favorites_good_pic1.png",
+      "css/mui.min.css",
+      "images/shop_score_dark.png",
+      "img_tmp/home_slider_pic1.png",
+      "images/dp_spfl.png",
+      "images/dp_dpjs.png",
+      "js/immersed.js",
+      "images/good_detail_collect.png",
+      "js/const.js",
+      "js/md5.js",
+      "images/Collect_yes.png",
+      "images/lazyloadimg.jpg",
+      "images/collected_no.png",
+      "img_tmp/point_market_goods_item3.png",
+      "img_tmp/point_market_goods_item2.png",
+      "img_tmp/point_market_goods_item1.png",
+      "images/collected_yes.png",
+      "js/mui.pullToRefresh.js",
+      "js/mui.pullToRefresh.material.js",
+      "css/mui.pullToRefresh.css"
+    ],
+    "refer": [
+      "view_0003_goods_classify.html",
+      "view_0003_shop_introduce.html",
+      "view_0003_chat_window.html"
+    ]
+  },
+  "view_0015_myorder_all.html": {
+    "resources": [
+      "images/group.png",
+      "js/mui.min.js",
+      "css/app.css",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/icons-extra.css",
+      "img_tmp/buy_good_pic.png",
+      "js/immersed.js",
+      "images/lazyloadimg.jpg",
+      "js/const.js",
+      "js/mui.pullToRefresh.js",
+      "css/mui.pullToRefresh.css",
+      "js/mui.pullToRefresh.material.js"
+    ],
+    "refer": [
+      "view_0015_myorder_trade_done.html",
+      "view_0015_myorder_waitpay.html",
+      "view_0015_myorder_waitdelgood.html",
+      "view_0015_myorder_waitreceive.html",
+      "view_0015_myorder_evaluate.html",
+      "view_0003_good_buy.html",
+      "view_0015_myorder_trade_close.html"
+    ]
+  },
+  "view_0003_goods_classify.html": {
+    "resources": [
+      "js/mui.min.js",
+      "js/md5.js",
+      "js/const.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js"
+    ],
+    "refer": []
+  },
+  "view_0003_shop_introduce.html": {
+    "resources": [
+      "js/mui.min.js",
+      "images/Collect_yes.png",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/good_detail_conect_seller.png",
+      "images/shop_score.png",
+      "images/shop_score_dark.png",
+      "img_tmp/good_detail_dianpu.png",
+      "images/collected_yes.png",
+      "images/collected_no.png",
+      "images/lazyloadimg.jpg"
+    ],
+    "refer": [
+      "view_0003_chat_window.html"
+    ]
+  },
+  "view_0003_chat_window.html": {
+    "resources": [
+      "js/mui.imageViewer.js",
+      "css/mui.imageviewer.css",
+      "js/arttmpl.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "plugin/im/myemojiPl.css",
+      "plugin/im/myemojiPl.js",
+      "plugin/im/jquery.min.js",
+      "images/good_detail_conect_seller.png",
+      "plugin/im/face.png",
+      "plugin/im/qqface/9.gif",
+      "plugin/im/qqface/42.gif",
+      "plugin/im/qqface/34.gif",
+      "plugin/im/qqface/7.gif",
+      "plugin/im/qqface/69.gif",
+      "plugin/im/qqface/8.gif",
+      "plugin/im/qqface/11.gif",
+      "plugin/im/qqface/55.gif",
+      "plugin/im/qqface/53.gif",
+      "plugin/im/qqface/16.gif",
+      "plugin/im/qqface/33.gif",
+      "plugin/im/qqface/68.gif",
+      "plugin/im/qqface/31.gif",
+      "plugin/im/qqface/18.gif",
+      "plugin/im/qqface/14.gif",
+      "plugin/im/qqface/3.gif",
+      "plugin/im/qqface/10.gif",
+      "plugin/im/qqface/15.gif",
+      "plugin/im/qqface/37.gif",
+      "plugin/im/qqface/60.gif",
+      "plugin/im/qqface/52.gif",
+      "plugin/im/qqface/29.gif",
+      "plugin/im/qqface/62.gif",
+      "plugin/im/qqface/71.gif",
+      "plugin/im/qqface/32.gif",
+      "plugin/im/qqface/43.gif",
+      "plugin/im/qqface/58.gif",
+      "plugin/im/qqface/38.gif",
+      "plugin/im/qqface/26.gif",
+      "plugin/im/qqface/59.gif",
+      "plugin/im/qqface/22.gif",
+      "plugin/im/qqface/2.gif",
+      "plugin/im/qqface/5.gif",
+      "plugin/im/qqface/28.gif",
+      "plugin/im/qqface/30.gif",
+      "plugin/im/qqface/72.gif",
+      "plugin/im/qqface/67.gif",
+      "plugin/im/qqface/35.gif",
+      "plugin/im/qqface/13.gif",
+      "plugin/im/qqface/46.gif",
+      "plugin/im/qqface/41.gif",
+      "plugin/im/qqface/57.gif",
+      "plugin/im/qqface/40.gif",
+      "plugin/im/qqface/24.gif",
+      "plugin/im/qqface/4.gif",
+      "plugin/im/qqface/66.gif",
+      "plugin/im/qqface/45.gif",
+      "plugin/im/qqface/70.gif",
+      "plugin/im/qqface/25.gif",
+      "plugin/im/qqface/44.gif",
+      "plugin/im/qqface/73.gif",
+      "plugin/im/qqface/1.gif",
+      "plugin/im/qqface/19.gif",
+      "plugin/im/qqface/39.gif",
+      "plugin/im/qqface/21.gif",
+      "plugin/im/qqface/6.gif",
+      "plugin/im/qqface/17.gif",
+      "plugin/im/qqface/56.gif",
+      "plugin/im/qqface/20.gif",
+      "plugin/im/qqface/51.gif",
+      "plugin/im/qqface/63.gif",
+      "plugin/im/qqface/48.gif",
+      "plugin/im/qqface/50.gif",
+      "plugin/im/qqface/49.gif",
+      "plugin/im/qqface/47.gif",
+      "plugin/im/qqface/74.gif",
+      "plugin/im/qqface/54.gif",
+      "plugin/im/qqface/12.gif",
+      "plugin/im/qqface/36.gif",
+      "plugin/im/qqface/23.gif",
+      "plugin/im/qqface/65.gif",
+      "plugin/im/qqface/27.gif",
+      "plugin/im/qqface/61.gif",
+      "plugin/im/qqface/75.gif",
+      "plugin/im/qqface/64.gif",
+      "plugin/im/strophe-1.2.8.min.js",
+      "plugin/im/websdk-1.4.5.min.js",
+      "plugin/im/webim.config.js",
+      "images/avatar.png",
+      "js/hx_login.js",
+      "js/mui.pullToRefresh.js",
+      "css/mui.pullToRefresh.css",
+      "js/mui.pullToRefresh.material.js"
+    ],
+    "refer": []
+  },
+  "view_0016_purse.html": {
+    "resources": [
+      "images/purse_chongzhi.png",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/60x60.gif",
+      "images/purse_recharge_des.png",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": [
+      "view_0016_purselog.html",
+      "view_0016_purse_recharge.html"
+    ]
+  },
+  "view_0016_purselog.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": []
+  },
+  "view_0016_purse_recharge.html": {
+    "resources": [
+      "js/mui.min.js",
+      "images/purse_chongzhi.png",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/back_b.png",
+      "images/purse_recharge_alipay.png",
+      "images/purse_recharge_wxpay.png",
+      "js/immersed.js",
+      "js/const.js"
+    ],
+    "refer": []
+  },
+  "view_0015_myorder_trade_done.html": {
+    "resources": [
+      "images/dinwei.png",
+      "images/liuyan.png",
+      "images/myorderstatus.png",
+      "js/mui.min.js",
+      "css/app.css",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/icons-extra.css",
+      "img_tmp/buy_good_pic.png",
+      "images/wuliuxinxi_pic.png",
+      "js/immersed.js"
+    ],
+    "refer": [
+      "view_0015_myorder_evaluate.html"
+    ]
+  },
+  "view_0015_myorder_waitdelgood.html": {
+    "resources": [
+      "images/dinwei.png",
+      "images/liuyan.png",
+      "images/myorderstatus.png",
+      "js/mui.min.js",
+      "images/wuliuxinxi_pic.png",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "img_tmp/buy_good_pic.png",
+      "js/immersed.js",
+      "images/lazyloadimg.jpg"
+    ],
+    "refer": [
+      "view_0015_order_backmoney.html"
+    ]
+  },
+  "view_0015_myorder_waitreceive.html": {
+    "resources": [
+      "js/mui.min.js",
+      "images/dinwei.png",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/liuyan.png",
+      "images/myorderstatus.png",
+      "css/icons-extra.css",
+      "img_tmp/buy_good_pic.png",
+      "images/wuliuxinxi_pic.png",
+      "js/immersed.js"
+    ],
+    "refer": [
+      "view_9000_webview.html",
+      "view_9001_webview_nojs.html",
+      "view_0015_order_backmoney.html"
+    ]
+  },
+  "view_0015_order_backmoney.html": {
+    "resources": [
+      "js/jquery.min.js",
+      "images/xiangji.png",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "img_tmp/buy_good_pic.png",
+      "js/immersed.js"
+    ],
+    "refer": []
+  },
+  "view_0015_myorder_waitpay.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "img_tmp/buy_good_pic.png",
+      "js/const.js"
+    ],
+    "refer": [
+      "view_0006_pointmarket_buy.html",
+      "view_0003_good_buy.html"
+    ]
+  },
+  "view_0006_pointmarket_good_detail.html": {
+    "resources": [
+      "img_tmp/graphic_details1.png",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "img_tmp/point_market_goods_item1.png",
+      "css/icons-extra.css",
+      "js/immersed.js",
+      "images/shop_score.png",
+      "images/shop_score_dark.png",
+      "img_tmp/good_detail_dianpu.png",
+      "images/lazyloadimg.jpg",
+      "js/md5.js",
+      "js/const.js",
+      "images/good_detail_conect_seller.png"
+    ],
+    "refer": [
+      "view_0006_pointmarket_buy.html",
+      "view_0015_myorder_trade_done.html"
+    ]
+  },
+  "view_0006_pointmarket_buy.html": {
+    "resources": [
+      "images/pay_qianbao.png",
+      "images/dizhilan.png",
+      "images/dinwei.png",
+      "images/purse_recharge_alipay.png",
+      "images/purse_recharge_wxpay.png",
+      "js/mui.min.js",
+      "img_tmp/point_market_goods_item4.png",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "images/lazyloadimg.jpg",
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": [
+      "view_0015_myorder_trade_done.html"
+    ]
+  },
+  "view_9000_webview.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js"
+    ],
+    "refer": []
+  },
+  "view_0015_order_backmoney_list.html": {
+    "refer": [
+      "view_0015_order_backmoney.html"
+    ],
+    "resources": [
+      "js/mui.min.js"
+    ]
+  },
+  "guide.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "view_0003_login.html"
+    ]
+  },
+  "view_0015_order_after_service.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/icons-extra.css",
+      "img_tmp/buy_good_pic.png",
+      "js/immersed.js",
+      "js/mui.pullToRefresh.js",
+      "css/mui.pullToRefresh.css",
+      "js/mui.pullToRefresh.material.js",
+      "js/const.js"
+    ],
+    "refer": [
+      "view_0015_order_backmoney.html"
+    ]
+  },
+  "view_0003_good_buy.html": {
+    "resources": [
+      "images/pay_qianbao.png",
+      "images/dizhilan.png",
+      "images/dinwei.png",
+      "images/purse_recharge_alipay.png",
+      "images/purse_recharge_wxpay.png",
+      "js/immersed.js",
+      "js/mui.min.js",
+      "img_tmp/buy_good_pic.png",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/md5.js",
+      "js/const.js",
+      "images/lazyloadimg.jpg"
+    ],
+    "refer": [
+      "view_0015_myorder_trade_done.html",
+      "view_0013_coupon.html",
+      "view_0008_address_manager.html"
+    ]
+  },
+  "view_9001_webview_nojs.html": {
+    "resources": [
+      "js/mui.min.js"
+    ],
+    "refer": []
+  },
+  "view_0003_groupgood_detail.html": {
+    "resources": [
+      "images/tuangou_jiantou.png",
+      "images/tuangou_back.png",
+      "js/mui.min.js",
+      "images/good_detail_collect.png",
+      "fonts/mui.ttf",
+      "images/Rectangle 9.jpg"
+    ],
+    "refer": []
+  },
+  "view_0014_coupon_useinfo.html": {
+    "resources": [
+      "js/const.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js"
+    ],
+    "refer": []
+  },
+  "view_0015_myorder_evaluate.html": {
+    "resources": [
+      "js/immersed.js",
+      "js/mui.min.js",
+      "img_tmp/good_detail_dianpu.png",
+      "img_tmp/buy_good_pic.png",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "js/const.js"
+    ],
+    "refer": []
+  },
+  "view_0010_setting_help_shopprocess.html": {
+    "resources": [
+      "js/mui.min.js",
+      "js/immersed.js",
+      "js/md5.js"
+    ],
+    "refer": []
+  },
+  "view_0010_setting_help_about.html": {
+    "resources": [
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": []
+  },
+  "view_0009_address_addedit.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.picker.min.css",
+      "js/city.data-3.js",
+      "js/const.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js"
+    ],
+    "refer": []
+  },
+  "view_0009_address_edit.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.picker.min.css",
+      "js/city.data-3.js",
+      "js/const.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js"
+    ],
+    "refer": []
+  },
+  "view_0005_editpwd.html": {
+    "resources": [
+      "images/login_pwd.png",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js"
+    ],
+    "refer": []
+  },
+  "view_0010_setting_help_useragreement.html": {
+    "resources": [
+      "js/const.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js"
+    ],
+    "refer": []
+  },
+  "view_0012_message_order.html": {
+    "refer": [
+      "view_0014_coupon_useinfo.html",
+      "view_0014_coupon_dateout.html"
+    ],
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/const.js"
+    ]
+  },
+  "view_0012_message_sys.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js"
+    ],
+    "refer": [
+      "view_0014_coupon_useinfo.html",
+      "view_0014_coupon_dateout.html"
+    ]
+  },
+  "view_0015_myorder_trade_close.html": {
+    "resources": [
+      "images/dinwei.png",
+      "images/liuyan.png",
+      "images/myorderstatus.png",
+      "css/icons-extra.css",
+      "js/const.js",
+      "img_tmp/buy_good_pic.png"
+    ],
+    "refer": []
+  },
+  "view_0003_good_detail_groupbuy.html": {
+    "refer": [
+      "view_0003_good_graphic_details.html",
+      "view_0003_good_buy.html"
+    ],
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "images/vertical_line.png",
+      "css/mui.min.css",
+      "images/collected_no.png",
+      "images/back_b.png",
+      "images/lazyloadimg.jpg",
+      "images/shopcar_b.png",
+      "images/good_detail_conect_seller.png",
+      "js/md5.js",
+      "js/const.js",
+      "images/collected_yes.png",
+      "images/shop_score_dark.png"
+    ]
+  },
+  "view_0004_seller_settlein.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/immersed.js",
+      "js/md5.js",
+      "js/const.js",
+      "images/store_in_1.png"
+    ],
+    "refer": []
+  }
+}

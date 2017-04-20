@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="plugin/layer/layer.css" rel="stylesheet" />
+		<script src="plugin/layer/layer.js"></script>
+
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/icons-extra.css" rel="stylesheet" />
+		<link href="css/iconfont.css" rel="stylesheet" /> 
+		<script src="js/mui.min.js"></script>
+
+		<link href="css/mui.pullToRefresh.css" rel="stylesheet" />
+		<script src="js/mui.pullToRefresh.js"></script>
+		<script src="js/mui.pullToRefresh.material.js"></script>
+		
+		<!--环信-->
+		<script type='text/javascript' src='plugin/im/webim.config.js'></script>
+		<script type='text/javascript' src='plugin/im/strophe-1.2.8.min.js'></script>
+		<script type='text/javascript' src='plugin/im/websdk-1.4.5.min.js'></script>
+		
+		<script type="text/javascript" src="js/hx_login.js"></script>
+
+		<style>
+			#mui-bar-nav {
+				box-shadow: 0 1px 6px rgba(204, 204, 204, 0);
+				-webkit-box-shadow: 0 1px 6px rgba(204, 204, 204, 0);
+			}
+			
+			.mui-content,
+			.mui-grid-view.mui-grid-9 {
+				background-color: white;
+			}
+			
+			a:hover {
+				text-decoration: none;
+			}
+			
+			#order_all.mui-navigate-right:after,
+			#order_all.mui-push-right:after {
+				right: 15px;
+				content: '全部订单\e583';
+				font-size: 13px;
+			}
+			
+			.mui-table-view-cell img {
+				width: 55px;
+				height: 55px;
+			}
+			
+			#user_fun img {
+				width: 28px;
+				height: 28px;
+			}
+			
+			.mui-table-view:before {
+				background-color: #f6f6f6;
+			}
+			
+			.mui-table-view:after {
+				background-color: #f6f6f6;
+				height: 0;
+				margin-bottom: 10px;
+			}
+			
+			.order_status.mui-grid-view.mui-grid-9 .mui-table-view-cell {
+				margin-top: 10px;
+				padding: 0;
+				border-right: 0px solid #f6f6f6;
+				border-bottom: 0px solid #f6f6f6;
+				border-top: 0px solid #f6f6f6;
+				border-left: 0px solid #f6f6f6;
+			}
+			
+			.user_fun.mui-grid-view.mui-grid-9 .mui-table-view-cell {
+				margin: 0;
+				padding: 20px 0;
+				border-right: 1px solid #f6f6f6;
+				border-bottom: 1px solid #f6f6f6;
+				border-top: 0px solid #f6f6f6;
+			}
+			
+			.mui-grid-view.mui-grid-9 .mui-table-view-cell>a:not(.mui-btn) {
+				padding: 0px 0;
+			}
+			
+			#user_avatar_edit,
+			.user_avatar {
+				text-align: center;
+				width: 100%;
+				padding-top: 10px;
+				padding-bottom: 10px;
+			}
+			
+			#user_avatar_edit img,
+			.user_avatar img {
+				width: 75px;
+				height: 75px;
+				background-size: 100%;
+				border-radius: 50%;
+				vertical-align: middle;
+				margin-bottom: 5px;
+			}
+			
+			.order_status li {
+				width: 20%;
+			}
+			
+			#user_edit_nick {
+				width: 70%;
+				color: white;
+				background-color: #037243;
+				text-align: center;
+			}
+			
+			#user_avatar_edit {
+				background-color: #069a5c;
+				/*position: fixed;
+				top: 44px;
+				z-index: 99;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<header id="mui-bar-nav" class="mui-bar mui-bar-nav" style="background-color: #069a5c;">
+			<span id="btn_sign" class="title_btn " style="float: left;color: white;padding-top:1px;text-align: center;">
+				<img style="display: block;width: 25px;height: 22px;" src="images/qiandao.png"/>
+				<p style="font-size:13px;vertical-align: middle;color: white;">签到</p>
+			</span>
+			
+			<h1 id="title" class="mui-title" style="color: white;"><b>个人中心</b></h1>
+			<!--<span class="title_btn  mui-pull-right goto-page" style="color: white;padding-top:1px;text-align: center;" href_data="view_0012_message.html">
+				<img  style="display: block;width: 22px;height: 22px;margin-left: 2px;"src="images/xiaoxi_dian.png"/>
+				<p style="font-size:13px;vertical-align: middle;color: white;">消息</p>
+				
+			</span>-->
+			<span class="title_btn mui-icon mui-icon-chat mui-pull-right goto-page" style="color: white;margin-top: -5px;" href_data="view_0012_message.html">
+				<span id="spot" class="mui-badge mui-badge-warning" style="width: 8px;height: 8px; margin-top: 12px;margin-left: -20px;background: #ffb100;display: none;">&nbsp;</span>
+				<p style="font-size:13px;vertical-align: middle;color: white;">消息</p>
+			</span>
+
+			<a id="btn_edit_user_cancel" class="user_edit_btn mui-pull-left mui-icon mui-icon-closeempty mui-hidden" style="color: white;font-size: 40px;"></a>
+			<a id="btn_edit_user_save" class="user_edit_btn mui-pull-right mui-icon mui-hidden" style="color: white;font-size: 17px;margin-top: 11px;">保存</a>
+		</header>
+		<div class="mui-content mui-scroll-wrapper" style="overflow: scroll;">
+			<div class="mui-scroll">
+				<div id="user_avatar" class="user_avatar">
+					<span style="position: relative;display: inline-block;"><img id="avatar" src="images/lazyloadimg.jpg" />
+					<img src="images/purse_recharge_des.png" id="vipLogo" style="width: 25px;height: 25px;position:absolute;bottom: 0;right: 0;display: none;"/>
+					</span>
+					<div style="margin-top: 10px;"><span class="user_nick" id="user_nick">未登录</span><span id="btn_user_edit" class="mui-icon mui-icon-compose" style="color: green;"></span></div>
+				</div>
+				<div id="user_avatar_edit" class="mui-hidden">
+					<img id="user_edit_img_view" style="background: url(images/lazyloadimg.jpg);" src="images/userimg.png" />
+					<input id="user_edit_img_path" type="hidden" value="" />
+					<div style="text-align: center;"><input id="user_edit_nick" type="text" placeholder="请输入昵称" value="" /></div>
+				</div>
+				<ul class="mui-table-view" style="margin-top: 10px;">
+					<li class="mui-table-view-cell">
+						<a href="#about" id="order_all" class="mui-navigate-right">我的订单</a>
+					</li>
+				</ul>
+				<ul class="mui-table-view order_status mui-grid-view mui-grid-9">
+					<li class="mui-table-view-cell mui-media">
+						<a id="wait_for_pay">
+							<img src="images/user_order_pic1.png" />
+							<span class="mui-badge mui-badge-warning" id="wait_pay_num" style="top: 12px;right: 5px;"></span>
+							<div class="mui-media-body">待付款</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a id="wait_del_good">
+							<img src="images/user_order_pic2.png" />
+							<span class="mui-badge mui-badge-warning" id="wait_delivery_num" style="top: 12px;right: 5px;"></span>
+							<div class="mui-media-body">待发货</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a id="wait_receive">
+							<img src="images/user_order_pic3.png" />
+							<span class="mui-badge mui-badge-warning" id="wait_receipt_num" style="top: 12px;right: 5px;"></span>
+							<div class="mui-media-body">待收货</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a id="trade_done">
+							<img src="images/user_order_pic4.png" />
+							<span class="mui-badge mui-badge-warning" id="wait_comment_num" style="top: 12px;right: 5px;"></span>
+							<div class="mui-media-body">待评价</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media goto-page" href_data="view_0015_order_after_service.html">
+						<a id="sold_after_server">
+							<img src="images/user_order_pic5.png" />
+							<span class="mui-badge mui-badge-success" id="refund_num" style="top: 12px;right: 5px;"></span>
+							<div class="mui-media-body">售后</div>
+						</a>
+					</li>
+				</ul>
+				<ul id="user_fun" class="mui-table-view user_fun mui-grid-view mui-grid-9">
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+						<a href="javascript:void(0);" class="goto-page" href_data="view_0006_pointmarket.html">
+							<img src="images/user_fun_pic1.png" />
+							<div class="mui-media-body">积分商城</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+						<a href="javascript:void(0);" class="goto-page" href_data="view_0013_coupon.html">
+							<img src="images/user_fun_pic2.png" />
+							<div class="mui-media-body">优惠券</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+						<a href="javascript:void(0);" class="goto-page" href_type="addr_manager" href_data="view_0008_address_manager.html">
+							<img src="images/user_fun_pic3.png" />
+							<div class="mui-media-body">地址管理</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+						<a href="javascript:void(0);" class="goto-page" href_data="view_0016_purse.html">
+							<img src="images/user_fun_pic4.png" />
+							<div class="mui-media-body">我的钱包</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+						<a href="javascript:void(0);" class="goto-page" href_data="view_0011_favorites.html">
+							<img src="images/user_fun_pic5.png" />
+							<div class="mui-media-body">收藏管理</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+						<a href="javascript:void(0);" class="goto-page" href_type="setting" href_data="view_0010_setting.html">
+							<img src="images/user_fun_pic6.png" />
+							<div class="mui-media-body">设置</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+
+</html>
+
+<script>
+	//	mui.init({
+	//      swipeBack: false,
+	//      pullRefresh: {
+	//          container: '#pullrefresh',
+	//          down: {
+	//              callback: pulldownRefresh
+	//          }
+	//      }
+	//  });
+
+	mui.init();
+
+//	var pullOj = null;
+//	//循环初始化所有下拉刷新，上拉加载。
+//	mui.each(document.querySelectorAll('.mui-scroll'), function(index, pullRefreshEl) {
+//		mui(pullRefreshEl).pullToRefresh({
+//			down: {
+//				callback: function() {
+//					pullOj = this;
+//					getNameAndAvatar();
+//				}
+//			}
+//		});
+//	});
+	
+
+	function gotoPage(url) {
+		var wv = plus.webview.getWebviewById(url);
+		if(wv) {
+			wv.show('pop-in');
+		} else {
+			mui.preload({
+				url: url,
+				id: url
+			});
+			mui.openWindow({
+				url: url,
+				id: url,
+				show: {
+					aniShow: 'pop-in'
+				}
+			});
+		}
+	}
+
+	function preloadPage() {
+		console.log('loading');
+
+		mui.preload({
+			url: 'view_0015_myorder_all.html',
+			id: 'view_0015_myorder_all.html'
+		});
+		mui.preload({
+			url: 'view_0006_pointmarket.html',
+			id: 'view_0006_pointmarket.html'
+		});
+		mui.preload({
+			url: 'view_0008_address_manager.html',
+			id: 'view_0008_address_manager.html'
+		});
+		mui.preload({
+			url: 'view_0010_setting.html',
+			id: 'view_0010_setting.html'
+		});
+		mui.preload({
+			url: 'view_0011_favorites.html',
+			id: 'view_0011_favorites.html'
+		});
+		mui.preload({
+			url: 'view_0012_message.html',
+			id: 'view_0012_message.html'
+		});
+		mui.preload({
+			url: 'view_0013_coupon.html',
+			id: 'view_0013_coupon.html'
+		});
+		mui.preload({
+			url: 'view_0016_purse.html',
+			id: 'view_0016_purse.html'
+		});
+		mui.preload({
+			url: 'view_0016_purse.html',
+			id: 'view_0016_purse.html'
+		});
+		mui.preload({
+			url: 'view_0015_order_after_service.html',
+			id: 'view_0015_order_after_service.html',
+		});
+		mui.preload({
+			url: 'view_0003_login.html',
+			id: 'view_0003_login.html'
+		});
+		console.log('loaded');
+
+	}
+	var is_first=true;
+	var is_msg=false;
+	mui.plusReady(function() {
+			initHX(function(message){
+				plus.storage.setItem('is_msg',true);		
+			},'user');
+		var view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			plus.nativeUI.showWaiting();
+			console.log("Webview Showed：" + view.id);
+						getNameAndAvatar();
+			preloadPage();
+			if(!isLogin()) {
+				document.getElementById('user_nick').innerText = "未登录";
+				document.getElementById('avatar').src = 'images/lazyloadimg.jpg';
+				gotoPage('view_0003_login.html');
+				return;
+			}
+			if(is_first) {
+				is_first=false;
+				getNameAndAvatar();
+			}
+			plus.nativeUI.closeWaiting();
+			
+			if(plus.storage.getItem('is_msg')){
+				is_msg= plus.storage.getItem('is_msg')
+			}
+			
+			if(is_msg){
+				document.getElementById('spot').style.display = 'block';
+			}
+			
+		}, false);
+		mui("body").on('tap', '.goto-page', function() {
+			var href_data = this.getAttribute('href_data');
+			if(!isLogin()) {
+				if('setting' == this.getAttribute('href_type')) {
+					gotoPage(href_data);
+					return;
+				}
+				gotoPage('view_0003_login.html');
+			} else {
+				if('addr_manager' == this.getAttribute('href_type')){
+					plus.storage.removeItem('select_addr_url');
+				}
+				gotoPage(href_data);
+			}
+		});
+	});
+	document.addEventListener('refreshData', function() {
+		getNameAndAvatar();
+	});
+
+	document.getElementById('btn_user_edit').addEventListener('tap', function() {
+		if(!isLogin()) {
+			gotoPage('view_0003_login.html');
+			return;
+		}
+		document.getElementById("user_edit_nick").value = document.getElementById('user_nick').innerText;
+		//document.getElementById("user_edit_img_view").style.backgroundImage = 'url(' + document.getElementById('avatar').src + ')';
+		document.getElementById('user_avatar').classList.add('mui-hidden');
+		document.getElementById('user_avatar_edit').classList.remove('mui-hidden');
+		document.getElementsByClassName('title_btn')[0].classList.add('mui-hidden');
+		document.getElementsByClassName('title_btn')[1].classList.add('mui-hidden');
+		document.getElementsByClassName('user_edit_btn')[0].classList.remove('mui-hidden');
+		document.getElementsByClassName('user_edit_btn')[1].classList.remove('mui-hidden');
+	});
+
+	document.getElementById('btn_edit_user_cancel').addEventListener('tap', function() {
+		document.getElementById('user_avatar').classList.remove('mui-hidden');
+		document.getElementById('user_avatar_edit').classList.add('mui-hidden');
+		document.getElementsByClassName('title_btn')[0].classList.remove('mui-hidden');
+		document.getElementsByClassName('title_btn')[1].classList.remove('mui-hidden');
+		document.getElementsByClassName('user_edit_btn')[0].classList.add('mui-hidden');
+		document.getElementsByClassName('user_edit_btn')[1].classList.add('mui-hidden');
+	});
+
+	document.getElementById('btn_edit_user_save').addEventListener('tap', function() {
+		if(!isLogin()) {
+			gotoPage('view_0003_login.html');
+			return;
+		}
+		var nick = document.getElementById("user_edit_nick").value;
+		if(0 == nick.length) {
+			mui.toast("昵称不能为空");
+			return;
+		}
+//		var avatar_path = document.getElementById('user_edit_img_view').src;
+		editNick(nick);
+	});
+	document.getElementById('user_edit_img_view').addEventListener('tap', function() {
+		chooseImgFromAlbums();
+	});
+
+	document.getElementById('order_all').addEventListener('tap', function() {
+		if(!isLogin()) {
+			gotoPage('view_0003_login.html');
+			return;
+		}
+		var view_myorder = plus.webview.getWebviewById('view_0015_myorder_all.html');
+		view_myorder.evalJS('mui(".mui-slider").slider().gotoItem(0);');
+		view_myorder.show('pop-in');
+	});
+
+	document.getElementById("wait_for_pay").addEventListener('tap', function() {
+		console.log("wait_for_pay");
+		//gotoPage('view_0015_myorder_all.html#item2mobile');
+		//view_myorder.evalJS('mui.trigger(document.getElementById("btn_item3mobile"),"tap");');
+		if(!isLogin()) {
+			gotoPage('view_0003_login.html');
+			return;
+		}
+		var view_myorder = plus.webview.getWebviewById('view_0015_myorder_all.html');
+		view_myorder.evalJS('mui(".mui-slider").slider().gotoItem(1);');
+		view_myorder.show('pop-in');
+		//			document.getElementById("btn_item2mobile");
+		//			mui("#btn_item2mobile").trigger('tap')
+		//			mui.trigger(btn_item2mobile,"tap");
+		//			mui.fire(tab_mainPage,'goHomeTab');
+	});
+	document.getElementById("wait_del_good").addEventListener('tap', function() {
+		if(!isLogin()) {
+			gotoPage('view_0003_login.html');
+			return;
+		}
+		var view_myorder = plus.webview.getWebviewById('view_0015_myorder_all.html');
+		view_myorder.evalJS('mui(".mui-slider").slider().gotoItem(2);');
+		view_myorder.show('pop-in');
+	});
+	document.getElementById("wait_receive").addEventListener('tap', function() {
+		if(!isLogin()) {
+			gotoPage('view_0003_login.html');
+			return;
+		}
+		var view_myorder = plus.webview.getWebviewById('view_0015_myorder_all.html');
+		view_myorder.evalJS('mui(".mui-slider").slider().gotoItem(3);');
+		view_myorder.show('pop-in');
+	});
+	document.getElementById("trade_done").addEventListener('tap', function() {
+		if(!isLogin()) {
+			gotoPage('view_0003_login.html');
+			return;
+		}
+		var view_myorder = plus.webview.getWebviewById('view_0015_myorder_all.html');
+		view_myorder.evalJS('mui(".mui-slider").slider().gotoItem(4);');
+		view_myorder.show('pop-in');
+	});
+
+	document.getElementById("btn_sign").addEventListener('tap', function() {
+		if(!isLogin()) {
+			gotoPage('view_0003_login.html');
+			return;
+		}
+		var authToken = plus.storage.getItem('authToken');
+//		var u_phone = plus.storage.getItem('u_phone');
+//		var time = Date.parse(new Date()) / 1000;
+//		var token = CryptoJS.MD5('SenXi' + time).toString();
+		mui.ajax(SERVER_HOST + 'user/sign-in', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: authToken
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					layerOpen({
+						"title": "",
+						"content": "<h4>您已连续签到" + data.data.total_sign_num + "天</h4><span>获得积分&nbsp;&nbsp;<font style='color:red'>+" + data.data.point + "分<h5></span>",
+						"btn": ["知道了"],
+						"shadeClose": true,
+						"style": {
+							"content": "text-align: center;font-size: 16px;padding: 16px;",
+							"btn": "background-color: #FEB100;color:white;border-radius: 0px 0px 8px 8px;"
+						}
+					});
+				} else {
+					if("authToken错误" == data.msg) {
+						gotoPage('view_0003_login.html');
+						return;
+					} else {
+						mui.toast(data.msg);
+					}
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				mui.toast("网络请求超时");
+			}
+		});
+	});
+
+	//从相册选择
+	function chooseImgFromAlbums() {
+		plus.gallery.pick(function(file) {
+			console.log(file)
+			changeToLocalUrl(file);
+		}, function(err) {
+			console.log(JSON.stringify(err));
+		}, {
+			filter: 'image',
+			multiple: false
+		});
+	}
+
+	//拍照
+	function chooseImgFromPictures() {
+		var cmr = plus.camera.getCamera();
+
+		cmr.captureImage(function(file) {
+			changeToLocalUrl(file);
+		}, function(err) {
+			console.log(JSON.stringify(err));
+		}, {
+			index: '2',
+		});
+	}
+
+	function changeToLocalUrl(path) {
+		//document.getElementById('user_edit_img_path').value = path;
+//		console.log(path);
+		resizeImage(path);
+		//uploadImg(path);
+	}
+	//再对图片进行压缩为270*270，再上传到服务器
+	function resizeImage(src) {
+	  plus.zip.compressImage(
+	    {
+	      src: src,
+	      dst: '_doc/tmp_avatar.jpg',
+	      overwrite: true,
+	      width: '100px', //这里指定了宽度，同样可以修改
+	      format: 'jpg',
+	      quality: 100  //图片质量不再修改，以免失真
+	    },
+	    function(e) {
+//	      console.log(e.target);
+	      uploadImg(e.target);  //上传图片, e.target存的是本地路径！
+	    },
+	    function(err) {
+	      
+	    }
+	  );
+	}
+
+	function editNick(nick) {
+		var authToken = plus.storage.getItem('authToken');
+//		var u_phone = plus.storage.getItem('u_phone');
+//		var time = Date.parse(new Date()) / 1000;
+//		var token = CryptoJS.MD5('SenXi' + time).toString();
+		var avatar_path = document.getElementById('avatar').getAttribute('path');
+		console.log(avatar_path);
+		mui.ajax(SERVER_HOST + 'user/update-member', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: authToken,
+				nickname: nick,
+				avatar_path:avatar_path,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				if(data.status == 1) {
+					mui.toast(data.msg);
+					document.getElementById('user_nick').innerText=nick;
+					document.getElementById('user_avatar').classList.remove('mui-hidden');
+					document.getElementById('user_avatar_edit').classList.add('mui-hidden');
+					document.getElementsByClassName('title_btn')[0].classList.remove('mui-hidden');
+					document.getElementsByClassName('title_btn')[1].classList.remove('mui-hidden');
+					document.getElementsByClassName('user_edit_btn')[0].classList.add('mui-hidden');
+					document.getElementsByClassName('user_edit_btn')[1].classList.add('mui-hidden');
+				} else {
+					if("authToken错误" == data.msg) {
+						gotoPage('view_0003_login.html');
+						return;
+					} else {
+						mui.toast(data.msg);
+					}
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				mui.toast("网络请求超时");
+			}
+		});
+	}
+
+	function getNameAndAvatar() {
+		var authToken = plus.storage.getItem('authToken');
+//		var u_phone = plus.storage.getItem('u_phone');
+//		var time = Date.parse(new Date()) / 1000;
+//		var token = CryptoJS.MD5('SenXi' + time).toString();
+		mui.ajax(SERVER_HOST + 'user/info', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: authToken,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					document.getElementById('user_nick').innerText = data.data.nickname;
+					if(data.data.avatar_path==''){
+						document.getElementById('avatar').src='images/default.png'
+					}else{
+						document.getElementById('avatar').src = staticUrl + data.data.avatar_path;
+					}
+					document.getElementById("user_edit_img_view").style.backgroundImage = 'url('+staticUrl + data.data.avatar_path+')';
+					plus.storage.setItem( "user-data", data.data);
+					if(data.data.is_vip == 2){
+						document.getElementById('vipLogo').style.display = 'block';
+					}
+					if(data.data.wait_pay_num!=0){
+						document.getElementById('wait_pay_num').innerText=data.data.wait_pay_num;
+					}else{
+						document.getElementById('wait_pay_num').style.display='none';
+					}
+					
+					if(data.data.wait_delivery_num!=0){
+						document.getElementById('wait_delivery_num').innerText=data.data.wait_delivery_num;
+					}else{
+						document.getElementById('wait_delivery_num').style.display='none';
+					}
+					
+					if(data.data.wait_receipt_num!=0){
+						document.getElementById('wait_receipt_num').innerText=data.data.wait_receipt_num;
+					}else{
+						document.getElementById('wait_receipt_num').style.display='none';
+					}
+					
+					if(data.data.wait_comment_num!=0){
+						document.getElementById('wait_comment_num').innerText=data.data.wait_comment_num;
+					}else{
+						document.getElementById('wait_comment_num').style.display='none';
+					}
+					
+					if(data.data.refund_num!=0){
+						document.getElementById('refund_num').innerText=data.data.refund_num;
+					}else{
+						document.getElementById('refund_num').style.display='none';
+					}
+				} else {
+					if("authToken错误" == data.msg) {
+						gotoPage('view_0003_login.html');
+						return;
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+
+				plus.ui.toast("网络请求超时");
+			}
+		});
+//		mui.ajax(SERVER_HOST + '/api/app/v1/get-avatar', {
+//			data: {
+//				time: TIME,
+//				token: TOKEN,
+//				authToken: 'user/info',
+//			},
+//			dataType: 'json', //服务器返回json格式数据
+//			type: 'post', //HTTP请求类型
+//			timeout: 10000, //超时时间设置为5秒；
+//			success: function(data) {
+//				if(pullOj&&pullOj.loading) {
+//					pullOj.endPullDownToRefresh();
+//				}
+//				console.log(JSON.stringify(data));
+//				if(data.status == 1) {
+//					if(data.avatar != '') {
+//						document.getElementById('avatar').src = SERVER_HOST + '/' + data.avatar;
+//						document.getElementById("user_edit_img_view").style.backgroundImage = 'url('+SERVER_HOST + '/' + data.avatar+')';
+//					}
+//				} else {
+//					if("authToken错误" == data.msg) {
+//						gotoPage('view_0003_login.html');
+//						return;
+//					} else {
+//						plus.ui.toast(data.msg);
+//					}
+//				}
+//			},
+//			error: function(xhr, type, errorThrown) {
+//				if(pullOj&&pullOj.loading) {
+//					pullOj.endPullDownToRefresh();
+//				}
+//				plus.ui.toast("网络请求超时");
+//			}
+//		});
+	}
+
+	function uploadImg(path) {
+		var authToken = plus.storage.getItem('authToken');
+		var wt = plus.nativeUI.showWaiting();
+		var ajaxUrl = SERVER_HOST + "index/upload";
+		var task = plus.uploader.createUpload(ajaxUrl, {
+				method: 'post',
+			},
+			function(t, status) { //上传完成
+				wt.close();
+				if(status == 200) {
+					data = eval('(' + t.responseText + ')');
+					console.log(JSON.stringify(data));
+					//						console.log(JSON.stringify(task));
+					if(data.status == 1) {
+						plus.ui.toast('上传头像成功');
+//						getNameAndAvatar();
+//						plus.io.resolveLocalFileSystemURL(path, function(entry) {
+//							console.log(entry);
+//							document.getElementById("avatar").src = entry.toLocalURL();
+//							document.getElementById("user_edit_img_view").src = entry.toLocalURL();
+//						});
+							document.getElementById("avatar").src = staticUrl+data.data.path;
+							document.getElementById("user_edit_img_view").src = staticUrl+data.data.path;
+							document.getElementById("avatar").setAttribute('path',data.data.path)
+					} else {
+						if('authToken错误' == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							plus.ui.toast(data.msg);
+						}
+					}
+				} else {
+					console.log(JSON.stringify(t));
+					mui.toast("修改失败");
+				}
+			}
+		);
+		var src = document.getElementById('user_edit_img_path').value;
+
+		
+//		var u_phone = plus.storage.getItem('u_phone');
+//		var time = Date.parse(new Date()) / 1000;
+//		var token = CryptoJS.MD5('SenXi' + time).toString();
+
+		task.addData('time', '1480576266');
+		task.addData('token', 'c92114bcc9e4454f1d2b7399dc9d62a9');
+		task.addData('authToken', authToken);
+					console.log(TIME);
+//					task.addEventListener('statechanged', stateChanged, false);
+		task.addFile(path, {
+			key: 'img'
+		});
+		console.log(JSON.stringify(task));
+		task.start();
+	}
+
+	function stateChanged(upload, status) {
+		console.log(JSON.stringify(upload));
+		//          		console.log(JSON.stringify(status)); 
+		if(upload.state == 4 && status == 200) {
+			plus.uploader.clear(); //清除上传
+			console.log("stateChanged:" + status); //服务器返回存在这里
+		}
+	}
+
+	var isLogin = function() {
+		var authToken = plus.storage.getItem('authToken');
+		var hx_account = plus.storage.getItem('hx_account');
+			if(!hx_account||!authToken){
+				return false;
+			}else{
+				return true;
+			}
+	}
+</script>
+<script src="js/immersed.js"></script>

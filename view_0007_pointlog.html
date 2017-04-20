@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>积分记录</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		<script>
+			mui.init();
+		</script>
+
+		<style>
+			body,
+			.mui-content {
+				background-color: #F5F5F5;
+			}
+			#points_num{
+				font-size:44px;
+				color:#ffb100;
+				margin: 10px auto;
+			}
+			.date{
+				font-size:14px;
+				color:#9b9b9b;
+			}
+			.reason{
+				font-size:18px;color:#53575e;
+			}
+			.point_more{
+				font-size:18px;
+				color:#ffb100;
+				float: right;
+			}
+			.point_less{
+				font-size:18px;
+				color:#4a4a4a;
+				float: right;
+			}
+			.list_null{
+				text-align: center;
+				font-size:14px;
+				color:#4a4a4a;
+				background: #F6F6F6;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>积分记录</b></h1>
+		</header>
+		<div class="mui-content">
+			<div style="text-align:center;padding: 20px;height:108px;font-size:16px;color:#9b9b9b;">
+				<div id="points_num">...</div>
+				<span >当前积分</span>
+			</div>
+			<div>
+				<p style="margin: 5px 9px;">积分纪录</p>
+				<ul id="point_record_list" class="mui-table-view">
+					 <div class="list_null">加载中...</div>
+				</ul>
+			</div>
+		</div>
+	</body>
+
+</html>
+<script>
+	mui.plusReady(function() {
+		
+		var view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+			mui.preload({
+				url: 'view_0003_login.html',
+				id: 'view_0003_login.html'
+			});
+			getPointRecord();
+			
+		}, false);
+		
+		document.addEventListener('refreshData', function(event) {
+			
+			if(!event.detail.point){
+				mui.toast("缺少参数");
+				mui.back();
+				return;
+			}
+			console.log(event.detail.point);
+			 document.getElementById('points_num').innerText = event.detail.point;
+		});
+	});
+	
+	function getPointRecord() {
+				var authToken = plus.storage.getItem('authToken');
+				mui.ajax(SERVER_HOST + 'user/point-log', {
+					data: {
+						time: TIME,
+						token: TOKEN,
+						authToken: authToken,
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					timeout: 10000, //超时时间设置为5秒；
+					success: function(data) {
+						console.log(JSON.stringify(data));
+						if(data.status == 1) {
+							parseData(data);
+						} else {
+							if("authToken错误" == data.msg) {
+								gotoPage('view_0003_login.html');
+								return;
+							} else {
+								mui.toast(data.msg);
+							}
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						plus.ui.toast("网络请求超时");
+					}
+				});
+			}
+
+			function parseData(data) {
+				var point_record_list = document.getElementById("point_record_list");
+				var html_str = '';
+				if(data.data.models.length > 0) {
+					for(var i = 0; i < data.data.models.length; i++) {
+						html_str += '<li class="mui-table-view-cell">'+
+					 				    '<div class="date">'+TimeToData(data.data.models[i].created_at)+'</div>'+
+					 				    '<div class="reason">'+data.data.models[i].title+'<span class="point_more">'+data.data.models[i].desc+'分</span></div>'+
+					 				'</li>';
+					}
+				} else {
+					html_str = '<div class="list_null">无</div>';
+				}
+				point_record_list.innerHTML = html_str;
+			}
+	
+	function gotoPage(url) {
+		mui.openWindow({
+			url: url,
+			id: url
+		});
+	}
+	
+	function TimeToData(time){
+		var date = new Date(time*1000);
+		Y = date.getFullYear() + '-';
+		M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+		D = date.getDate() < 10 ?'0'+date.getDate():date.getDate();
+		h = date.getHours() + ':';
+		m = date.getMinutes() + ':';
+		s = date.getSeconds(); 
+		return (Y+M+D+' '+h+m+s);
+	}
+	
+	
+</script>
+<script src="js/immersed.js"></script>

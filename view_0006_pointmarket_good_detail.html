@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<script src="js/mui.min.js"></script>
+		
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		
+	</head>
+
+	<body>
+		<style>
+			.mui-control-content {
+				background-color: white;
+			}
+			
+			#good_img{
+				width: 100%;
+				height: 210px;
+			}
+			#good_name{
+				font-size: 16px;
+			}
+
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+				color: #FFB100;
+				background:white;
+			}
+			.mui-control-item{
+				background:white;
+			}
+			
+			#btn_exchange{
+				z-index: 2;
+				margin: 0px auto;
+				padding: 5px;
+				text-align: center;
+				background: white;
+			}
+			#btn_exchange button{
+				background-image:-webkit-linear-gradient(top, #ffd900 0%, #ffb100 100%);
+				border-radius:4px;
+				width:80%;
+				height:50px;
+				font-size: 18px;
+			}
+		</style>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>积分兑换</b></h1>
+		</header>
+
+		<div class="mui-content">
+			<img id="good_img" src="images/lazyloadimg.jpg" />
+			<ul class="mui-table-view">
+				<div class="mui-table-view-cell">
+					<p id="good_name">USB Hub 分线器多功能底座迷你小风扇...</p>
+					<p><span>消耗积分：<span id="good_price" style="color: #FFB100;font-size: 16px;">...</span></span><span style="float:right;">库存：<span id="good_rest_num">...</span>件</span></p>
+				</div>
+			</ul>
+			<div id="slider" class="mui-slider" style="margin-top: 8px;">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item mui-active" href="#item1mobile">
+						商品详情
+					</a>
+					<a class="mui-control-item" href="#item2mobile">
+						商品参数
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar" style="background-color: #FFB100;width: 50%;">
+				</div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div id="good_detail" class="mui-scroll" style="padding: 5px;">
+								
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div id="scroll2" class="mui-scroll-wrapper">
+							<div id="good_param" class="mui-scroll" style="padding: 5px;">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="btn_exchange">
+				<button class="mui-btn mui-btn-warning">确认兑换</button>
+			</div>
+		</div>
+	</body>
+
+</html>
+<script>
+	mui.init();
+	
+	var data_good = null;
+	
+	mui('.mui-scroll-wrapper').scroll();
+	
+	var resolutionHeight = window.innerHeight-433;//84=标题高度44+轮播216+good_info 65+margin-top 8px+slider标题高度约40+底部按钮60
+	document.getElementById("item1mobile").setAttribute("style","min-height:"+resolutionHeight+"px;");
+	document.getElementById("item2mobile").setAttribute("style","min-height:"+resolutionHeight+"px;");
+		
+	function gotoPage(url){
+		mui.openWindow({
+		    url:url,
+		    id:url,
+		    show:{
+		      aniShow:'pop-in'
+		    }
+		});
+	}
+	
+	mui.plusReady(function() {
+		console.log('111');
+		view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+			mui.preload({
+				url: 'view_0006_pointmarket_buy.html',
+				id: 'view_0006_pointmarket_buy.html'
+			});
+		}, false);
+		
+		document.addEventListener('refreshData', function(event) {
+			console.log(event);
+			
+			if(!event.detail.good_id){
+				mui.toast("缺少参数");
+				mui.back();
+				return;
+			}
+			getGoodDetail(event.detail.good_id);
+		});
+		
+		document.getElementById("btn_exchange").addEventListener('tap',function(){
+			if(!data_good){
+				mui.toast("数据过时,请刷新后再试");
+				return;
+			}
+			var good_buy=plus.webview.getWebviewById('view_0006_pointmarket_buy.html');
+			mui.fire(good_buy,'refreshData',{
+				data_good:data_good
+			});
+			good_buy.show('pop-in');
+		});
+	});
+	
+	function getGoodDetail(goods_id) {
+		data_good=null;
+//		var time = Date.parse(new Date()) / 1000;
+//		var token = CryptoJS.MD5('SenXi' + time).toString();
+//		var u_phone = plus.storage.getItem('u_phone');
+		var data_args={
+					time: TIME,
+					token: TOKEN,
+					authToken: '',
+					sid:goods_id
+		};
+		plus.nativeUI.showWaiting();
+		mui.ajax(SERVER_HOST + 'point-goods/get-point-good', {
+				data: data_args,
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					plus.nativeUI.closeWaiting();
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						parseData_GoodDetail(data);
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.nativeUI.closeWaiting();
+					plus.ui.toast("网络请求超时");
+				}
+		});
+	}
+
+	function parseData_GoodDetail(data) {
+		data_good=data;
+		document.getElementById('good_img').src = staticUrl +'/'+ data.data.img;
+		document.getElementById('good_name').innerText = data.data.title;
+		document.getElementById('good_price').innerText = data.data.point;
+		document.getElementById('good_rest_num').innerText = data.data.repertory;
+		document.getElementById('good_detail').innerHTML  = data.data.content;
+		document.getElementById('good_param').innerHTML  = data.data.parameter;
+	}
+	
+</script>
+<script type="text/javascript" src="js/immersed.js" ></script>

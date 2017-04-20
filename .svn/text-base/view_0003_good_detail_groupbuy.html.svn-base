@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		<!--<script src="js/isLogin.js"></script>-->
+		<script>
+			mui.init();
+		</script>
+		<style>
+			.mui-content {
+				margin-bottom: 60px;
+			}
+			
+			#mui-bar-nav {
+				background-color: transparent;
+				box-shadow: 0 1px 6px rgba(204, 204, 204, 0);
+				-webkit-box-shadow: 0 1px 6px rgba(204, 204, 204, 0);
+			}
+			
+			a:hover {
+				text-decoration: none;
+			}
+			
+			#good_detail_img {
+				width: 100%;
+				height: 375px;
+			}
+			.good_img img {
+				width: 100%;
+				max-height: 375px;
+			}
+			
+			.good_name {
+				padding-left: 12px;
+				font-size: 16px;
+				color: #4a4a4a;
+				line-height: 22px;
+				text-align: left;
+			}
+			
+			.good_collect {
+				text-align: center;
+				font-size: 10px;
+				color: #9b9b9b;
+				margin-top: 10px;
+			}
+			
+			.good_collect img {
+				width: 24px;
+				height: 23px;
+			}
+			
+			.good_price_now {
+				font-size: 16px;
+				color: #fa632d;
+				text-align: left;
+				font-weight: bold;
+			}
+			
+			.good_rest {
+				font-size: 12px;
+				color: #9b9b9b;
+				text-align: left;
+			}
+			
+			.good_price_old {
+				text-align: right;
+				font-size: 12px;
+				color: #9b9b9b;
+				letter-spacing: -0.18px;
+			}
+			
+			#btn_conect_seller {
+				font-size: 14px;
+				color: #4a4a4a;
+				background: #ffffff;
+				height: 56px;
+			}
+			
+			#btn_conect_seller img {
+				height: 17px;
+				vertical-align: middle;
+			}
+			
+			#btn_add_to_shoppingcar {
+				font-size: 18px;
+				height: 56px;
+				color: #ffffff;
+				background: #ffb100;
+			}
+			
+			#btn_buy_now {
+				background: #fa632d;
+				box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.12);
+				height: 56px;
+				font-size: 18px;
+				color: #ffffff;
+				text-align: center;
+			}
+			
+			#shop_img {
+				width: 48px;
+				height: 48px;
+				border-radius: 50%;
+				float: left;
+			}
+			
+			.shop_detail {
+				margin-left: 60px;
+			}
+			
+			#shop_name {
+				font-size: 14px;
+				color: #2a2a2a;
+			}
+			
+			.shop_score {
+				font-size: 12px;
+				color: #9b9b9b;
+			}
+			
+			#good_detail_img_pop {
+				height: 44px;
+				width: 44px;
+			}
+			
+			
+			#buy_number_input {
+				height: 33px;
+				width: 80px;
+			}
+			
+			
+			#btn_ok {
+				background: #ffb100;
+				box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.12);
+				width: 100%;
+				height: 56px;
+			}
+			
+			#read_detail_more {
+				font-size: 14px;
+				color: #c0c0c0;
+				text-align: center;
+				margin-top: 10px;
+				margin-bottom: 15px;
+			}
+			.good_kind_item,.good_kind_item_selected{
+				margin: 5px;
+				padding: 0 8px;
+				border-radius: 6px;
+				height: 53px;
+			}
+			.good_kind_item p,.good_kind_item_selected p{
+				text-align: left;
+				word-break: break-all;
+				word-wrap: break-word;
+				font-size: 12px;
+			}
+			.good_kind_item_selected{
+				border: 1px solid #f6f6f6;
+				background: #fafafa;
+			}
+			.good_kind_item_selected p{
+				color:#ffb100;
+			}
+			.good_kind_item{
+				background: #fafafa;
+				border: 1px solid #f6f6f6;
+			}
+			.good_kind_item p{
+				color:#c0c0c0;
+			}
+			.mui-popover.mui-popover-action .mui-table-view{
+				margin: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" id="mui-bar-nav">
+			<a class="mui-action-back mui-pull-left"><img src="images/back_b.png" style="width: 40px;margin-top: 10px;" /></a>
+			<a id="btn_shoppingcar_back" class="mui-pull-right"><img src="images/shopcar_b.png" style="width: 40px;margin-top: 10px;" /></a>
+		</header>
+		<input id="shop_id" type="hidden" />
+		<input id="good_id" type="hidden" />
+		<div id="mui-content" class="mui-content mui-scroll-wrapper" style="margin-top:-45px;">
+			<div class="mui-scroll">
+				<!--<div class="good_img" style="background: #ffffff;">
+					<img id="good_detail_img" src="images/lazyloadimg.jpg" />
+				</div>-->
+				<div id="slider" class="mui-slider">
+					<div id="ad_pos_1" class="mui-slider-group mui-slider-loop">
+						<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+						<div class="mui-slider-item mui-slider-item-duplicate">
+							<img src="images/lazyloadimg.jpg">
+						</div>
+						<!-- 第一张 -->
+						<div class="mui-slider-item">
+							<img src="images/lazyloadimg.jpg">
+						</div>
+						<!-- 第二张 -->
+						<div class="mui-slider-item">
+							<img src="images/lazyloadimg.jpg">
+						</div>
+						<!-- 第三张 -->
+						<div class="mui-slider-item">
+							<img src="images/lazyloadimg.jpg">
+						</div>
+						<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+						<div class="mui-slider-item mui-slider-item-duplicate">
+							<img src="images/lazyloadimg.jpg">
+						</div>
+					</div>
+					<div id="ad_pos_1_indicator" class="mui-slider-indicator">
+						<div class="mui-indicator mui-active"></div>
+						<div class="mui-indicator"></div>
+						<div class="mui-indicator"></div>
+					</div>
+				</div>
+				<div class="mui-row good_name_collect" style="background: #ffffff;border-top: 1px solid #f6f6f6;">
+					<div class="good_name mui-col-sm-9 mui-col-xs-9" style="margin-top: 7px;"><span id="good_name" style="font-size: 16px;">...</span></div>
+					<div class="vertical_line mui-col-sm-1 mui-col-xs-1" style="text-align: center;"><img src="images/vertical_line.png" /></div>
+					<div id="good_collect" is_collected="0" class="good_collect mui-col-sm-2 mui-col-xs-2">
+						<img id="good_collect_img" src="images/collected_no.png" />
+						<p>收藏</p>
+					</div>
+				</div>
+				<ul class="mui-table-view">
+					<div class="mui-table-view-cell">
+						<div class="mui-row good_price">
+							<div class="good_price_rest mui-col-sm-8 mui-col-xs-8">
+								<div class="good_price_now">￥<span id="good_price_now">...</span></div>
+								<div class="good_rest">
+									<span>库存：<span id="good_rest_num">...</span>件</span>
+									<span style="margin-left: 5px;">起批量：≥ <span id="multi_limit_num">...</span>件</span>
+								</div>
+							</div>
+							<!--<div class="good_price_old mui-col-sm-4 mui-col-xs-4">原价：<s id="good_price_old">￥...</s></div>-->
+						</div>
+					</div>
+				</ul>
+				<ul class="mui-table-view" id="noborder" style="margin-top: 8px;">
+					<li id="btn_select_kind" class="mui-table-view-cell">
+						<a href="#select_kind" class="mui-navigate-right"><span>选择</span><span id="kind" style="margin-left: 10px;">规格</span></a>
+					</li>
+				</ul>
+				<ul id="shop_info" class="mui-table-view" style="margin-top: 8px;">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<div class="shop">
+								<img id="shop_img" src="images/lazyloadimg.jpg" />
+								<div class="shop_detail">
+									<div id="shop_name">...</div>
+									<div class="shop_score">
+										<span>店铺评分</span>
+										<span id="shop_star" style="margin-left: 6px;">
+													<!--<img src="images/shop_score.png" />
+													<img src="images/shop_score.png" />
+													<img src="images/shop_score.png" />
+													<img src="images/shop_score.png" />
+													<img src="images/shop_score_dark.png" />-->
+													...
+										</span>
+									</div>
+								</div>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<div id="read_detail_more">
+					点击或继续滑动查看更多详情
+				</div>
+			</div>
+		</div>
+		<nav class="mui-bar mui-bar-tab">
+			<a id="btn_conect_seller" class="mui-tab-item">
+				<span><img src="images/good_detail_conect_seller.png" />联系卖家</span>
+			</a>
+			<a href="#select_kind" class="mui-tab-item" id="btn_add_to_shoppingcar">
+				<span>加入购物车</span>
+			</a>
+			<a href="#select_kind" class="mui-tab-item" id="btn_buy_now">
+				<span>立即购买</span>
+			</a>
+		</nav>
+		<div id="select_kind_pop" class="mui-popover mui-popover-action mui-popover-bottom" style="background: white;">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media">
+					<div class="mui-row">
+						<div class="mui-col-sm-3 mui-col-xs-3">
+							<img id="good_detail_img_pop" class="mui-pull-left" src="images/lazyloadimg.jpg">
+						</div>
+						<div class="mui-col-sm-9 mui-col-xs-9">
+							<div class="good_price_now">￥<span id="good_price_now_pop">...</span></div>
+							<div class="good_rest">库存：<span id="good_rest_num_pop">...</span>件</div>
+						</div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<div style="float: left;">
+						<p style="color: black;">选择规格</p>
+					</div>
+					<br />
+					<div id="good_kind" class="mui-row" style="margin-top: 8px;">
+						<!--<div class="mui-col-sm-6 mui-col-xs-6">
+							<div class="good_kind_item_selected" kind_index="1">
+								<p>规格A</p><p>库存：25</p>
+							</div>
+						</div>
+						<div class="mui-col-sm-6 mui-col-xs-6" kind_index="2">
+							<div class="good_kind_item">
+								<p>规格B</p><p>库存：23</p>
+							</div>
+						</div>
+						<div class="mui-col-sm-6 mui-col-xs-6" kind_index="3">
+							<div class="good_kind_item">
+								<p>规格C</p><p>库存：999</p>
+							</div>
+						</div>-->
+					</div>
+				</li>
+			</ul>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<span class="mui-pull-left" style="color: black;font-size: 14px;">购买数量</span>
+					<span id="mui-numbox" class="mui-numbox mui-pull-right" data-numbox-min='1' style="height: 30px;">
+						<button class="mui-btn mui-btn-numbox-minus" type="button" style="color: #ff6900;">-</button>
+						<input id="good_num_tobuy" class="mui-input-numbox" type="number" value="1" style="color: black;" />
+						<button class="mui-btn mui-btn-numbox-plus" type="button" style="color: #ff6900;">+</button>
+					</span>
+				</li>
+			</ul>
+			<ul class="mui-table-view">
+				<button id="btn_ok" type="button" class="mui-btn mui-btn-warning mui-btn-block mui-btn-outlined"><span style="color: white;font-size: 18px;">确认</span></button>
+			</ul>
+		</div>
+	</body>
+
+</html>
+
+<script>
+	mui('.mui-scroll-wrapper').scroll();
+	
+	var gallery = mui('.mui-slider');
+gallery.slider({
+  interval:5000//自动轮播周期，若为0则不自动播放，默认为0；
+});
+
+	function gotoPage(url) {
+		mui.openWindow({
+			url: url,
+			id: url,
+			show: {
+				aniShow: 'pop-in'
+			}
+		});
+	}
+
+	var read_detail_more = 0;
+	var data_good = null;
+	var data_batch = null;
+	var is_buy_now= false;
+
+	mui.plusReady(function() {
+		var view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+			mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
+			mui.preload({
+				url: 'view_0003_good_graphic_details.html',
+				id: 'view_0003_good_graphic_details.html'
+			});
+			mui.preload({
+				url: 'view_0003_shop_home.html',
+				id: 'view_0003_shop_home.html'
+			});
+			mui.preload({
+				url: 'view_0003_good_buy.html',
+				id: 'view_0003_good_buy.html'
+			});
+			
+		}, false);
+
+		document.addEventListener('refreshData', function(event) {
+			//			document.getElementById('shop_id').value = event.detail.shop_id;
+			//			document.getElementById('good_id').value = event.detail.good_id;
+			getGoodDetail(event.detail.good_id);
+			getGoodBatches(event.detail.good_id);
+//			getShop(event.detail.shop_id);
+		});
+
+	});
+
+	function getShop(shop_id) {
+		var u_phone = plus.storage.getItem('u_phone');
+		var time = Date.parse(new Date()) / 1000;
+		var token = CryptoJS.MD5('SenXi' + time).toString();
+		var authToken = plus.storage.getItem('authToken');
+		
+		var data_args={
+					time: TIME,
+					token: TOKEN,
+					authToken: authToken,
+					shop_id: shop_id,
+		};
+		
+		plus.nativeUI.showWaiting();
+		mui.ajax(SERVER_HOST + 'goods/goods-info', {
+				data: data_args,
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					plus.nativeUI.closeWaiting();
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						parseData_Shop(data);
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.nativeUI.closeWaiting();
+					plus.ui.toast("网络请求超时");
+				}
+		});
+	}
+
+	function parseData_Shop(data) {
+		
+		document.getElementById("shop_name").innerText=data.shop_name;
+		if(data.avatar_path == ''){
+			document.getElementById("shop_img").src='images/default.png';
+		}else{
+			document.getElementById("shop_img").src=staticUrl+data.avatar_path;
+		}
+		
+		
+		var shop_star = document.getElementById("shop_star");
+		var star_num=parseInt(data.grade);
+		console.log(star_num);
+		var html_str = '';
+		for(var i = 0; i < star_num; i++){
+			html_str +='<img src="images/shop_score.png" />';
+		}
+		for(var i = 0; i < 5-star_num; i++){
+			html_str +='<img src="images/shop_score_dark.png" />';
+		}
+		shop_star.innerHTML=html_str;
+	}
+
+	function getGoodDetail(goods_id) {
+		data_good=null;
+		
+		var authToken = plus.storage.getItem('authToken');
+		var data_args={
+					time: TIME,
+					token: TOKEN,
+					authToken: authToken,
+					gid: goods_id
+		};
+		
+		console.log(JSON.stringify(data_args))
+		plus.nativeUI.showWaiting();
+		mui.ajax(SERVER_HOST + 'goods/goods-info', {
+				data: data_args,
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					plus.nativeUI.closeWaiting();
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						parseData_GoodDetail(data);
+						parseData_Shop(data.data.shop);
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.nativeUI.closeWaiting();
+					plus.ui.toast("网络请求超时");
+				}
+		});
+	}
+
+	function parseData_GoodDetail(data) {
+		data_good=data;
+		
+		if(data.data.sale_way == "2") {
+			mui.toast("此商品没有团购活动");
+			mui.back();
+			return;
+		}
+		var ad_pos_1 = document.getElementById("ad_pos_1");
+		var ad_pos_1_indicator = document.getElementById("ad_pos_1_indicator");
+		var html_str = '';
+		//轮播广告
+		if(data.data.thumbs.length > 0) {
+
+			html_str = '<div data_index="' + (data.data.thumbs.length - 1) + '" class="ad_pos_1 mui-slider-item mui-slider-item-duplicate">' +
+				'<img src="' + staticUrl + data.data.thumbs[data.data.thumbs.length - 1].path + '">' +
+				'</div>';
+
+			for(var i = 0; i < data.data.thumbs.length; i++) {
+				if(data.data.thumbs[i].path!=''){
+					html_str = html_str + '<div data_index="' + i + '" class="ad_pos_1 mui-slider-item">' +
+						'<img src="' + staticUrl + data.data.thumbs[i].path + '">' +
+						'</div>';
+				}
+			}
+			html_str = html_str + '<div data_index="0" class="ad_pos_1 mui-slider-item mui-slider-item-duplicate">' +
+				'<img src="' + staticUrl + data.data.thumbs[0].path + '">' +
+				'</div>';
+			ad_pos_1.innerHTML = html_str;
+
+			html_str_s = '<div class="mui-indicator mui-active"></div>';
+			for(var i = 1; i < data.data.thumbs.length; i++) {
+				if(data.data.thumbs[i].path!=''){
+					html_str_s = html_str_s + '<div class="mui-indicator"></div>';
+				}
+			}
+			ad_pos_1_indicator.innerHTML = html_str_s;
+			mui("#slider").slider({
+				interval: 3000
+			});
+		}
+		
+		
+//		document.getElementById('good_detail_img').src = staticUrl + '/' + data.data.avatar;
+		document.getElementById('good_detail_img_pop').src = staticUrl + data.data.img_path;
+		document.getElementById('good_name').innerText = data.data.goods_name;
+		document.getElementById('multi_limit_num').innerText = data.data.least_sold_num;
+		document.getElementById('good_price_now').innerText = parseFloat(data.data.price_group).toFixed(2);
+//		document.getElementById('good_price_old').innerText = parseFloat(data.data.old_price).toFixed(2);
+		document.getElementById('good_price_now_pop').innerText = parseFloat(data.data.price_group).toFixed(2);
+		document.querySelector('.mui-numbox').setAttribute('data-numbox-min',data.data.least_sold_num);
+		if(data.data.is_collect == 1) {
+			document.getElementById('good_collect_img').setAttribute('src', 'images/collected_yes.png');
+			document.getElementById('good_collect').setAttribute('is_collected', '1');
+		}else{
+			document.getElementById('good_collect_img').setAttribute('src', 'images/collected_no.png');
+			document.getElementById('good_collect').setAttribute('is_collected', '0');
+		}
+
+	
+	}
+	
+	
+	function getGoodBatches(goods_id) {
+	
+		var authToken = plus.storage.getItem('authToken');
+		var data_args={
+					time: TIME,
+					token: TOKEN,
+					authToken: authToken,
+					gid: goods_id
+		};
+		console.log(JSON.stringify(data_args))
+		plus.nativeUI.showWaiting();
+		mui.ajax(SERVER_HOST + 'goods/goods-batches', {
+				data: data_args,
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					plus.nativeUI.closeWaiting();
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						parseData_GoodBatches(data);
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.nativeUI.closeWaiting();
+					plus.ui.toast("网络请求超时");
+				}
+		});
+	}
+	
+	function parseData_GoodBatches(data){
+		data_batch=data.data
+		
+		var good_kind = document.getElementById("good_kind");
+		var html_str = '';
+		var total_num=0;
+		if(data.data.length > 0) {
+			html_str = html_str + '<div class="mui-col-sm-6 mui-col-xs-6">'+
+										'<div class="good_kind_item_selected" kind_index="0" kind_id="'+data.data[0].bid+'">'+
+											'<p>'+data.data[0].name+'</p><p>库存：'+data.data[0].stock+'</p>'+
+										'</div>'+
+									'</div>';
+			total_num+=data.data[0].stock;
+			for(var i = 1; i < data.data.length; i++) {
+				html_str = html_str + '<div class="mui-col-sm-6 mui-col-xs-6">'+
+										'<div class="good_kind_item" kind_index="'+i+'" kind_id="'+data.data[i].bid+'">'+
+											'<p>'+data.data[i].name+'</p><p>库存：'+data.data[i].stock+'</p>'+
+										'</div>'+
+									'</div>';
+				total_num+=data.data[i].stock;
+			}
+		} else {
+			html_str = '<div class="list_null">无</div>';
+		}
+		good_kind.innerHTML = html_str;
+		document.getElementById('good_rest_num').innerText=total_num;
+		document.getElementById('good_rest_num_pop').innerText=total_num;
+		
+	}
+	
+	mui("body").on('tap', '.good_kind_item', function() {
+		var old_item=document.getElementsByClassName('good_kind_item_selected')[0];
+		old_item.classList.remove('good_kind_item_selected');
+		old_item.classList.add('good_kind_item');
+		this.classList.remove('good_kind_item');
+		this.classList.add('good_kind_item_selected');
+	});
+
+	document.getElementById("btn_conect_seller").addEventListener('tap', function() {
+		gotoPage('view_0003_chat_window.html');
+	});
+	
+	document.getElementById("btn_add_to_shoppingcar").addEventListener('tap', function() {
+		is_buy_now=false;
+		mui('#select_kind_pop').popover('show');
+	});
+	document.getElementById("btn_buy_now").addEventListener('tap', function() {
+		is_buy_now=true;
+		mui('#select_kind_pop').popover('show');
+	});
+	document.getElementById("btn_select_kind").addEventListener('tap', function() {
+		is_buy_now=true;
+		mui('#select_kind_pop').popover('show');
+	});
+
+	document.getElementById('mui-content').addEventListener('scrollbottom', function() {
+		//console.info("bottom");
+		if(read_detail_more > 3) {
+			console.log(read_detail_more);
+			read_detail_more = 0;
+			if(!data_good){
+				mui.toast("数据过时,请刷新后再试");
+				return;
+			}
+			var good_graphic=plus.webview.getWebviewById('view_0003_good_graphic_details.html');
+			mui.fire(good_graphic,'refreshData',{
+				data_good:data_good
+			});
+			good_graphic.show('pop-in');
+		} else {
+			read_detail_more = 0;
+		}
+	});
+			
+	document.getElementById("read_detail_more").addEventListener('tap', function() {
+			if(!data_good){
+				mui.toast("数据过时,请刷新后再试");
+				return;
+			}
+			var good_graphic=plus.webview.getWebviewById('view_0003_good_graphic_details.html');
+			mui.fire(good_graphic,'refreshData',{
+				data_good:data_good,
+				is_multi:1
+			});
+			good_graphic.show('pop-in');
+	});
+
+	//获取滚动条距离顶部的高度。
+	document.querySelector('.mui-scroll-wrapper').addEventListener('scroll', function(e) {
+		if(e.detail.y < -180) {
+			//console.log('>>>>>' + e.detail.y);
+			read_detail_more++;
+			
+		}
+	});
+
+	document.addEventListener('drag', function(e) {
+		console.log('drag');
+	});
+	document.addEventListener('dragend', function(e) {
+		console.log('dragend');
+	});
+
+	document.getElementById("shop_info").addEventListener('tap', function() {
+		if(!data_good){
+			mui.toast("数据过时,请刷新后再试");
+			return;
+		}
+		var shop_home=plus.webview.getWebviewById('view_0003_shop_home.html');
+		//data_good.shop_id;
+		mui.fire(shop_home,'refreshData',{
+			shop_id:data_good.data.shop_id
+		});
+		shop_home.show('pop-in');
+	});
+	
+	document.getElementById("btn_ok").addEventListener('tap', function() {
+		if(!data_good){
+				mui.toast("数据过时,请刷新后再试");
+				return;
+		}
+		if(is_buy_now){
+			var kind_index=document.querySelector('.good_kind_item_selected').getAttribute('kind_index');
+			
+			var kind_id=document.querySelector('.good_kind_item_selected').getAttribute('kind_id');
+			
+			console.log(JSON.stringify(data_good))
+			
+//			var good_kind=data_good.kind[kind_index].title;
+			var good_num_tobuy=document.getElementById("good_num_tobuy").value;
+			if(good_num_tobuy>data_batch[kind_index].total_stock){
+				mui.toast("该规格库存不足，请重新选择购买数量");
+				return;
+			}
+		
+			var authToken = plus.storage.getItem('authToken');
+			var data_path={
+					time: TIME,
+					token: TOKEN,
+					authToken: authToken,
+					batch_id: kind_id,
+					gid: data_good.data.gid,
+					num:good_num_tobuy,
+					buy_type:1,
+			};
+			console.log(JSON.stringify(data_path))
+			plus.nativeUI.showWaiting();
+			mui.ajax(SERVER_HOST + 'order/place-order-by-info', {
+					data: data_path,
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					timeout: 10000, //超时时间设置为5秒；
+					success: function(data) {
+						plus.nativeUI.closeWaiting();
+						console.log(JSON.stringify(data));
+						if(data.status == 1) {
+							var good_buy=plus.webview.getWebviewById('view_0003_good_buy.html');
+							mui.fire(good_buy,'refreshData',{
+								data_good:data.data
+							});
+							good_buy.show('pop-in');
+						} else {
+							plus.ui.toast(data.msg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						console.log(data)
+						plus.nativeUI.closeWaiting();
+						plus.ui.toast("网络请求超时");
+					}
+			});
+		
+		}else{//添加进购物车
+			var kind_index=document.querySelector('.good_kind_item_selected').getAttribute('kind_index');
+			
+			var kind_id=document.querySelector('.good_kind_item_selected').getAttribute('kind_id');
+			
+//			var good_kind=data_good.kind[kind_index].title;
+			var good_num_tobuy=document.getElementById("good_num_tobuy").value;
+			if(good_num_tobuy>data_batch[kind_index].total_stock){
+				mui.toast("该规格库存不足，请重新选择购买数量");
+				return;
+			}
+//			if(!isOnlineLogin()){
+//				return;
+//			}
+			
+			var authToken = plus.storage.getItem('authToken');
+		
+			mui.ajax(SERVER_HOST + 'order/join-cart', {
+				data: {
+					time: TIME,
+					token: TOKEN,
+					authToken: authToken,
+					batch_id: kind_id,
+					gid: 'data_good.data.gid',
+					num:good_num_tobuy,
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						plus.ui.toast(data.msg);
+						mui('#select_kind_pop').popover('hide');
+					} else {
+						if('authToken错误'==data.msg){
+							gotoPage("view_0003_login.html");
+							return;
+						}
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.ui.toast("网络请求超时");
+				}
+			});
+		}
+	});
+
+	document.getElementById("good_collect").addEventListener('tap', function() {
+		if(!data_good){
+			mui.toast("数据过时,请刷新后再试");
+			return;
+		}
+		var url='user/collect';
+		
+		var authToken = plus.storage.getItem('authToken');
+	
+		var goods_id = data_good.data.gid;
+		console.log(goods_id);
+		mui.ajax(SERVER_HOST + url, {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: authToken,
+				gid: goods_id,
+				type:1,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					if(data.msg=='已收藏'){
+						document.getElementById('good_collect_img').setAttribute('src', 'images/collected_yes.png');
+						document.getElementById('good_collect').setAttribute('is_collected', '1');
+					}else{
+						document.getElementById('good_collect_img').setAttribute('src', 'images/collected_no.png');
+						document.getElementById('good_collect').setAttribute('is_collected', '0');
+					}
+					plus.ui.toast(data.msg);
+				} else {
+					if('authToken错误'==data.msg){
+						gotoPage("view_0003_login.html");
+						return;
+					}
+					plus.ui.toast(data.msg);
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				plus.ui.toast("网络请求超时");
+			}
+		});
+	});
+
+	document.getElementById("btn_shoppingcar_back").addEventListener('tap', function() {
+		var tab_mainPage = plus.webview.getWebviewById('tab_sub_shoppingcart.html').parent();
+		mui.fire(tab_mainPage, 'goShoppingcartTab');
+		setTimeout(function() {
+			tab_mainPage.show('pop-in');
+		}, 100);
+
+	});
+</script>
+<script>
+	mui('body').on('shown', '.mui-popover', function(e) {
+		//console.log('shown', e.detail.id);//detail为当前popover元素
+	});
+	mui('body').on('hidden', '.mui-popover', function(e) {
+		//console.log('hidden', e.detail.id);//detail为当前popover元素
+	});
+	
+</script>
+<script>
+	(function(w) {
+		var immersed = 0;
+		var ms = (/Html5Plus\/.+\s\(.*(Immersed\/(\d+\.?\d*).*)\)/gi).exec(navigator.userAgent);
+		if(ms && ms.length >= 3) {
+			immersed = parseFloat(ms[2]);
+		}
+		w.immersed = immersed;
+
+		if(!immersed) {
+			return;
+		}
+		var t = document.getElementsByClassName('mui-bar-nav')[0];
+		t && (t.style.paddingTop = immersed + 'px', t.style.height = 44 + immersed + 'px');
+	})(window);
+</script>

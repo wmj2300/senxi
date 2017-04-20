@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="HandheldFriendly" content="true" />
+		<meta name="MobileOptimized" content="320" />
+		<title>网页</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;">正在打开...</h1>
+		</header>
+	</body>
+
+</html>
+
+<script>
+	var topoffset = '45px';
+	(function(w) {
+		var immersed = 0;
+		var ms = (/Html5Plus\/.+\s\(.*(Immersed\/(\d+\.?\d*).*)\)/gi).exec(navigator.userAgent);
+		if(ms && ms.length >= 3) {
+			immersed = parseFloat(ms[2]);
+		}
+		w.immersed = immersed;
+
+		if(!immersed) {
+			return;
+		}else{
+			topoffset = 45 + immersed + 'px';
+		}
+		
+	})(window);
+</script>
+
+<script type="text/javascript" charset="utf-8">
+	var url=null,ws = null,embed = null;
+	
+	mui.plusReady(function(){
+		ws = plus.webview.currentWebview();
+		url=ws.url;
+		console.log(url);
+		mui.back=function(){
+			mui.currentWebview.close();
+			plus.nativeUI.closeWaiting();
+		}
+		createEmbed();
+	});
+	// 创建子Webview
+	function createEmbed(){
+		
+		
+		embed = plus.webview.create(url, 'embed_webview', {
+			top: topoffset,
+			bottom: '0px',
+			position: 'dock',
+			dock: 'bottom',
+			bounce: 'vertical'
+		});
+		embed.setJsFile( "_www/js/noPlus.js" );
+		console.log(JSON.stringify(embed));
+//		var settings=embed.
+//		console.log(JSON.stringify(settings.));
+//		settings.setPluginsEnabled(false);
+		
+		ws.append(embed);
+		embed.addEventListener('loaded', function() {
+			plus.nativeUI.closeWaiting();
+			if('null'!=embed.getTitle()){
+				document.getElementById('title').innerText=embed.getTitle();
+			}
+		}, false);
+		embed.addEventListener('loading', function() {
+			plus.nativeUI.showWaiting('', {
+				style: 'black',
+				modal: false,
+				background: 'rgba(0,0,0,0)'
+			});
+		}, false);
+	}
+</script>
+<script src="js/immersed.js"></script>

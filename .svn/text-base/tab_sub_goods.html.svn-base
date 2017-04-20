@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>商品</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+
+		<script src="js/mui.pullToRefresh.js"></script>
+		<script src="js/mui.pullToRefresh.material.js"></script>
+		<link rel="stylesheet" href="css/mui.pullToRefresh.css">
+
+		<style>
+			.mui-col-xs-3,
+			.mui-control-content {
+				overflow-y: auto;
+			}
+			
+			.mui-grid-view.mui-grid-9 {
+				padding-top: 5px;
+			}
+			
+			.mui-segmented-control .mui-control-item {
+				line-height: 50px;
+				width: 100%;
+			}
+			
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+				background-color: #fff;
+			}
+			
+			#segmentedControls a.mui-active {
+				color: #07985B;
+			}
+			
+			#segmentedControls a {
+				font-family: "微软雅黑";
+			}
+			
+			.mui-grid-view.mui-grid-9 .mui-table-view-cell {
+				padding: 5px 2px;
+			}
+			
+			.mui-grid-view.mui-grid-9 .mui-table-view-cell>a:not(.mui-btn) {
+				padding: 0px 0;
+			}
+			
+			.mui-table-view-cell button{
+				width: 100%;
+			}
+			
+			.mui-table-view-cell button:enabled:active {
+				background-color: transparent;
+				color: green;
+			}
+			
+			#segmentedControls {
+				border: 1px solid #F6F6F6;
+			}
+			#segmentedControlContents button{
+				border: 0px solid #F6F6F6;
+			}
+			#segmentedControlContents li{
+				border: 0px solid #F6F6F6;
+			}
+			.list_null {
+				font-size: 14px;
+				color: rgba(0, 0, 0, 0.48);
+				text-align: center;
+				background-color: #efeff4;
+			}
+			
+		</style>
+
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<h1 id="title" class="mui-title" style="color: white;"><b>商品</b></h1>
+		</header>
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-row mui-scroll">
+				<div class="list_null">加载中(下拉刷新)...</div>
+				<div class="mui-col-xs-3">
+					<div id="segmentedControls" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-vertical">
+						<!--<a class="mui-control-item mui-active" href="#content1">热门分类</a>-->
+					</div>
+				</div>
+				<div id="segmentedControlContents" class="mui-col-xs-9">
+					<div id="content1" class="mui-control-content mui-active">
+						<!--<ul class="mui-table-view mui-grid-view mui-grid-9">
+							<li cat_id="111" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+								<button type="button">蓝莓</button>
+							</li>
+							<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+								<button type="button">柚子</button>
+							</li>
+							<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+								<button type="button">柚子</button>
+							</li>
+							<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+								<button type="button">核桃</button>
+							</li>
+							<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+								<button type="button">草莓</button>
+							</li>
+							<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+								<button type="button">枇杷</button>
+							</li>
+						</ul>-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>
+
+<script>
+
+	mui.init();
+	
+	var pullOj=null;
+	//循环初始化所有下拉刷新，上拉加载。
+	mui.each(document.querySelectorAll('.mui-scroll'), function(index, pullRefreshEl) {
+		pullRefreshEl.setAttribute("style","min-height:"+(window.innerHeight-100)+"px;");
+		mui(pullRefreshEl).pullToRefresh({
+			down: {
+				callback: function() {
+					pullOj = this;
+					getGoodsCatalogList();
+//					setTimeout(function() {
+//						self.endPullDownToRefresh();
+//					}, 1000);
+				}
+			}
+		});
+	});
+            
+	function gotoPage(url) {
+		mui.openWindow({
+			url: url,
+			id: url,
+			show: {
+				aniShow: 'pop-in'
+			}
+		});
+	}
+	
+	is_first=true;
+	
+	mui.plusReady(function() {
+		mui('.mui-scroll-wrapper').scroll();
+		
+		view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			
+			console.log("Webview Showed：" + view.id);
+			mui.preload({
+				url: 'view_0002_search_result.html',
+				id: 'view_0002_search_result.html'
+			});
+			
+			if(is_first){
+				is_first=false;
+				getGoodsCatalogList();
+			}
+			
+		}, false);
+
+		mui("body").on('tap', '.good_cat_two', function() {
+			plus.storage.setItem('multi_search','0');
+			var cat_id = this.getAttribute('cat_id');
+			var resultPage = plus.webview.getWebviewById('view_0002_search_result.html');
+			mui.fire(resultPage, 'searchGoods', {
+				cat_id: cat_id
+			});
+			resultPage.show('pop-in');
+		});
+		
+//		document.querySelectorAll('#segmentedControls>a').addEventListener('tap',function(e){
+//			
+//			condole.log(e)
+//			
+//		})
+	});
+
+	function getGoodsCatalogList() {
+		var authToken = plus.storage.getItem('authToken');
+		mui.ajax(SERVER_HOST + 'goods/get-types', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: authToken,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if(pullOj&&pullOj.loading) {
+					pullOj.endPullDownToRefresh();
+				}
+				if(data.status == 1) {
+					parseData(data);
+				} else {
+					plus.ui.toast(data.msg);
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				if(pullOj&&pullOj.loading) {
+					pullOj.endPullDownToRefresh();
+				}
+				
+				plus.ui.toast("网络请求超时");
+				//mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+			}
+		});
+	}
+
+	function parseData(data) {
+		var controls = document.getElementById("segmentedControls");
+		var contents = document.getElementById("segmentedControlContents");
+		var html_controls = '';
+		var html_contents = '';
+		if(data.data.length > 0) {
+			for(var i = 0; i < data.data.length; i++) {
+				
+				html_controls = html_controls+'<a class="mui-control-item" href="#content_'+i+'">'+data.data[i].name+'</a>';
+				
+				html_contents = html_contents +'<div id="content_'+i+'" class="mui-control-content">'+
+														'<ul class="mui-table-view mui-grid-view mui-grid-9">';
+
+				if(data.data[i].child.length > 0) {
+					for(var j = 0; j < data.data[i].child.length; j++) {
+						html_contents = html_contents +			'<li cat_id="'+data.data[i].child[j].tid+'" class="good_cat_two mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">'+
+																	'<img style="width:100%" src='+data.data[i].child[j].img_base_url + '/' + data.data[i].child[j].img+'>'+
+																	'<button>'+data.data[i].child[j].name+'</button>'+
+																'</li>';
+					}
+					
+				}
+						html_contents = html_contents +	'</ul>'+
+												'</div>';
+				
+			}
+		}
+		controls.innerHTML=html_controls;
+		contents.innerHTML = html_contents;
+		document.getElementById("content_0").classList.add('mui-active');
+		document.getElementsByClassName('mui-control-item')[0].classList.add('mui-active');
+		document.getElementsByClassName("list_null")[0].classList.add('mui-hidden');
+	}
+	
+//	function pulldownRefresh(){
+//		getGoodsCatalogList();
+// 	}
+
+
+</script>
+<script src="js/immersed.js"></script>

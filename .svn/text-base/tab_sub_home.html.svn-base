@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>首页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="plugin/layer/layer.css" rel="stylesheet" />
+		<script src="plugin/layer/layer.js"></script>
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+
+		<link href="css/mui.pullToRefresh.css" rel="stylesheet" />
+		<script src="js/mui.pullToRefresh.js"></script>
+		<script src="js/mui.pullToRefresh.material.js"></script>
+		
+		<!--环信-->
+		<script type='text/javascript' src='plugin/im/webim.config.js'></script>
+		<script type='text/javascript' src='plugin/im/strophe-1.2.8.min.js'></script>
+		<script type='text/javascript' src='plugin/im/websdk-1.4.5.min.js'></script>
+		
+		<script type="text/javascript" src="js/hx_login.js"></script>
+		
+		<script>
+			mui.init();
+		</script>
+
+		<style>
+			html,
+			body {
+				font-family: "微软雅黑";
+			}
+			
+			.mui-content {
+				background-color: white;
+			}
+			
+			.home-content {
+				margin: 2px 5px 10px;
+			}
+			
+			#slider {
+				margin: 0px;
+			}
+			
+			.mui-slider-item img {
+				height: 131px;
+				width: 100%;
+			}
+			
+			.mui-slider-indicator {
+				position: relative;
+				margin-top: -28px;
+			}
+			
+			a:hover {
+				text-decoration: none;
+			}
+			
+			#index_brand img {
+				width: 80%;
+				height: 40px;
+			}
+			
+			#home_fun {
+				width: 100%;
+				padding-bottom: 5px;
+				margin-top: 8px;
+				border-bottom: 1px solid #f6f6f6;
+			}
+			
+			#home_fun img {
+				width: 55px;
+			}
+			
+			.home_fun_item {
+				text-align: center;
+				font-size: 14px;
+				color: #333;
+			}
+			
+			.mui-grid-view.mui-grid-9 {
+				background-color: white;
+				border: 0px;
+				text-align: center;
+			}
+			
+			.mui-grid-view.mui-grid-9 .mui-table-view-cell {
+				width: 30%;
+				margin: 5px;
+				height: 55px;
+				padding: 8px;
+				border-radius: 15px;
+				border: 1px solid #f6f6f6;
+			}
+			
+			.bran_title {
+				text-align: center;
+				font-size: 17px;
+				color: #069a5c;
+				padding-bottom: 8px;
+				border-bottom: 1px solid #f6f6f6;
+			}
+			/*.mui-grid-view.mui-grid-9 .mui-table-view-cell, .mui-grid-view.mui-grid-9{
+				border: 0px solid white;
+			}
+			
+			
+			.mui-table-view-cell {
+				padding: 0px;
+			}*/
+			/*.mui-grid-view.mui-grid-9 .mui-table-view-cell {
+				padding: 5px 5px;
+			}*/
+			
+			#ad_pos_2,
+			#ad_pos_3,
+			#ad_pos_4,
+			#ad_pos_5 {
+				width: 98%;
+				margin: 0px auto;
+			}
+			
+			#ad_pos_2 img,
+			#ad_pos_3 img,
+			#ad_pos_4 img,
+			#ad_pos_5 img {
+				border-radius: 5%;
+				width: 100%;
+				height: 120px;
+				margin-top: 5px;
+			}
+			
+			.search_div {
+				background: #ffffff;
+				border-radius: 6px;
+				width: 90%;
+				height: 29px;
+				margin: 6px 0;
+				float: left;
+				position:relative;
+			}
+			
+			#search_input {
+				background: url(images/search.png) no-repeat 10px;
+				padding-left: 30px;
+				/*margin-top: 6px;
+				margin-bottom: 6px;*/
+				border: 0px;
+				font-size:15px;
+				color:#9b9b9b;
+				position: absolute;  
+            		top: 0; left: 0; bottom: 0; right: 0; 
+			}
+			
+			.shop_head{
+				line-height: 45px;
+				margin-bottom: 5px;
+				border-bottom: 1px solid #f6f6f6;
+				border-top: 1px solid #f6f6f6;
+			}
+			.shop_head span{
+				font-size: 16px;
+			}
+			.shop_head img{
+				width: 36px;height: 36px;border-radius: 50%;vertical-align: middle;
+			}
+			.shop_head a{
+				float:right;vertical-align: middle;font-size:14px;color:#ffa641;padding:0px 5px;border-left: 1px solid #f6f6f6;
+			}
+			.good_item{
+				padding: 5px;
+			}
+			.good_item img{
+				width: 100%;
+				height: 88px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<!--<div id="title" class="mui-input-row mui-search mui-pull-left" style="width:90%;">
+				<input id="keywords" type="search" placeholder="请输入关键字" value="搜索" style="background-color: white;" readonly="readonly" />
+			</div>-->
+			<div class="search_div">
+				<input id="search_input" value="搜索" readonly="readonly"/>
+			</div>
+			<span class="mui-icon mui-icon-chat mui-pull-right goto-page" style="color: white;margin-top: -5px;" need_login="1" href_data="view_0012_message.html">
+				<span id="spot" class="mui-badge mui-badge-warning" style="width: 8px;height: 8px; margin-top: 12px;margin-left: -20px;background: #ffb100;display: none;">&nbsp;</span>
+				<p style="color:#FFFFFF;margin-top:2px;font-size:.8rem">消息</p>
+			</span>
+		</header>
+		<div class="mui-content mui-scroll-wrapper">
+			<div id="pull_to_refresh" class="mui-scroll">
+
+				<div id="slider" class="mui-slider">
+					
+					<div id="ad_pos_1" class="mui-slider-group mui-slider-loop">
+						<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+						<div class="mui-slider-item mui-slider-item-duplicate">
+							<img src="images/lazyloadimg.jpg">
+						</div>
+						<!-- 第一张 -->
+						<div class="mui-slider-item">
+							<img src="images/lazyloadimg.jpg">
+						</div>
+						<!-- 第二张 -->
+						<div class="mui-slider-item">
+							<img src="images/lazyloadimg.jpg">
+						</div>
+						<!-- 第三张 -->
+						<div class="mui-slider-item">
+							<img src="images/lazyloadimg.jpg">
+						</div>
+						<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+						<div class="mui-slider-item mui-slider-item-duplicate">
+							<img src="images/lazyloadimg.jpg">
+						</div>
+					</div>
+					<div id="ad_pos_1_indicator" class="mui-slider-indicator">
+						<div class="mui-indicator mui-active"></div>
+						<div class="mui-indicator"></div>
+						<div class="mui-indicator"></div>
+					</div>
+				</div>
+				<!--end slider-->
+				<div class="home-content">
+					<div id="home_fun" class="mui-row">
+						<div class="home_fun_item mui-col-xs-3 mui-col-sm-3" id="btn_sign">
+							<img src="images/home_grid_pic1.png" />
+							<div class="mui-media-body">签到</div>
+						</div>
+						<div class="home_fun_item mui-col-xs-3 mui-col-sm-3 goto-page" href_type="multi_search" href_data="view_0002_search_result.html">
+							<img src="images/home_grid_pic2.png" />
+							<div class="mui-media-body">商家贸易</div>
+						</div>
+						<div class="home_fun_item mui-col-xs-3 mui-col-sm-3 goto-page" need_login="1" href_data="view_0006_pointmarket.html">
+							<img src="images/home_grid_pic3.png" />
+							<div class="mui-media-body">积分商城</div>
+						</div>
+						<div class="home_fun_item mui-col-xs-3 mui-col-sm-3 goto-page" href_data="view_0004_seller_settlein.html">
+							<img src="images/home_grid_pic4.png" />
+							<div class="mui-media-body">商家入驻</div>
+						</div>
+					</div>
+
+					<div id="ad_pos_2">
+						<img data_index="1" class="ad_pos_2" src="images/lazyloadimg.jpg" />
+						<img src="images/lazyloadimg.jpg" />
+						<img src="images/lazyloadimg.jpg" />
+					</div>
+					<div style="margin-top: 15px;">
+						<div class="bran_title"><b>推荐品牌</b></div>
+						<ul class="mui-table-view mui-grid-view mui-grid-9" id="index_brand">
+							<li class="brand mui-table-view-cell mui-media">
+								<img src="images/lazyloadimg.jpg" />
+							</li>
+							<li class="brand mui-table-view-cell mui-media">
+								<img src="images/lazyloadimg.jpg" />
+							</li>
+							<li class="brand mui-table-view-cell mui-media">
+								<img src="images/lazyloadimg.jpg" />
+							</li>
+							<li class="brand mui-table-view-cell mui-media">
+								<img src="images/lazyloadimg.jpg" />
+							</li>
+							<li class="brand mui-table-view-cell mui-media">
+								<img src="images/lazyloadimg.jpg" />
+							</li>
+							<li class="brand mui-table-view-cell mui-media">
+								<img src="images/lazyloadimg.jpg" />
+							</li>
+						</ul>
+
+					</div>
+					<div style="margin-top: 15px;">
+						<div class="bran_title"><b>最新活动</b></div>
+						<div id="ad_pos_3">
+							<img data_index="2" class="ad_pos_3" src="images/lazyloadimg.jpg" />
+							<img src="images/lazyloadimg.jpg" />
+							<img src="images/lazyloadimg.jpg" />
+						</div>
+					</div>
+
+					<div style="margin-top: 15px;">
+						<div class="bran_title"><b>推荐店铺</b></div>
+						<div id="shops_info">
+							<!--<div class="store">
+								<div class="shop_head">
+									<span id="shop_1_title" shop_id="" class="shop_title">
+										<img id="shop_1_img" src="images/lazyloadimg.jpg"/>
+										<span id="shop_1_name">...</span>
+									</span>
+									<a id="shop_1_collect" shop_id="" class="shop_collect">...</a>
+								</div>
+								<div id="shop_1_good_list" class="mui-row">
+									<div shop_id="" good_id="" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="images/lazyloadimg.jpg" /></div>
+									<div shop_id="" good_id="" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="images/lazyloadimg.jpg" /></div>
+									<div shop_id="" good_id="" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="images/lazyloadimg.jpg" /></div>
+								</div>
+							</div>
+							<div class="store">
+								<div class="shop_head">
+									<span id="shop_2_title" shop_id="" class="shop_title">
+										<img id="shop_2_img" src="images/lazyloadimg.jpg"/>
+										<span id="shop_2_name">...</span>
+									</span>
+									<a id="shop_2_collect" shop_id="" class="shop_collect">...</a>
+								</div>
+								<div id="shop_2_good_list" class="mui-row">
+									<div shop_id="" good_id="" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="images/lazyloadimg.jpg" /></div>
+									<div shop_id="" good_id="" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="images/lazyloadimg.jpg" /></div>
+									<div shop_id="" good_id="" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="images/lazyloadimg.jpg" /></div>
+								</div>
+							</div>-->
+						</div>
+						
+					</div>
+					<div id="ad_pos_4">
+						<img data_index="2" class="ad_pos_4" src="images/lazyloadimg.jpg" />
+					</div>
+					<div id="self_shop">
+						<!--<div class="store" >
+							<div class="shop_head">
+								<span id="shop_official_title" shop_id="" class="shop_title">
+									<img id="shop_official_img" src="images/lazyloadimg.jpg"/>
+									<span id="shop_official_name">...</span>
+								</span>
+								<a id="shop_official_collect" shop_id="" class="shop_collect">...</a>
+							</div>
+							<div id="shop_official_good_list" class="mui-row">
+								<div shop_id="" good_id="" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="images/lazyloadimg.jpg" /></div>
+								<div shop_id="" good_id="" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="images/lazyloadimg.jpg" /></div>
+								<div shop_id="" good_id="" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="images/lazyloadimg.jpg" /></div>
+							</div>
+						</div>-->
+					</div>
+					<div id="ad_pos_5">
+						<img data_index="2" class="ad_pos_5" src="images/lazyloadimg.jpg" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>
+<script>
+	var is_msg = false
+	
+		
+	
+//	var conn = new WebIM.connection({
+//			    https: WebIM.config.https,
+//			    url: WebIM.config.xmppURL,
+//			    isAutoLogin: WebIM.config.isAutoLogin,
+//			    isMultiLoginSessions: WebIM.config.isMultiLoginSessions
+//			});
+//	
+//	conn.listen({
+//		    onOpened: function ( message ) {          //连接成功回调
+//		    		console.log(JSON.stringify(message));
+//		    		conn.setPresence();       
+//		    },
+//		    onClosed: function ( message ) {console.log('onClosed:'+JSON.stringify(message));},
+//		    onTextMessage: function ( message ) {
+//		    		console.log(JSON.stringify(message));
+//		    		document.getElementById('spot').style.display = 'block';
+//		    		messageList.push(message);
+//		    		plus.storage.setItem('messageList',messageList);
+//		    },    //收到文本消息
+//		    onEmojiMessage: function ( message ) {console.log('onEmojiMessage:'+JSON.stringify(message));},   //收到表情消息
+//		    onPictureMessage: function ( message ) {console.log('onPictureMessage:'+JSON.stringify(message));}, //收到图片消息
+//		    onCmdMessage: function ( message ) {console.log('onCmdMessage:'+JSON.stringify(message));},     //收到命令消息
+//		    onAudioMessage: function ( message ) {console.log('onAudioMessage:'+JSON.stringify(message));},   //收到音频消息
+//		    onLocationMessage: function ( message ) {console.log('onLocationMessage:'+JSON.stringify(message));},//收到位置消息
+//		    onFileMessage: function ( message ) {console.log('onFileMessage:'+JSON.stringify(message));},    //收到文件消息
+//		    onVideoMessage: function ( message ) {console.log('onVideoMessage:'+JSON.stringify(message));},   //收到视频消息
+//		    onPresence: function ( message ) {console.log('onPresence:'+JSON.stringify(message));},       //收到联系人订阅请求、处理群组、聊天室被踢解散等消息
+//		    onRoster: function ( message ) {console.log('onRoster:'+JSON.stringify(message));},         //处理好友申请
+//		    onInviteMessage: function ( message ) {console.log('onInviteMessage:'+JSON.stringify(message));},  //处理群组邀请
+//		    onOnline: function () {console.log('onOnline:'+JSON.stringify(message));},                  //本机网络连接成功
+//		    onOffline: function () {console.log('onOffline:'+JSON.stringify(message));},                 //本机网络掉线
+//		    onError: function ( message ) {
+//		    	console.log('onError:'+JSON.stringify(message));
+//		    },          //失败回调
+//		    onBlacklistUpdate: function (list) {       //黑名单变动
+//		        // 查询黑名单，将好友拉黑，将好友从黑名单移除都会回调这个函数，list则是黑名单现有的所有好友信息
+//		        console.log(list);
+//		    }
+//
+//		});
+	function gotoPage(url) {
+		mui.openWindow({
+			url: url,
+			id: url,
+			show: {
+				aniShow: 'pop-in'
+			}
+		});
+	}
+
+	function preloadPage() {
+		console.log('loading home...');
+		mui.preload({
+			url: 'view_0004_seller_settlein.html',
+			id: 'view_0004_seller_settlein.html'
+		});
+		mui.preload({
+			url: 'view_0001_search.html',
+			id: 'view_0001_search.html'
+		});
+		mui.preload({
+			url: 'view_0003_good_detail.html',
+			id: 'view_0003_good_detail.html'
+		});
+		mui.preload({
+			url: 'view_0006_pointmarket.html',
+			id: 'view_0006_pointmarket.html'
+		});
+		mui.preload({
+			url: 'view_0012_message.html',
+			id: 'view_0012_message.html'
+		});
+		mui.preload({
+			url: 'view_0002_search_result.html',
+			id: 'view_0002_search_result.html'
+		});
+		mui.preload({
+			url: 'view_0003_shop_home.html',
+			id: 'view_0003_shop_home.html'
+		});
+		mui.preload({
+			url: 'view_0003_login.html',
+			id: 'view_0003_login.html'
+		});
+		console.log('loaded home...');
+	}
+	var pullOj = null;
+	mui(document.getElementById("pull_to_refresh")).pullToRefresh({
+		down: {
+			callback: function() {
+				pullOj = this;
+				getIndexAd();
+//				getIndexBrand();
+//				getIndexShop();
+			}
+		}
+	});
+	
+
+	
+	var is_first = true;
+	var ad_data = null;
+	mui('.mui-scroll-wrapper').scroll({
+		deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+	});
+	
+	mui.plusReady(function() {
+				
+		if(is_first) {
+			is_first = false;
+			plus.nativeUI.showWaiting();
+			preloadPage();
+			getIndexAd();
+//			getIndexBrand();
+//			getIndexShop();
+			plus.navigator.closeSplashscreen();
+			plus.nativeUI.closeWaiting();
+		}
+		initHX(function(message){
+			plus.storage.setItem('is_msg',true);
+		},'home');
+		if(plus.storage.getItem('is_msg')){
+			is_msg = plus.storage.getItem('is_msg')
+		}
+		if(is_msg){
+			document.getElementById('spot').style.display = 'block';
+		}
+		
+    		console.log(plus.storage.getItem('messageList'));
+		
+		view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+		
+			
+		}, false);
+		
+		
+		mui("body").on('tap', '.goto-page', function() {
+			var href_data = this.getAttribute('href_data');
+			var href_type = this.getAttribute('href_type');
+			var need_login = this.getAttribute('need_login');
+			if('multi_search' == href_type) {
+//				plus.storage.setItem('multi_search', '1');
+				var searchPage = plus.webview.getWebviewById('view_0002_search_result.html');
+				mui.fire(searchPage, 'searchGoods', {
+					keywords: '',
+					multi_search: 1,
+				});
+				setTimeout(function() {
+					searchPage.show('pop-in');
+				}, 100);
+				return;
+			}
+			if('1' == need_login && !isLogin()) {
+				gotoPage('view_0003_login.html');
+			} else {
+				gotoPage(href_data);
+			}
+		});
+		
+
+		mui("body").on('tap', '.ad_pos_1', function() {
+			var data_index = this.getAttribute('data_index');
+			gotoAdPage(ad_data.ads[data_index]);		
+		});
+
+		mui("body").on('tap', '.ad_pos_2', function() {
+			var data_index = this.getAttribute('data_index');
+			gotoAdPage(ad_data.three_brand[data_index]);	
+		});
+
+		mui("body").on('tap', '.ad_pos_3', function() {
+			var data_index = this.getAttribute('data_index');
+			gotoAdPage(ad_data.last_activities[data_index]);	
+		});
+
+		mui("body").on('tap', '.ad_pos_4', function() {
+			var data_index = this.getAttribute('data_index');
+			gotoAdPage(ad_data.last_activities[data_index]);
+		});
+
+		mui("body").on('tap', '.ad_pos_5', function() {
+			var data_index = this.getAttribute('data_index');
+			gotoAdPage(ad_data.last_activities[data_index]);
+		});
+		
+		mui("body").on('tap', '.shop_title', function() {
+			var shop_id = this.getAttribute('shop_id');
+			if(!shop_id){
+				return;
+			}
+			var shop_home = plus.webview.getWebviewById('view_0003_shop_home.html');
+			mui.fire(shop_home, 'refreshData', {
+				shop_id: shop_id
+			});
+			shop_home.show('pop-in');
+		});
+		
+		mui("body").on('tap', '.brand', function() {
+			var shop_id = this.getAttribute('shop_id');
+			if(!shop_id){
+				return;
+			}
+			var shop_home = plus.webview.getWebviewById('view_0003_shop_home.html');
+			mui.fire(shop_home, 'refreshData', {
+				shop_id: shop_id
+			});
+			shop_home.show('pop-in');
+		});
+		
+		mui("body").on('tap', '.good_item', function() {
+			var shop_id = this.getAttribute('shop_id');
+			var good_id = this.getAttribute('good_id');
+			if(!shop_id||!good_id){
+				return;
+			}
+			var good_detail = plus.webview.getWebviewById('view_0003_good_detail.html');
+			mui.fire(good_detail, 'refreshData', {
+				good_id: good_id,
+				shop_id: shop_id
+			});
+			good_detail.show('pop-in');
+		});
+		
+		mui("body").on('tap', '.shop_collect', function() {
+			var em_to_mark=this;
+			var shop_id = this.getAttribute('shop_id');
+			if(!shop_id){
+				return;
+			}
+			var url='/api/app/v1/mark-shop';
+			if('已关注'==em_to_mark.innerText){
+				url='/api/app/v1/un-mark-shop';
+			}
+			
+			mui.ajax(SERVER_HOST + url, {
+				data: {
+					time: time,
+					token: token,
+					phone: u_phone,
+					authToken: authToken,
+					shop_id: shop_id
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						if('+关注'==em_to_mark.innerText){
+							em_to_mark.innerText='已关注';
+						}else{
+							em_to_mark.innerText='+关注';
+						}
+						plus.ui.toast(data.msg);
+					} else {
+						if('authToken错误'==data.msg){
+							gotoPage("view_0003_login.html");
+							return;
+						}
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.ui.toast("网络请求超时");
+				}
+			});
+		});
+
+		document.getElementById("search_input").addEventListener('tap', function() {
+			plus.storage.setItem('multi_search', '0');
+			var searchPage = plus.webview.getWebviewById('view_0001_search.html');
+			mui.fire(searchPage, 'setKeywords', {
+				keywords: ''
+			});
+			setTimeout(function() {
+				searchPage.show('pop-in');
+			}, 100);
+		});
+
+		document.getElementById("btn_sign").addEventListener('tap', function() {
+			if(!isLogin()) {
+				gotoPage('view_0003_login.html');
+				return;
+			}
+			var authToken = plus.storage.getItem('authToken');
+			var u_phone = plus.storage.getItem('u_phone');
+			var time = Date.parse(new Date()) / 1000;
+			var token = CryptoJS.MD5('SenXi' + time).toString();
+			mui.ajax(SERVER_HOST + 'user/sign-in', {
+				data: {
+					time: TIME,
+					token: TOKEN,
+					authToken: authToken,
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 5000, //超时时间设置为5秒；
+				success: function(data) {
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						layerOpen({
+							"title": "",
+							"content": "<h4>您已连续签到" + data.data.total_sign_num + "天</h4><span>获得积分&nbsp;&nbsp;<font style='color:red'>+" + data.data.point + "分<h5></span>",
+							"btn": ["知道了"],
+							"shadeClose": true,
+							"style": {
+								"content": "text-align: center;font-size: 16px;padding: 16px;",
+								"btn": "background-color: #FEB100;color:white;border-radius: 0px 0px 8px 8px;"
+							}
+						});
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.ui.toast("网络请求超时");
+				}
+			});
+		});
+
+		//plus.navigator.closeSplashscreen();
+	});
+
+	function getIndexAd() {
+		var authToken = plus.storage.getItem('authToken');
+		mui.ajax(SERVER_HOST + 'home/ads', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: '',
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if(pullOj&&pullOj.loading) {
+					pullOj.endPullDownToRefresh();
+				}
+				if(data.status == 1) {
+					parseData_IndexAd(data);
+				} else {
+					plus.ui.toast(data.msg);
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				plus.ui.toast("网络请求超时");
+			}
+		});
+	}
+
+	function parseData_IndexAd(data) {
+		ad_data = data.data;
+		var html_str = '';
+		//轮播广告
+		if(data.data.ads.length > 0) {
+			var ad_pos_1 = document.getElementById("ad_pos_1");
+			var ad_pos_1_indicator = document.getElementById("ad_pos_1_indicator");
+
+			html_str = '<div data_index="' + ('ads_'+data.data.ads.length - 1) + '" class="ad_pos_1 mui-slider-item mui-slider-item-duplicate">' +
+				'<img src="' + staticUrl + data.data.ads[data.data.ads.length - 1].img_path + '">' +
+				'</div>';
+
+			for(var i = 0; i < data.data.ads.length; i++) {
+				html_str = html_str + '<div data_index="' + i + '" class="ad_pos_1 mui-slider-item">' +
+					'<img src="' + staticUrl + data.data.ads[i].img_path + '">' +
+					'</div>';
+			}
+			html_str = html_str + '<div data_index="0" class="ad_pos_1 mui-slider-item mui-slider-item-duplicate">' +
+				'<img src="' + staticUrl + data.data.ads[0].img_path + '">' +
+				'</div>';
+			ad_pos_1.innerHTML = html_str;
+
+			html_str = '<div class="mui-indicator mui-active"></div>';
+			for(var i = 1; i < data.data.ads.length; i++) {
+				html_str = html_str + '<div class="mui-indicator"></div>';
+			}
+			ad_pos_1_indicator.innerHTML = html_str;
+			mui("#slider").slider({
+				interval: 3000
+			});
+		}
+		//pos2
+		if(data.data.three_brand.length > 0) {
+			var ad_pos_2 = document.getElementById("ad_pos_2");
+			html_str = '';
+			for(var i = 0; i < data.data.three_brand.length; i++) {
+				html_str = html_str + '<img data_index="' + i + '" class="ad_pos_2" src="' + staticUrl + data.data.three_brand[i].img_path + '">';
+			}
+			ad_pos_2.innerHTML = html_str;
+		}
+		
+		
+		
+		
+		//index_brand
+		if(data.data.recommend_shops.length > 0) {
+			var index_brand = document.getElementById("index_brand");
+			var html_str = '';
+			for(var i = 0; i < data.data.recommend_shops.length; i++) {
+				html_str = html_str + '<li shop_id="' + data.data.recommend_shops[i].sid + '" class="brand mui-table-view-cell mui-media">' +
+					'<img src="' + staticUrl + data.data.recommend_shops[i].avatar_path + '"/>' +
+					'</li>';
+			}
+			index_brand.innerHTML = html_str;
+		}
+
+		//pos3
+		if(data.data.last_activities.length > 0) {
+			var ad_pos_3 = document.getElementById("ad_pos_3");
+			html_str = '';
+			for(var i = 0; i < data.data.last_activities.length-2; i++) {
+				html_str = html_str + '<img data_index="' + i + '" class="ad_pos_3" src="' + staticUrl + data.data.last_activities[i].img_path + '">';
+			}
+			ad_pos_3.innerHTML = html_str;
+		}
+		
+		
+
+		//pos4
+		if(data.data.last_activities.length > 0) {
+			var ad_pos_4 = document.getElementById("ad_pos_4");
+			html_str = '';
+			html_str = html_str + '<img data_index="' + (data.data.last_activities.length-2) + '" class="ad_pos_4" src="' + staticUrl + data.data.last_activities[data.data.last_activities.length-2].img_path + '">';
+			ad_pos_4.innerHTML = html_str;
+		}
+
+		//pos5
+		if(data.data.last_activities.length > 0) {
+			var ad_pos_5 = document.getElementById("ad_pos_5");
+			html_str = '';
+			html_str = html_str + '<img data_index="' + (data.data.last_activities.length-1) + '" class="ad_pos_5" src="' + staticUrl + data.data.last_activities[data.data.last_activities.length-1].img_path + '">';
+			ad_pos_5.innerHTML = html_str;
+		}
+		
+		//shop
+		if(data.data.recommend_shops_infos.length>0){
+			var ad_pos_6 = document.getElementById("shops_info");
+			html_str = '';
+				mui.each(data.data.recommend_shops_infos,function(i,rec){
+					html_str = html_str + '<div class="store">'+
+								'<div class="shop_head">'+
+									'<span id="shop_'+rec.sid+'_title" shop_id="'+rec.sid+'" class="shop_title">'+
+										'<img id="shop_'+rec.sid+'_img" src="'+(rec.avatar_path == '' ? 'images/default.png' : staticUrl+rec.avatar_path)+'"/>'+
+										'<span id="shop_'+rec.sid+'_name">'+rec.shop_name+'</span>'+
+									'</span>'+
+									'<a id="shop_'+rec.sid+'_collect" shop_id="'+rec.sid+'" class="shop_collect">';
+//									if(res.is_collect == 1){
+//										html_str = html_str +'已关注'
+//									}else{
+//										html_str = html_str + '未关注'
+//									}
+				html_str = html_str +'</a>'+
+								'</div>'+
+								'<div id="shop_'+rec.sid+'_good_list" class="mui-row">';
+								mui.each(rec.goods,function(index,info){
+									html_str = html_str + '<div shop_id="'+rec.sid+'" good_id="'+info.gid+'" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="'+(staticUrl+info.img_path)+'" /></div>';
+								})
+								html_str = html_str +'</div>'+
+							'</div>';
+				})
+			
+			ad_pos_6.innerHTML = html_str;
+			
+		}
+		
+		//shop_self
+		if(data.data.self_shop){
+			var ad_pos_7 = document.getElementById("self_shop");
+			html_str = '';
+			html_str = html_str + '<div class="store">'+
+						'<div class="shop_head">'+
+							'<span id="shop_'+data.data.self_shop.sid+'_title" shop_id="'+data.data.self_shop.side+'" class="shop_title">'+
+								'<img id="shop_'+data.data.self_shop.sid+'_img" src="'+(data.data.self_shop.avatar_path == '' ? 'images/default.png' : staticUrl+data.data.self_shop.avatar_path)+'"/>'+
+								'<span id="shop_'+data.data.self_shop.sid+'_name">'+data.data.self_shop.shop_name+'</span>'+
+							'</span>'+
+							'<a id="shop_'+data.data.self_shop.sid+'_collect" shop_id="'+data.data.self_shop.sid+'" class="shop_collect">';
+//									if(res.is_collect == 1){
+//										html_str = html_str +'已关注'
+//									}else{
+//										html_str = html_str + '未关注'
+//									}
+		html_str = html_str +'</a>'+
+						'</div>'+
+						'<div id="shop_'+data.data.self_shop.sid+'_title" class="mui-row">';
+						mui.each(data.data.self_shop.goods,function(index,info){
+							html_str = html_str + '<div shop_id="'+data.data.self_shop.sid+'" good_id="'+info.gid+'" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="'+(staticUrl+info.img_path)+'" /></div>';
+						})
+						html_str = html_str +'</div>'+
+					'</div>';
+					
+			
+		ad_pos_7.innerHTML = html_str;
+			
+		}
+	}
+
+	function gotoAdPage(ad) {
+		if(ad.href != '') {
+			mui.openWindow({
+				url: 'view_9000_webview.html',
+				id: 'view_9000_webview.html',
+				extras: {
+					url: ad.href
+				}
+			});
+		} else if(ad.href == '') {
+			var resultPage = plus.webview.getWebviewById('view_0002_search_result.html');
+			mui.fire(resultPage, 'searchGoodsByAd', {
+				aid: ad.aid,
+			});
+			resultPage.show('pop-in');
+		}
+	}
+
+//	function getIndexBrand() {
+//		var time = Date.parse(new Date()) / 1000;
+//		var token = CryptoJS.MD5('SenXi' + time).toString();
+//		mui.ajax(SERVER_HOST + '/api/app/v1/get-index-brand', {
+//			data: {
+//				time: time,
+//				token: token
+//			},
+//			dataType: 'json', //服务器返回json格式数据
+//			type: 'post', //HTTP请求类型
+//			timeout: 10000, //超时时间设置为5秒；
+//			success: function(data) {
+//				console.log(JSON.stringify(data));
+//				if(pullOj&&pullOj.loading) {
+//					pullOj.endPullDownToRefresh();
+//				}
+//				if(data.status == 1) {
+//					parseData_IndexBrand(data);
+//				} else {
+//					plus.ui.toast(data.msg);
+//				}
+//			},
+//			error: function(xhr, type, errorThrown) {
+//				if(pullOj&&pullOj.loading) {
+//					pullOj.endPullDownToRefresh();
+//				}
+//				plus.ui.toast("网络请求超时");
+//			}
+//		});
+//	}
+
+	function parseData_IndexBrand(data) {
+		if(data.brand.length > 0) {
+			var index_brand = document.getElementById("index_brand");
+			var html_str = '';
+			for(var i = 0; i < data.brand.length; i++) {
+				html_str = html_str + '<li shop_id="' + data.brand[i].shop_id + '" class="brand mui-table-view-cell mui-media">' +
+					'<img src="' + SERVER_HOST + '/' + data.brand[i].avatar + '"/>' +
+					'</li>';
+			}
+			index_brand.innerHTML = html_str;
+		}
+	}
+
+//	function getIndexShop() {
+//		var time = Date.parse(new Date()) / 1000;
+//		var token = CryptoJS.MD5('SenXi' + time).toString();
+//		mui.ajax(SERVER_HOST + '/api/app/v1/get-index-shop', {
+//			data: {
+//				time: time,
+//				token: token
+//			},
+//			dataType: 'json', //服务器返回json格式数据
+//			type: 'post', //HTTP请求类型
+//			timeout: 10000, //超时时间设置为5秒；
+//			success: function(data) {
+//				console.log(JSON.stringify(data));
+//				if(pullOj&&pullOj.loading) {
+//					pullOj.endPullDownToRefresh();
+//				}
+//				if(data.status == 1) {
+//					parseData_IndexShop(data);
+//				} else {
+//					plus.ui.toast(data.msg);
+//				}
+//			},
+//			error: function(xhr, type, errorThrown) {
+//				if(pullOj&&pullOj.loading) {
+//					pullOj.endPullDownToRefresh();
+//				}
+//				plus.ui.toast("网络请求超时");
+//			}
+//		});
+//	}
+
+	function parseData_IndexShop(data) {
+		if(null!=data.shop[0]){
+			getShopDetail('shop_1',data.shop[0].shop_id);
+			getShopGoodList('shop_1',data.shop[0].shop_id);
+		}
+		if(null!=data.shop[1]){
+			getShopDetail('shop_2',data.shop[1].shop_id);
+			getShopGoodList('shop_2',data.shop[1].shop_id);
+		}
+		if(null!=data.official_shop){
+			getShopDetail('shop_official',data.official_shop);
+			getShopGoodList('shop_official',data.official_shop);
+		}
+	}
+	
+//	function getShopDetail(shop_pos,shop_id) {
+//		var u_phone = plus.storage.getItem('u_phone');
+//		var time = Date.parse(new Date()) / 1000;
+//		var token = CryptoJS.MD5('SenXi' + time).toString();
+//		
+//		var data_args={
+//					time: time,
+//					token: token,
+//					shop_id: shop_id,
+//		};
+//		if(u_phone != null) {
+//			data_args.phone=u_phone;
+//		}
+//		mui.ajax(SERVER_HOST + '/api/app/v1/shop-intro-info', {
+//				data: data_args,
+//				dataType: 'json', //服务器返回json格式数据
+//				type: 'post', //HTTP请求类型
+//				timeout: 10000, //超时时间设置为5秒；
+//				success: function(data) {
+//					console.log(JSON.stringify(data));
+//					if(data.status == 1) {
+//						document.getElementById(shop_pos+'_title').setAttribute('shop_id',shop_id);
+//						document.getElementById(shop_pos+'_collect').setAttribute('shop_id',shop_id);
+//						document.getElementById(shop_pos+'_name').innerText=data.title;
+//						document.getElementById(shop_pos+'_img').src=SERVER_HOST +'/'+ data.avatar;
+//						if(1==data.isMark){
+//							document.getElementById(shop_pos+'_collect').innerText='已关注';
+//						}else{
+//							document.getElementById(shop_pos+'_collect').innerText='+关注';
+//						}
+//					} else {
+//						console.log(shop_id);
+//						plus.ui.toast(data.msg);
+//					}
+//				},
+//				error: function(xhr, type, errorThrown) {
+//					plus.ui.toast("网络请求超时");
+//				}
+//		});
+//	}
+	
+//	function getShopGoodList(shop_pos,shop_id){
+//		var time = Date.parse(new Date()) / 1000;
+//		var token = CryptoJS.MD5('SenXi' + time).toString();
+//		
+//		mui.ajax(SERVER_HOST + '/api/app/v1/shop-goods-default', {
+//			data: {
+//				time: time,
+//				token: token,
+//				page: 1,
+//				amount: 3,
+//				shop_id:shop_id
+//			},
+//			dataType: 'json', //服务器返回json格式数据
+//			type: 'post', //HTTP请求类型
+//			timeout: 10000, //超时时间设置为5秒；
+//			success: function(data) {
+//				console.log(JSON.stringify(data));
+//				if(data.status == 1) {
+//					parseData_ShopGoodList(shop_pos,data);
+//				} else {
+//					plus.ui.toast(data.msg);
+//				}
+//			},
+//			error: function(xhr, type, errorThrown) {
+//				plus.ui.toast("网络请求超时");
+//			}
+//		});
+//		
+//	}
+//	
+//	function parseData_ShopGoodList(shop_pos,data){
+//		var shop_good_list = document.getElementById(shop_pos+"_good_list");
+//		var html_str='';
+//			for(var i = 0; i < data.goods_list.length; i++) {
+//					html_str += '<div shop_id="'+data.goods_list[i].shop_id+'" good_id="'+data.goods_list[i].goods_id
+//						+'" class="good_item mui-col-xs-4 mui-col-sm-4"><img src="'+SERVER_HOST+'/'+data.goods_list[i].avatar+'" /></div>';
+//			}
+//		shop_good_list.innerHTML = html_str;
+//	}
+	
+	var isLogin = function() {
+		var authToken = plus.storage.getItem('authToken');
+		var hx_account = plus.storage.getItem('hx_account');
+			if(!hx_account||!authToken){
+				return false;
+			}else{
+				return true;
+			}
+	}
+</script>
+<script src="js/immersed.js"></script>

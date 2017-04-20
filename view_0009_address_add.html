@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		<link rel="stylesheet" href="css/mui.picker.min.css" />
+		<script type="text/javascript" src="js/city.data-3.js" ></script>
+		<script type="text/javascript" src="js/mui.picker.min.js" ></script>
+		<script type="text/javascript" src="js/mui.poppicker.js" ></script>
+		<script>
+			mui.init();
+		</script>
+
+		<style>
+			.mui-content{
+				font-size:14px;
+				color:#2a2a2a;
+			}
+			.mui-btn-blue,.mui-btn-blue:enabled:active, .mui-btn-blue.mui-active:enabled{
+			    color: #fff;
+			    border: 1px solid #07985B;
+			    background-color: #07985B;
+			}
+			#title{
+				font-weight:bold;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;">添加地址</h1>
+			<a id="btn_header_save" class="mui-btn mui-btn-link mui-pull-right" style="color: white;">保存</a>
+		</header>
+		<div class="mui-content">
+				<form class="mui-input-group">
+					<div class="mui-input-row">
+						<label>联系人</label>
+						<input id="addr_name" type="text" class="mui-input-clear" placeholder="您的姓名" maxlength="6">
+					</div>
+					<div class="mui-input-row">
+						<label>手机号</label>
+						<input id="addr_phone" type="number" class="mui-input-clear" placeholder="您的联系方式" maxlength="11">
+					</div>
+					<div class="mui-input-row" id="btn_addr_city">
+						<a class="mui-navigate-right" style="color: black;">
+							<label>所在区域</label>
+							<input id="addr_display" type="text" placeholder="请选择" readonly="readonly"/>
+							<input id="addr_province" type="hidden" />
+							<input id="addr_city" type="hidden" />
+							<input id="addr_district" type="hidden" />
+						</a>
+					</div>
+					<div class="mui-input-row">
+						<label>门牌号</label>
+						<input id="addr_detail" type="text" class="mui-input-clear" placeholder="请输入门牌号等详细信息" >
+					</div>
+				</form>
+		</div>
+	</body>
+
+</html>
+<script>
+
+		var cityPicker3 = new mui.PopPicker({
+				layer: 3
+			});
+		cityPicker3.setData(cityData3);
+		
+		console.log(JSON.stringify(cityData3))
+		document.getElementById("btn_addr_city").addEventListener('tap',function(){
+			cityPicker3.show(function(items) {
+					document.getElementById('addr_display').value = (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;
+					document.getElementById("addr_province").value=(items[0] || {}).text;
+					document.getElementById("addr_city").value=(items[1] || {}).text;
+					document.getElementById("addr_district").value=(items[2] || {}).text;
+			});
+        });
+    	document.getElementsByClassName('mui-poppicker')[0].style.display="none";
+//  	mui('html').on('tap','.mui-poppicker-active-for-page',function(){
+//			console.log('none');
+//  		document.getElementsByClassName('mui-poppicker')[0].style.display="none";
+//  	});
+    	
+	mui.plusReady(function(){
+		view=plus.webview.currentWebview();
+    	view.addEventListener("show", function(e){
+		    console.log( "Webview Showed："+view.id );
+			mui.preload({
+				url: 'view_0003_login.html',
+				id: 'view_0003_login.html'
+			});
+		});
+        document.getElementById("btn_header_save").addEventListener('tap',function(){
+        	var addr_name=document.getElementById("addr_name").value;
+        	if(addr_name.length==0){
+        		mui.toast("姓名不能为空");
+        		return;
+        	}
+        	var check_phone_number = /^1[3458]\d{9}$/;
+            var addr_phone=document.getElementById("addr_phone").value;
+            if (addr_phone.length != 11 || !addr_phone.match(check_phone_number)) {
+                mui.toast("请输入有效的手机号");
+                return;
+            }
+            if(document.getElementById("addr_display").value.length==0){
+            	mui.toast("所在区域不能为空");
+                return;
+            }
+			var addr_detail=document.getElementById("addr_detail").value;
+			if(addr_detail.length==0){
+				mui.toast("门牌号不能为空");
+                return;
+			}
+			
+            var authToken = plus.storage.getItem('authToken');
+            var u_phone = plus.storage.getItem('u_phone');
+            var time=Date.parse(new Date())/1000;
+			var token=CryptoJS.MD5('SenXi'+time).toString();
+			
+            mui.ajax(SERVER_HOST+'user/add-address',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken,
+					name:addr_name,
+					mobile:addr_phone,
+//					postcode:'000000',
+					province:document.getElementById("addr_province").value,
+					city:document.getElementById("addr_city").value,
+					town:document.getElementById("addr_district").value,
+					street:addr_detail
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						plus.ui.toast('添加成功');
+						
+						document.getElementById("addr_district").value='';
+						document.getElementById("addr_city").value='';
+						document.getElementById("addr_province").value='';
+						document.getElementById("addr_phone").value='';
+						document.getElementById("addr_detail").value='';
+						document.getElementById("addr_name").value='';
+						
+						var addr_man_wv=plus.webview.getWebviewById('view_0008_address_manager.html');
+						mui.fire(addr_man_wv,'refreshList');
+						mui.back();
+					}else{
+						if("authToken错误" == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							mui.toast(data.msg);
+						}
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+        });
+		
+	});
+</script>
+<script src="js/immersed.js"></script>

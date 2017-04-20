@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>收藏</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<script src="js/jquery.min.js"></script>
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		
+		<script>
+			mui.init();
+		</script>
+
+		<style>
+		
+			.list_null {
+				font-size: 14px;
+				color: rgba(0, 0, 0, 0.48);
+				text-align: center;
+				background-color: #efeff4;
+			}
+			
+			#mui-segmented-control {
+				border: none;
+			}
+			
+			#mui-control-item-left,
+			#mui-control-item-right {
+				border: 1px solid white;
+				color: white;
+				border-radius: 10px;
+				line-height: 30px;
+			}
+			
+			#mui-control-item-left {
+				border-top-right-radius: 0px;
+				border-bottom-right-radius: 0px;
+			}
+			
+			#mui-control-item-right {
+				border-top-left-radius: 0px;
+				border-bottom-left-radius: 0px;
+			}
+			
+			#mui-segmented-control .mui-control-item.mui-active {
+				color: green;
+				background-color: white;
+			}
+			
+			.good_detail {
+				margin-left: 100px;
+			}
+			
+			.good_img {
+				width: 88px;
+				height: 88px;
+				float: left;
+			}
+			
+			.good_name {
+				font-size: 14px;
+				color: #4a4a4a;
+			}
+			
+			.good_standard_des {
+				margin-top: 5px;
+			}
+			
+			.good_price {
+				margin-top: 5px;
+				color: #ffb100;
+				font-size: 14px;
+			}
+			
+			.good_rest {
+				font-size: 12px;
+				color: #9b9b9b;
+			}
+			
+			.shop_img {
+				width: 48px;
+				height: 48px;
+				border-radius: 50%;
+				float: left;
+			}
+			
+			.shop_detail {
+				margin-left: 60px;
+			}
+			
+			.shop_name {
+				font-size: 14px;
+				color: #2a2a2a;
+			}
+			
+			.shop_score {
+				font-size: 12px;
+				color: #9b9b9b;
+				/*position:relative;
+				top:-5px;*/
+			}
+			#shop_star img{
+				vertical-align: middle;
+			}
+			.mui-icon {
+				font-size: 17px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;height: 40px;">
+				<div id="mui-segmented-control" class="mui-segmented-control" style="">
+					<a class="mui-control-item mui-active" id="mui-control-item-left" href="#goods" >收藏的商品</a>
+					<a class="mui-control-item" id="mui-control-item-right" href="#shops">收藏的店铺</a>
+				</div>
+			</h1>
+		</header>
+		<div class="mui-content">
+			<div>
+				<div id="goods" class="mui-control-content mui-active">
+					<ul id="fav_goodlist" class="mui-table-view">
+						<!--<div class="list_null">加载中...</div>
+						<div class="mui-table-view-cell ">
+							<div class="good" data-href="view_0003_good_detail.html">
+								<img class="good_img" src="img_tmp/favorites_good_pic1.png" />
+								<div class="good_detail">
+									<div class='good_name'>德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</div>
+									<p class='good_price'>￥119.00</p>
+									<p class='good_rest'>库存：99件</p>
+								</div>
+							</div>
+						</div>-->
+					</ul>
+				</div>
+				<div id="shops" class="mui-control-content">
+					<ul id="fav_shoplist" class="mui-table-view">
+						<div class="list_null">加载中...</div>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right">
+								<div class="shop_item" shop_id="11111">
+									<img class="shop_img" src="img_tmp/favorites_good_pic1.png" />
+									<div class="shop_detail">
+										<div class='shop_name'>GODVIA歌帝梵亚太总代</div>
+										<div>
+											<span class="shop_score">店铺评分</span>
+											<span id="shop_star" style="margin-left: 6px;">
+													<img src="images/shop_score.png" />
+													<img src="images/shop_score.png" />
+													<img src="images/shop_score.png" />
+													<img src="images/shop_score.png" />
+													<img src="images/shop_score_dark.png" />
+												</span>
+										</div>
+									</div>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+
+	</body>
+
+</html>
+<script>
+	function gotoPage(url) {
+		mui.openWindow({
+			url: url,
+			id: url,
+			show: {
+				aniShow: 'pop-in'
+			}
+		});
+	}
+
+	function preloadPage() {
+		mui.preload({
+			url: 'view_0003_good_detail.html',
+			id: 'view_0003_good_detail.html'
+		});
+		mui.preload({
+			url: 'view_0003_shop_home.html',
+			id: 'view_0003_shop_home.html'
+		});
+		mui.preload({
+			url: 'view_0003_login.html',
+			id: 'view_0003_login.html'
+		});
+	}
+
+	mui.plusReady(function() {
+		var view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+			preloadPage();
+			getGoodList();
+			getShopList();
+		}, false);
+		mui("body").on('tap', '.good_item', function() {
+			var shop_id = this.getAttribute("shop_id");
+			var good_id = this.getAttribute("good_id");
+			console.log(shop_id,good_id);
+			var good_detail = plus.webview.getWebviewById('view_0003_good_detail.html');
+			mui.fire(good_detail, 'refreshData', {
+				shop_id: shop_id,
+				good_id: good_id
+			});
+			good_detail.show('pop-in');
+		});
+		mui("body").on('tap', '.shop_item', function() {
+			var shop_id = this.getAttribute('shop_id');
+			var shop_home = plus.webview.getWebviewById('view_0003_shop_home.html');
+			mui.fire(shop_home, 'refreshData', {
+				shop_id: shop_id
+			});
+			shop_home.show('pop-in');
+		});
+		
+	});
+	
+	function getGoodList(){
+			var authToken = plus.storage.getItem('authToken');
+            data_dgra={
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken,
+					type:1,
+				}
+            
+            console.log(JSON.stringify(data_dgra));
+            mui.ajax(SERVER_HOST+'user/collect-list',{
+				data:data_dgra,
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						parseData_GoodList(data);
+					}else{
+						if("authToken错误" == data.msg) {
+								gotoPage('view_0003_login.html');
+								return;
+						} else {
+							mui.toast(data.msg);
+						}
+					}
+				},
+				error:function(xhr,type,errorThrown,data){
+					console.log(JSON.stringify(xhr))
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	function parseData_GoodList(data){
+		var fav_goodlist=document.getElementById("fav_goodlist");
+		var html_str='';
+			if(data.data.models.length>0){
+				for(var i = 0; i < data.data.models.length; i++) {
+					html_str=html_str+'<div class="mui-table-view-cell ">'+
+										'<div class="good_item" shop_id="'+data.data.models[i].shop_id+'" good_id="'+data.data.models[i].gid+'">'+
+											'<img class="good_img" src="'+staticUrl+data.data.models[i].img_path+'" />'+
+											'<div class="good_detail">'+
+												'<div class="good_name">'+data.data.models[i].goods_name+'</div>'+
+												'<p class="good_price">￥'+parseFloat(data.data.models[i].price_retail).toFixed(2)+'</p>'+
+												'<p class="good_rest">库存：'+data.data.models[i].total_stock+'件</p>'+
+											'</div>'+
+										'</div>'+
+									'</div>';
+				}
+			}else{
+				html_str='<div class="list_null">收藏为空</div>';
+			}
+			fav_goodlist.innerHTML=html_str;
+	}
+	
+	function getShopList(){
+		var authToken = plus.storage.getItem('authToken');
+            data_dgra={
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken,
+					type:2,
+				}
+            
+            console.log(JSON.stringify(data_dgra));
+            mui.ajax(SERVER_HOST+'user/collect-list',{
+				data:data_dgra,
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						parseData_ShopList(data);
+					}else{
+						if("authToken错误" == data.msg) {
+								gotoPage('view_0003_login.html');
+								return;
+						} else {
+							mui.toast(data.msg);
+						}
+					}
+				},
+				error:function(xhr,type,errorThrown,data){
+					console.log(JSON.stringify(xhr))
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	function parseData_ShopList(data){
+		var fav_shoplist=document.getElementById("fav_shoplist");
+		var html_str='';
+			if(data.data.models.length>0){
+				for(var i = 0; i < data.data.models.length; i++) {
+					var star_num=parseInt(data.data.models[i].grade);
+					var star_html_str = '';
+					for(var i = 0; i < star_num; i++){
+						star_html_str +='<img src="images/shop_score.png" />';
+					}
+					for(var i = 0; i < 5-star_num; i++){
+						star_html_str +='<img src="images/shop_score_dark.png" />';
+					}
+					html_str=html_str+'<li class="mui-table-view-cell">'+
+											'<a class="mui-navigate-right">'+
+												'<div class="shop_item" shop_id="'+data.data.models[i].sid+'">'+
+													'<img class="shop_img" src="'+staticUrl+data.data.models[i].avatar_path+'" />'+
+													'<div class="shop_detail">'+
+														'<div class="shop_name">'+data.data.models[i].shop_name+'</div>'+
+														'<div>'+
+															'<span class="shop_score">店铺评分</span>'+
+															'<span id="shop_star" style="margin-left: 6px;">'+
+																	star_html_str+
+																'</span>'+
+														'</div>'+
+													'</div>'+
+												'</div>'+
+											'</a>'+
+										'</li>';
+				}
+			}else{
+				html_str='<div class="list_null">收藏为空</div>';
+			}
+			fav_shoplist.innerHTML=html_str;
+	}
+</script>
+<script src="js/immersed.js"></script>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>登录</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<script src="js/jquery.min.js"></script>
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		<script>
+			mui.init();
+		</script>
+		<style>
+			.mui-content {
+				margin: 10px 5px;
+			}
+			
+			a:hover {
+				text-decoration: none;
+			}
+			
+			.hot-key {
+				/*border:1px solid gainsboro;*/
+				/*padding: 5px 15px;*/
+				margin: 10px;
+				height: 31px;
+				border-radius: 100px;
+				font-size: 14px;
+				color: #4a4a4a;
+			}
+			.search_div {
+				background: #ffffff;
+				border-radius: 6px;
+				width: 68%;
+				height: 29px;
+				margin: 6px 0;
+				float: left;
+				position:relative;
+			}
+			
+			#search_input {
+				background: url(images/search.png) no-repeat 10px;
+				padding-left: 30px;
+				border: 0px;
+				font-size:14px;
+				position: absolute;  
+            	top: 0; left: 0; bottom: 0; right: 0; 
+			}
+			.list_null {
+				font-size: 14px;
+				color: rgba(0, 0, 0, 0.48);
+				text-align: center;
+				background-color: transparent;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;width: 12%;margin-right:0px"></a>
+			<!--<div class="mui-input-row mui-search mui-pull-left" style="clear: none;float: left;width: 68%;">
+				<input id="keywords" type="search" placeholder="请输入关键字" value="" style="background-color: white;" class="mui-input-clear" />
+			</div>-->
+			<div class="search_div">
+				<input id="search_input" class="mui-input-clear" type="search" style="margin: 0;"/>
+			</div>
+			
+			<button id="btn_search" class="mui-pull-right mui-btn-nav mui-btn mui-btn-warning" style="color: white;width: 20%;padding-top: 5px;padding-bottom: 5px;"><b>搜索</b></button>
+		</header>
+		<div class="mui-content">
+			<div style="color: #9F9F9F;">最近搜索</div>
+			<div id="last_keyword_list" style="background-color: white;margin-top:5px;padding: 10px;">
+				<div class="list_null">加载中...</div>
+				<!--<button class="hot-key">木瓜</button>
+				<button class="hot-key">月饼</button>
+				<button class="hot-key">红富士</button>
+				<button class="hot-key">巧克力</button>
+				<button class="hot-key">水梨</button>
+				<button class="hot-key">进口饼干</button>
+				<button class="hot-key">大闸蟹</button>-->
+			</div>
+			<div style="color: #9F9F9F;margin-top: 10px;">热门搜索</div>
+			<div id="hot_keyword_list" style="background-color: white;margin-top:5px;padding: 10px;">
+				<div class="list_null">加载中...</div>
+				<!--<button class="hot-key">木瓜</button>
+				<button class="hot-key">月饼</button>
+				<button class="hot-key">红富士</button>
+				<button class="hot-key">巧克力</button>
+				<button class="hot-key">水梨</button>
+				<button class="hot-key">进口饼干</button>
+				<button class="hot-key">大闸蟹</button>-->
+			</div>
+		</div>
+	</body>
+
+</html>
+<script>
+	
+	var searchList = [];			
+	var list = []
+	mui.plusReady(function() {
+		view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+			document.getElementById("search_input").focus();
+			list = plus.storage.getItem("recentSearch");
+	
+			if(list){
+				searchList = list;
+			}
+			
+			parseData_HistoryLast(searchList);
+			getSearchHistoryHot();
+			//		    document.getElementById("keywords").focus();
+			mui.preload({
+				url: 'view_0002_search_result.html',
+				id: 'view_0002_search_result.html'
+			});
+		}, false);
+		
+		
+
+		mui(".mui-content").on('tap', '.hot-key', function() {
+		
+			var resultPage = plus.webview.getWebviewById('view_0002_search_result.html');
+			mui.fire(resultPage, 'searchGoods', {
+				keywords: this.innerText
+			});
+			resultPage.show('pop-in');
+			
+		});
+
+		document.getElementById("btn_search").addEventListener('tap', function() {
+						
+			var keywords=document.getElementById("search_input").value;
+			if(!keywords)keywords='';
+			document.getElementById("search_input").value = '';
+			var resultPage = plus.webview.getWebviewById('view_0002_search_result.html');
+			mui.fire(resultPage, 'searchGoods', {
+				keywords: keywords
+			});
+			resultPage.show('pop-in');
+			
+			searchList.unshift(keywords);
+			parseData_HistoryLast(searchList)
+			plus.storage.setItem( "recentSearch", searchList);
+		});
+
+		document.addEventListener('setKeywords', function(e) {
+			document.getElementById("search_input").focus();
+			document.getElementById("search_input").value = e.detail.keywords;
+		})
+		
+		function getSearchHistoryLast() {
+			var time = Date.parse(new Date()) / 1000;
+			var token = CryptoJS.MD5('SenXi' + time).toString();
+			mui.ajax(SERVER_HOST + '/api/app/v1/search-history-last', {
+				data: {
+					time: time,
+					token: token
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						parseData_HistoryLast(data);
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.ui.toast("网络请求超时");
+				}
+			});
+		}
+
+		function parseData_HistoryLast(searchList) {
+			var keyword_list = document.getElementById("last_keyword_list");
+			var html_str = '';
+			if(searchList != '') {
+				for(var i = 0; i < searchList.length; i++) {
+					html_str = html_str + '<button class="hot-key">' + searchList[i] + '</button>';
+				}
+			} else {
+				html_str = '<div class="list_null">无结果</div>';
+			}
+			keyword_list.innerHTML = html_str;
+		}
+
+		
+		function getSearchHistoryHot() {
+			
+			mui.ajax(SERVER_HOST + 'home/get-hot-keywords', {
+				data: {
+					time: TIME,
+					token: TOKEN,
+					authToken:'',
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						parseData_HistoryHot(data);
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.ui.toast("网络请求超时");
+				}
+			});
+		}
+
+		function parseData_HistoryHot(data) {
+			var keyword_list = document.getElementById("hot_keyword_list");
+			var html_str = '';
+			if(data != null) {
+				for(var i = 0; i < data.data.length; i++) {
+					html_str = html_str + '<button class="hot-key">' + data.data[i] + '</button>';
+				}
+			} else {
+				html_str = '<div class="list_null">无结果</div>';
+			}
+			keyword_list.innerHTML = html_str;
+		}
+
+	});
+
+	//	mui.back = function(){
+	//			console.log(plus.webview.getLaunchWebview().id);
+	//	        var homePage = plus.webview.getWebviewById('view_0003_login.html');
+	//	        homePage.show();
+	//  	}
+</script>
+<script src="js/immersed.js"></script>

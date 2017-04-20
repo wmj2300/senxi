@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script>
+			mui.init();
+		</script>
+			
+		<style>
+			#btn_recharge{
+				margin: 37px auto;
+				text-align: center;
+			}
+			#recharge_num,#btn_recharge button{
+				border-radius:4px;
+				width:80%;
+				height:50px;
+			}
+			/*radio选中颜色*/
+			.mui-radio input[type=radio]:checked:before {
+			    color: #07985B;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>余额充值</b></h1>
+		</header>
+		<div class="mui-content">
+			<div id="change" style="width: 90%;text-align: center;margin: 20px auto;margin-bottom: 22px;">
+				<input id="recharge_num" type="number" style="" placeholder="请输入要充值的金额"/>
+			</div>
+			<div style="text-align: center;">
+				<span style="font-size:14px;color:#4a4a4a;">需支付金额</span>
+				<div style="font-size:20px;color:#ffb100;margin-top: 15px;"><span id="balance_num">0.00</span>元</div>
+			</div>
+			<div style="margin-top:10px;margin-bottom: 0px;">
+				<form class="mui-input-group" style="padding: 0 10px;">
+					<div class="mui-input-row mui-radio mui-left">
+						<label><img src="images/purse_recharge_alipay.png" style="width: 24px;height: 24px;margin:0 20px; vertical-align: middle;"/><span style="vertical-align: middle;">支付宝支付</span></label>
+						<input name="radio1" value="2" type="radio" checked style="vertical-align: middle;">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label><img src="images/purse_recharge_wxpay.png" style="width: 24px;height: 24px; margin:0 20px;vertical-align: middle;" /><span style="vertical-align: middle;">微信支付</span></label>
+						<input name="radio1" value="1" type="radio" style="vertical-align: middle;">
+					</div>
+				</form>
+			</div>
+			<div id="btn_recharge">
+				<button class="mui-btn mui-btn-warning">确定</button>
+			</div>
+		</div>
+	</body>
+
+</html>
+<script>
+	var pay_type='1'
+
+	function gotoPage(url){
+		mui.openWindow({
+		    url:url,
+		    id:url,
+		    show:{
+		      aniShow:'fade-in'
+		    }
+		});
+	}
+	mui.plusReady(function(){
+		view=plus.webview.currentWebview();
+		view.addEventListener("show", function(e){
+		    console.log( "Webview Showed："+view.id );
+		    mui.preload({
+				url:'view_0016_purselog.html',
+				id:'view_0016_purselog.html'
+			});
+		}, false );
+		mui("body").on('tap','.goto-page',function(){
+            var href = this.getAttribute('data-href');
+            gotoPage(href);
+     });	
+     	mui('#change').on('change','#recharge_num',function(){
+     		console.log(this.value);
+     		document.getElementById("balance_num").innerHTML = this.value;
+     	});
+     	document.getElementById("btn_recharge").addEventListener('tap',function(){
+			var authToken = plus.storage.getItem('authToken');
+			var radios = document.getElementsByName('radio1');
+			for(var i=0;i<radios.length;i++){
+				if(radios[i].checked){
+					pay_type=radios[i].value;
+				}
+			}
+			console.log(pay_type)
+			if(document.getElementById("recharge_num").value == ''){
+				plus.ui.toast("请填写充值金额~");
+				return false;
+			}
+           
+            mui.ajax(SERVER_HOST+'home/recharge',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken,
+					amount:document.getElementById("recharge_num").value,
+					pay_type:pay_type,
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						if(pay_type == 2){
+							pay('alipay',data.data);
+						}else if(pay_type == 1){
+							pay('wxpay',data.data);
+						}
+					}else{
+						plus.ui.toast(data.msg);
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+		});
+       
+	});
+	
+	
+	
+	function getVipLimit(){
+			
+	}
+	var channel=null;
+	var channels_arr = [];
+	var payArr=[{"id":"alipay","description":"支付宝","serviceReady":true},{"id":"wxpay","description":"微信","serviceReady":true}]
+// 1. 获取支付通道
+function plusReady(){
+    // 获取支付通道
+    plus.payment.getChannels(function(channels){
+        
+        channels_arr = channels;
+//      console.log(JSON.stringify(channels));
+    },function(e){
+        alert("获取支付通道失败："+e.message);
+    });
+}
+document.addEventListener('plusready',plusReady,false);
+
+//var ALIPAYSERVER='http://demo.dcloud.net.cn/helloh5/payment/alipay.php?total=';
+//var WXPAYSERVER='http://demo.dcloud.net.cn/helloh5/payment/wxpay.php?total=';
+// 2. 发起支付请求
+function pay(id,data){
+    // 从服务器请求支付订单
+//  var PAYSERVER='';
+    
+    var statement = null;
+    
+    if(id=='alipay'){
+//      PAYSERVER=ALIPAYSERVER;
+mui.each(channels_arr,function(index,cha){
+	if(cha.id == id){
+        channel=channels_arr[index];
+	}
+})
+        
+        statement = data['params'];
+    }else if(id=='wxpay'){
+//      PAYSERVER=WXPAYSERVER;
+        mui.each(channels_arr,function(index,cha){
+			if(cha.id == id){
+		        channel=channels_arr[index];
+			}
+		})
+		var pla=ismobile(1);
+		if(pla==0){
+			statement = JSON.stringify(data);
+		}else if(pla==1){
+			var json = {
+				"appid":data.appid,
+				"noncestr":data.noncestr,
+				"package":data.package,
+				"partnerid":data.partnerid,
+				"prepayid":data.prepayid,
+				"timestamp":data.timestamp,
+				"sign":data.sign
+				}
+        		statement = JSON.stringify(json);
+		}
+        
+    }else{
+        plus.nativeUI.alert("不支持此支付通道！",null,"捐赠");
+        return;
+    }
+    
+    console.log(statement);
+
+    plus.payment.request(channel,statement,function(result){
+        plus.nativeUI.alert("支付成功！",function(){
+                        back();
+        });
+    },function(error){
+    	
+    	
+    	console.log(JSON.stringify(error));
+    		if(error.code == -100){
+    			plus.ui.toast("放弃支付~");
+    		}else{
+    			plus.nativeUI.alert("支付失败：" + error.code);
+    		}
+    });
+}
+function ismobile(test){
+    var u = navigator.userAgent, app = navigator.appVersion;
+    if(/AppleWebKit.*Mobile/i.test(navigator.userAgent) || (/MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(navigator.userAgent))){
+     if(window.location.href.indexOf("?mobile")<0){
+      try{
+       if(/iPhone|mac|iPod|iPad/i.test(navigator.userAgent)){
+        return '0';
+       }else{
+        return '1';
+       }
+      }catch(e){}
+     }
+    }else if( u.indexOf('iPad') > -1){
+        return '0';
+    }else{
+        return '1';
+    }
+};	
+</script>
+<script src="js/immersed.js"></script>

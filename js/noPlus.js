@@ -1,0 +1,1 @@
+if(window.plus){window.plus=null;}

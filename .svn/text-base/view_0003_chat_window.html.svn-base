@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link rel="stylesheet" href="plugin/im/myemojiPl.css" />
+		<script type="text/javascript" src="plugin/im/jquery.min.js" ></script>
+		<script type="text/javascript" src="plugin/im/myemojiPl.js" ></script>
+		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		
+		<link href="css/mui.pullToRefresh.css" rel="stylesheet" />
+		<script src="js/mui.pullToRefresh.js"></script>
+		<script src="js/mui.pullToRefresh.material.js"></script>
+		
+		<script type='text/javascript' src='plugin/im/webim.config.js'></script>
+		<script type='text/javascript' src='plugin/im/strophe-1.2.8.min.js'></script>
+		<script type='text/javascript' src='plugin/im/websdk-1.4.5.min.js'></script>
+
+		<style>
+			.mui-content{
+				margin-bottom: 100px;
+				max-height: 700px;
+			}
+			.Input_text{
+				-webkit-user-select: auto;
+				-webkit-user-modify: read-write;
+				border: solid 1px #f6f6f6;
+				padding: 10px !important;
+				font-size: 16px !important;
+				line-height: 18px !important;
+				font-family: verdana !important;
+				overflow: hidden;
+			}
+			.Input_text *{
+				-webkit-user-select: auto;
+    			-webkit-user-modify: read-write;
+			}
+			.emoji_container{
+				width: 100%;
+			}
+			#msg-list {
+				height: 100%;
+				overflow: auto;
+				-webkit-overflow-scrolling: touch;
+			}
+			.msg-item {
+				padding: 8px;
+				clear: both;
+			}
+			.msg-item .mui-item-clear {
+				clear: both;
+			}
+			.msg-item .msg-user {
+				width: 38px;
+				height: 38px;
+				border: solid 1px #f6f6f6;
+				display: inline-block;
+				background: #fff;
+				border-radius: 3px;
+				vertical-align: top;
+				text-align: center;
+				float: left;
+				padding: 3px;
+				color: #ddd;
+			}
+			
+			.msg-item .msg-user-img{
+				width: 38px;
+				height: 38px;
+				display: inline-block;
+				border-radius: 3px;
+				vertical-align: top;
+				text-align: center;
+				float: left;
+				color: #ddd;
+			}
+			
+			.msg-item .msg-content {
+				display: inline-block;
+				border-radius: 5px;
+				border: solid 1px #f6f6f6;
+				background-color: #FFFFFF;
+				color: #333;
+				padding: 8px;
+				vertical-align: top;
+				font-size: 15px;
+				position: relative;
+				margin: 0px 8px;
+				max-width: 75%;
+				min-width: 35px;
+				float: left;
+			}
+			.msg-item .msg-content .msg-content-inner {
+				overflow-x: hidden;
+			}
+			.msg-item .msg-content .msg-content-arrow {
+				position: absolute;
+				border: solid 1px #f6f6f6;
+				border-right: none;
+				border-top: none;
+				background-color: #FFFFFF;
+				width: 10px;
+				height: 10px;
+				left: -5px;
+				top: 12px;
+				-webkit-transform: rotateZ(45deg);
+				transform: rotateZ(45deg);
+			}
+			.msg-item-self .msg-user,
+			.msg-item-self .msg-content {
+				float: right;
+			}
+			.msg-item-self .msg-content .msg-content-arrow {
+				left: auto;
+				right: -5px;
+				-webkit-transform: rotateZ(225deg);
+				transform: rotateZ(225deg);
+			}
+			.msg-item-self .msg-content,
+			.msg-item-self .msg-content .msg-content-arrow {
+				background-color: #D4F8D8;
+				color: #000;
+				border-color: #f6f6f6;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;">与<span id="chatName">GODIVA</span>的聊天</h1>
+		</header>
+		<div class="mui-content" id='msg-list'>
+ 				<!--<div class="msg-item " msg-type="text">
+ 						<img class="msg-user-img" src="images/avatar.png" alt="">
+ 					<div class="msg-content">
+ 						<div class="msg-content-inner">
+ 								Hi，我是 MUI 小管家！Hi，我是 MUI 小管家！Hi，我是 MUI 小管家！
+ 						</div>
+ 						<div class="msg-content-arrow"></div>
+ 					</div>
+ 					<div class="mui-item-clear"></div>
+ 				</div>
+ 				<div class="msg-item  msg-item-self" msg-type="text">
+ 						<i class="msg-user mui-icon mui-icon-person"></i>
+ 					<div class="msg-content">
+ 						<div class="msg-content-inner">
+ 								b
+ 						</div>
+ 						<div class="msg-content-arrow"></div>
+ 					</div>
+ 					<div class="mui-item-clear"></div>
+ 				</div>
+ 				<div class="msg-item " msg-type="text">
+ 						<img class="msg-user-img" src="images/avatar.png" alt="">
+ 					<div class="msg-content">
+ 						<div class="msg-content-inner">
+ 								<img src="plugin/im/qqface/10.gif" />
+ 						</div>
+ 						<div class="msg-content-arrow"></div>
+ 					</div>
+ 					<div class="mui-item-clear"></div>
+ 				</div>-->
+		</div>
+		<div class="Main" style="position: fixed;bottom: 0px;width: 100%;padding: 5px;padding-bottom:10px;background: white;">    
+			<div class="faceDiv">
+	        	<section class="emoji_container" style="height: auto;">
+	        	</section>
+	        	<!--<section class="emoji_tab"></section>-->
+	        </div>  
+	        <div class="Input_Box" style="min-height: 80px;">
+	        		<div contenteditable="true" class="Input_text" id="Input_text" style="min-height: 50px;max-height: 60px;overflow-y: auto;">
+	        		</div>                      
+		          	<div class="Input_Foot">
+		          		<a class="imgBtn" href="javascript:void(0);"><img src="plugin/im/face.png" width="24px"/>表情</a>
+		          		<a id="btn_send" class="postBtn">发送</a> 
+		         	</div>
+	        </div> 
+	          
+		</div>
+	</body>
+
+</html>
+<script src="js/hx_login.js"></script>
+<script>
+	$('.Main').myEmoji();
+	
+	
+//  var conn = new WebIM.connection({
+//	    https: WebIM.config.https,
+//	    url: WebIM.config.xmppURL,
+//	    isAutoLogin: WebIM.config.isAutoLogin,
+//	    isMultiLoginSessions: WebIM.config.isMultiLoginSessions
+//	});
+//	conn.listen({
+//	    onOpened: function ( message ) {          //连接成功回调
+//	        // 如果isAutoLogin设置为false，那么必须手动设置上线，否则无法收消息
+//	        // 手动上线指的是调用conn.setPresence(); 如果conn初始化时已将isAutoLogin设置为true
+//	        // 则无需调用conn.setPresence();    
+//	        console.log('onOpened:'+JSON.stringify(message));
+//	    },  
+//	    onClosed: function ( message ) {console.log('onClosed:'+JSON.stringify(message));},         //连接关闭回调
+//	    onTextMessage: function ( message ) {
+//	    	console.log('onTextMessage:'+JSON.stringify(message));
+//	    	var $html_str='<div class="msg-item" msg-type="text">'+
+//					 						'<img class="msg-user-img" src="images/avatar.png">'+
+//					 					'<div class="msg-content">'+
+//					 						'<div class="msg-content-inner">'+
+//					 								message.data+
+//					 						'</div>'+
+//					 						'<div class="msg-content-arrow"></div>'+
+//					 					'</div>'+
+//					 					'<div class="mui-item-clear"></div>'+
+//					 				'</div>';
+//				$("#msg-list").append($html_str);
+//				msg_list_em.scrollTop =msg_list_em.scrollHeight;
+//	    },    //收到文本消息
+//	    onEmojiMessage: function ( message ) {console.log('onEmojiMessage:'+JSON.stringify(message));},   //收到表情消息
+//	    onPictureMessage: function ( message ) {console.log('onPictureMessage:'+JSON.stringify(message));}, //收到图片消息
+//	    onCmdMessage: function ( message ) {console.log('onCmdMessage:'+JSON.stringify(message));},     //收到命令消息
+//	    onAudioMessage: function ( message ) {console.log('onAudioMessage:'+JSON.stringify(message));},   //收到音频消息
+//	    onLocationMessage: function ( message ) {console.log('onLocationMessage:'+JSON.stringify(message));},//收到位置消息
+//	    onFileMessage: function ( message ) {console.log('onFileMessage:'+JSON.stringify(message));},    //收到文件消息
+//	    onVideoMessage: function ( message ) {console.log('onVideoMessage:'+JSON.stringify(message));},   //收到视频消息
+//	    onPresence: function ( message ) {console.log('onPresence:'+JSON.stringify(message));},       //收到联系人订阅请求、处理群组、聊天室被踢解散等消息
+//	    onRoster: function ( message ) {console.log('onRoster:'+JSON.stringify(message));},         //处理好友申请
+//	    onInviteMessage: function ( message ) {console.log('onInviteMessage:'+JSON.stringify(message));},  //处理群组邀请
+//	    onOnline: function () {console.log('onOnline:'+JSON.stringify(message));},                  //本机网络连接成功
+//	    onOffline: function () {console.log('onOffline:'+JSON.stringify(message));},                 //本机网络掉线
+//	    onError: function ( message ) {
+//	    	console.log('onError:'+JSON.stringify(message));
+//	    },          //失败回调
+//	    onBlacklistUpdate: function (list) {       //黑名单变动
+//	        // 查询黑名单，将好友拉黑，将好友从黑名单移除都会回调这个函数，list则是黑名单现有的所有好友信息
+//	        console.log(list);
+//	    }
+//	});
+	
+	
+	// 单聊发送文本消息
+	var sendPrivateText = function (msg_content,username) {
+		var hx_account = plus.storage.getItem('hx_account');
+	    var id = conn.getUniqueId();                 // 生成本地消息id
+	    var msg = new WebIM.message('txt', id);      // 创建文本消息
+	    msg.set({
+	        msg: msg_content,                  // 消息内容
+	        to: username,                          // 接收消息对象（用户id）
+	        roomType: false,
+	        success: function (id, serverMsgId) {
+	            console.log('send private text Success');
+	            var $html_str='<div class="msg-item msg-item-self" msg-type="text">'+
+					 						'<i class="msg-user mui-icon mui-icon-person"></i>'+
+					 					'<div class="msg-content">'+
+					 						'<div class="msg-content-inner">'+
+					 								msg_content+
+					 						'</div>'+
+					 						'<div class="msg-content-arrow"></div>'+
+					 					'</div>'+
+					 					'<div class="mui-item-clear"></div>'+
+					 				'</div>';
+				$("#msg-list").append($html_str);
+				msg_em.innerText='';
+				msg_list_em.scrollTop =msg_list_em.scrollHeight;
+	        }
+	    });
+	    msg.body.chatType = 'singleChat';
+	    conn.send(msg.body);
+	    var arr = [];
+	    if(plus.storage.getItem('messageList')){
+	    		arr = JSON.parse(plus.storage.getItem('messageList'))
+	    }
+	    if(arr.length>0){
+    			for(var i=0;i<arr.length;i++){
+	    			if(arr[i].fromName == username){
+	    				arr[i].content.push({
+	    					text:msg_content,
+						from:hx_account,
+						to:username,
+						id:id,
+						time:date(),
+	    				});
+	    			}
+	    		}
+    		}else{
+    			var data = {
+					fromName:username,
+					content:[],
+				}
+				data.content.push({
+					text:msg_content,
+					from:hx_account,
+					to:username,
+					id:id,
+					time:date(),
+				});
+				arr.push(data);
+    		}
+    		plus.storage.setItem('messageList',JSON.stringify(arr));
+	};
+
+	var msg_em=document.getElementById("Input_text");
+	var msg_list_em=document.getElementById("msg-list");
+	var from_id = '';
+	
+	mui.plusReady(function(){
+		
+		initHX(function(message){
+					var $html_str='<div class="msg-item" msg-type="text">'+
+					 						'<img class="msg-user-img" src="images/avatar.png">'+
+					 					'<div class="msg-content">'+
+					 						'<div class="msg-content-inner">'+
+					 								message.data+
+					 						'</div>'+
+					 						'<div class="msg-content-arrow"></div>'+
+					 					'</div>'+
+					 					'<div class="mui-item-clear"></div>'+
+					 				'</div>';
+				$("#msg-list").append($html_str);
+				msg_list_em.scrollTop =msg_list_em.scrollHeight;
+			},'self')
+		
+			var msgList = plus.storage.getItem('messageList');
+			console.log(JSON.stringify(msgList));
+			var wv=plus.webview.currentWebview();
+			wv.addEventListener('show',function(){
+//			var hx_account = plus.storage.getItem('hx_account');
+//			if(hx_account){
+//				var options = { 
+//							apiUrl: WebIM.config.apiURL,
+//							user: hx_account,
+//							pwd: 'sx123456',
+//							appKey: WebIM.config.appkey
+//						};
+//				conn.open(options);
+//			}			
+		});
+		document.addEventListener('refreshData',function(e){
+				if(!e.detail.fid){
+					mui.toast("缺少参数");
+					mui.back();
+					return;
+				}
+				from_id = e.detail.fid;
+				chatPage(from_id);
+			})
+		document.getElementById("btn_send").addEventListener('tap',function(){
+				console.log(from_id);
+				if(!msg_em.innerText){
+					return;
+				}
+				sendPrivateText(msg_em.innerText,from_id);
+				
+			});
+	});
+	function chatPage(from_id){
+		var arr = [];
+		var msgList = document.getElementById('msg-list');
+		var $html_str = '';
+	    if(plus.storage.getItem('messageList')){
+	    		arr = JSON.parse(plus.storage.getItem('messageList'))
+	    }
+	    if(arr.length>0){
+    			for(var i=0;i<arr.length;i++){
+	    			if(arr[i].fromName == from_id){
+	    				document.getElementById('chatName').innerHTML= from_id;
+	    				mui.each(arr[i].content,function(index,inn){
+	            				if(inn.from == from_id){
+	            					$html_str =$html_str+ '<div class="msg-item" msg-type="text">'+'<img class="msg-user-img" src="images/avatar.png">';
+	            				}else{
+	            					$html_str =$html_str+ '<div class="msg-item msg-item-self" msg-type="text">'+'<img class="msg-user" src="images/avatar.png">';
+	            				}
+	    					$html_str=$html_str+
+					 					'<div class="msg-content">'+
+					 						'<div class="msg-content-inner">'+
+					 								inn.text+
+					 						'</div>'+
+					 						'<div class="msg-content-arrow"></div>'+
+					 					'</div>'+
+					 					'<div class="mui-item-clear"></div>'+
+					 				'</div>';
+					 				inn.is_new = false;
+	    				})
+	    				
+	    					msgList.innerHTML = $html_str;
+	    					msg_list_em.scrollTop =msg_list_em.scrollHeight;
+	    					plus.storage.setItem('messageList',JSON.stringify(arr));
+	    			}
+	    		}
+    		}
+	}
+</script>
+<script src="js/immersed.js"></script>

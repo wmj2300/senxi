@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		<style>
+			.mui-content>.mui-table-view:first-child {
+			    margin-top: 0px;
+			}
+			.list_null {
+				font-size: 14px;
+				color: rgba(0, 0, 0, 0.48);
+				text-align: center;
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">商品分类</h1>
+		</header>
+		<div class="mui-content">
+				<ul id="goods_catalog_list" class="mui-table-view">
+					<div class="list_null">加载中...</div>
+				</ul>
+		</div>
+	</body>
+</html>
+<script>
+	mui.init();
+	mui.plusReady(function() {
+		var view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+		}, false);
+		
+		mui("body").on('tap', '.good_cat_two', function() {
+			var cat_id = this.getAttribute('cat_id');
+			
+			var resultPage = plus.webview.getWebviewById('view_0002_search_result.html');
+			mui.fire(resultPage, 'searchGoodsByCat', {
+				cat_id: cat_id
+			});
+			resultPage.show('pop-in');
+		});
+	});
+	
+	document.addEventListener('refreshData',function(e){
+		getGoodsCatalogList(e.detail.shop_id);
+	});
+	
+	function getGoodsCatalogList(shop_id) {
+		document.getElementById("goods_catalog_list").innerHTML='';
+		var authToken = plus.storage.getItem('authToken');
+		mui.ajax(SERVER_HOST + 'goods/get-types', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken:authToken,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					parseData_GoodsCatalog(data);
+				} else {
+					plus.ui.toast(data.msg);
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				plus.ui.toast("网络请求超时");
+			}
+		});
+	}
+
+	function parseData_GoodsCatalog(data) {
+		var goods_catalog_list = document.getElementById("goods_catalog_list");
+		var html_str = '';
+		if(data.data.length > 0) {
+			for(var i = 0; i < data.data.length; i++) {
+					html_str = html_str + '<li class="mui-table-view-cell mui-collapse">'+
+												'<a class="mui-navigate-right">'+data.data[i].name+'</a>'+
+												'<ul class="mui-table-view mui-table-view-chevron">';
+					for(var j = 0; j < data.data[i].child.length; j++) {
+						html_str = html_str + 		'<li cat_id="'+data.data[i].child[j].id+'" class="good_cat_two mui-table-view-cell">'+data.data[i].child[j].name+'</li>';
+					}
+					html_str = html_str +		'</ul>'+
+										'</li>';
+			}
+		} else {
+			html_str = '<div class="list_null">暂无分类</div>';
+		}
+
+		goods_catalog_list.innerHTML = html_str;
+	}
+</script>
+<script type="text/javascript" src="js/immersed.js" ></script>

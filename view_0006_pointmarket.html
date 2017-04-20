@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>购物车</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		<script>
+			mui.init();
+		</script>
+
+		<style>
+			body,
+			.mui-content {
+				background-color: #F5F5F5;
+			}
+			
+			.current_points {
+				font-family: PingFangSC-Medium;
+				font-size: 16px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				line-height: 20px;
+				text-align: left;
+				margin-left: 8px;
+			}
+			
+			#points_num {
+				font-size: 18px;
+				color: #ffb100;
+			}
+			
+			.goods_item {
+				text-align: center;
+				border-radius: 5px;
+				border-bottom-left-radius: 0px;
+				border-bottom-right-radius: 0px;
+				padding: 0px 5px;
+			}
+			
+			.goods_detail {
+				box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.12);
+				height: 180px;
+				background: white;
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
+			}
+			
+			.goods_detail img {
+				margin: 6px auto;
+				width: 100%;
+				height: 65%;
+			}
+			
+			.goods_detail div {
+				font-family: MicrosoftYaHei;
+				font-size: 14px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				line-height: 22px;
+				text-align: left;
+				margin: 0 9px;
+			}
+			
+			.goods_points_rest {
+				background: #fafafa;
+				box-shadow: 0px 0.5px 0.5px 0px;
+				height: 56px;
+				padding: 16px 12px;
+				font-size: 12px;
+				text-align: left;
+				border-bottom-left-radius: 5px;
+				border-bottom-right-radius: 5px;
+				margin-bottom: 10px;
+			}
+			
+			.goods_point_num {
+				font-size: 17px;
+				color: #ff6823;
+			}
+			
+			.goods_rest {
+				float: right;
+				color: #9b9b9b;
+				position:relative;
+				top:1.4px;
+			}
+			.list_null {
+				font-size: 14px;
+				color: rgba(0, 0, 0, 0.48);
+				text-align: center;
+				background-color: transparent;
+			}
+			#goods_name{
+				text-align: center;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 2;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>积分商城</b></h1>
+		</header>
+		<div class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div style="height:44px;padding: 11px 16px;background-color: white;">
+					<img src="images/user_fun_pic1.png" style="width:24px;height:18px;vertical-align: middle;" />
+					<span class="current_points">当前积分：<span id="points_num">...</span>
+						<a id="btn_point_log" style="float: right;font-size: 12px;color:#9b9b9b;">积分记录</a>
+					</span>
+				</div>
+				<div id="good_list" class="mui-row" style="padding: 8px;">
+					<div class="list_null">加载中...</div>
+					<!--<div good_id="1" class="mui-col-xs-6 goods_item">
+						<div id="item1_point" class="goods_detail">
+							<img id="goods_pic" src="img_tmp/point_market_goods_item1.png" />
+							<div id="goods_name">无印良品muji极简风格迷你风扇</div>
+						</div>
+						<div class="goods_points_rest">
+							<span class="goods_point_num">1999</span> 积分<span class="goods_rest">库存：99</span>
+						</div>
+					</div>-->
+					<!--<div class="mui-col-xs-6 goods_item">
+						<div class="goods_detail">
+							<img id="goods_pic" src="img_tmp/point_market_goods_item2.png" />
+							<div id="goods_name">Nike 耐克 波点小赵云复古运动休闲鞋</div>
+						</div>
+						<div class="goods_points_rest">
+							<span class="goods_point_num">1920</span> 积分<span class="goods_rest">库存：99</span>
+						</div>
+					</div>
+					<div class="mui-col-xs-6 goods_item">
+						<div class="goods_detail">
+							<img id="goods_pic" src="img_tmp/point_market_goods_item3.png" />
+							<div id="goods_name">容生电器 迷你家用取暖器白色</div>
+						</div>
+						<div class="goods_points_rest">
+							<span class="goods_point_num">1920</span> 积分<span class="goods_rest">库存：99</span>
+						</div>
+					</div>
+					<div class="mui-col-xs-6 goods_item">
+						<div class="goods_detail">
+							<img id="goods_pic" src="img_tmp/point_market_goods_item4.png" />
+							<div id="goods_name">USB分线器多功能底座迷你小风扇</div>
+						</div>
+						<div class="goods_points_rest">
+							<span class="goods_point_num">1920</span> 积分<span class="goods_rest">库存：99</span>
+						</div>
+					</div>
+					<div class="mui-col-xs-6 goods_item">
+						<div class="goods_detail">
+							<img id="goods_pic" src="img_tmp/point_market_goods_item4.png" />
+							<div id="goods_name">USB分线器多功能底座迷你小风扇</div>
+						</div>
+						<div class="goods_points_rest">
+							<span class="goods_point_num">1920</span> 积分<span class="goods_rest">库存：99</span>
+						</div>
+					</div>-->
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>
+
+<script>
+
+	mui('.mui-scroll-wrapper').scroll();
+	
+	function gotoPage(url){
+		mui.openWindow({
+		    url:url,
+		    id:url,
+		    show:{
+		      aniShow:'pop-in'
+		    }
+		});
+	}
+	
+	function preloadPage(){
+		mui.preload({
+				url:'view_0007_pointlog.html',
+				id:'view_0007_pointlog.html'
+		});
+		mui.preload({
+			url:'view_0006_pointmarket_good_detail.html',
+			id:'view_0006_pointmarket_good_detail.html'
+		});
+		mui.preload({
+			url: 'view_0003_login.html',
+			id: 'view_0003_login.html'
+		});
+	}
+	
+	mui.plusReady(function() {
+		view=plus.webview.currentWebview();
+		view.addEventListener("show", function(e){
+		    console.log( "Webview Showed："+view.id );
+		    plus.nativeUI.showWaiting();
+		    preloadPage();
+			getPointRecord();
+			getPointGoods();
+			plus.nativeUI.closeWaiting();
+			if(!isLogin()){
+				gotoPage('view_0003_login.html');
+				return;
+			}
+		}, false );
+		
+       document.getElementById("btn_point_log").addEventListener('tap',function(){
+       	
+       		var point_log = plus.webview.getWebviewById('view_0007_pointlog.html');
+			mui.fire(point_log, 'refreshData', {
+				point: document.getElementById('points_num').innerHTML,
+			});
+       		gotoPage('view_0007_pointlog.html');
+       });
+       
+       mui("body").on('tap', '.goods_item', function() {
+			var good_id = this.getAttribute('good_id');
+			var point_good_detail = plus.webview.getWebviewById('view_0006_pointmarket_good_detail.html');
+			mui.fire(point_good_detail, 'refreshData', {
+				good_id: good_id
+			});
+			point_good_detail.show('pop-in');
+		});
+		
+	});
+	
+	
+	function getPointRecord() {
+				var authToken = plus.storage.getItem('authToken');
+				console.log(authToken);
+				mui.ajax(SERVER_HOST + 'user/info', {
+					data: {
+						time: TIME,
+						token: TOKEN,
+						authToken: authToken,
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					timeout: 10000, //超时时间设置为5秒；
+					success: function(data) {
+						console.log(JSON.stringify(data));
+						if(data.status == 1) {
+							document.getElementById('points_num').innerHTML = data.data.point;
+						}else {
+							if("authToken错误" == data.msg) {
+								gotoPage('view_0003_login.html');
+								return;
+							} else {
+								mui.toast(data.msg);
+							}
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						plus.ui.toast("网络请求超时");
+					}
+				});
+		}
+		
+		function getPointGoods(){
+//				var time = Date.parse(new Date()) / 1000;
+//				var token = CryptoJS.MD5('SenXi' + time).toString();
+				mui.ajax(SERVER_HOST + 'point-goods/point-store', {
+					data: {
+						time: TIME,
+						token: TOKEN,
+						authToken: '',
+						page:1,
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					timeout: 10000, //超时时间设置为5秒；
+					success: function(data) {
+						console.log(JSON.stringify(data));
+						if(data.status == 1) {
+							parseData_PointGoods(data.data);
+						} else {
+							plus.ui.toast(data.msg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						plus.ui.toast("网络请求超时");
+					}
+				});
+		}
+		
+		function parseData_PointGoods(data) {
+			var good_list = document.getElementById("good_list");
+			var html_str = '';
+			if(data.models.length > 0) {
+				for(var i = 0; i < data.models.length; i++) {
+					html_str = html_str + '<div good_id="'+data.models[i].sid+'" class="mui-col-xs-6 goods_item">'+
+												'<div id="item1_point" class="goods_detail">'+
+													'<img id="goods_pic" src="'+staticUrl+'/'+data.models[i].img+'" />'+
+													'<div id="goods_name" class="t_center">'+data.models[i].title+'</div>'+
+												'</div>'+
+												'<div class="goods_points_rest">'+
+													'<span class="goods_point_num">'+data.models[i].point+'</span> 积分<span class="goods_rest">库存：'+data.models[i].repertory+'</span>'+
+												'</div>'+
+											'</div>';
+				}
+			}else{
+				html_strhtml_str = '<div class="list_null">暂无积分商品</div>';
+			}
+			good_list.innerHTML = html_str;
+		}
+		var isLogin = function(){
+			var authToken = plus.storage.getItem('authToken');
+			if(!authToken){
+				return false;
+			}else{
+				return true;
+			}
+		}
+	
+</script>
+<script src="js/immersed.js"></script>

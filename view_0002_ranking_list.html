@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>我的订单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.pullToRefresh.css">
+<style>
+			.mui-content {
+				background-color: white;
+			}
+			
+			a:hover {
+				text-decoration: none;
+			}
+			
+			.good_detail {
+				margin-left: 100px;
+			}
+			
+			.good_img {
+				width: 88px;
+				height: 88px;
+				float: left;
+			}
+			
+			.good_name {
+				font-size: 14px;
+				color: #4a4a4a;
+			}
+			
+			.good_standard_des {
+				margin-top: 5px;
+			}
+			
+			.good_price {
+				margin-top: 5px;
+				color: #ffb100;
+				font-size: 14px;
+			}
+			
+			.good_rest_text{
+				font-size: 12px;
+				color: #9b9b9b;
+				vertical-align: middle;
+			}
+			
+			.good_rest img{
+				width:35px;
+				height:16px;
+				margin-left: 10px;
+				vertical-align: middle;
+			}
+			
+			.btn_select {
+				border: 0px;
+			}
+			
+			.btn_select:enabled:active {
+				background-color: wheat;
+			}
+			
+			.list_null {
+				font-size: 14px;
+				color: rgba(0, 0, 0, 0.48);
+				text-align: center;
+				background-color: transparent;
+			}
+			.mui-pull-bottom-tips{
+				display: none;
+			}
+			
+			.good_item{
+				min-height: 108px;
+				margin-top: 10px;
+				border-bottom: 1px solid #F6F6F6;
+			}
+	
+			#search_way{
+				position: relative;
+				top: 44px;
+				z-index: 99;
+				background: white;
+				border-bottom: 1px solid #F6F6F6;
+			}
+			.goods_list{
+				padding: 15px;
+				/*padding-top: 44px;*/
+			}
+			.search_div {
+				background: #ffffff;
+				border-radius: 6px;
+				width: 68%;
+				height: 29px;
+				margin: 6px 0;
+				float: left;
+				position:relative;
+			}
+			
+			#search_input {
+				background: url(images/search.png) no-repeat 10px;
+				padding-left: 30px;
+				border: 0px;
+				font-size:14px;
+				position: absolute;  
+            	top: 0; left: 0; bottom: 0; right: 0; 
+			}
+			.left {
+				width: 75px;
+				float: left;
+				margin-right: 20px;
+			}
+			
+			.right {
+				width: 200px;
+				float: left;
+			}
+			
+			#shop_name {
+				font-size: 12px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			#good_img {
+				width: 80px;
+				height: 80px;
+			}
+			
+			#shop_name {
+				font-size: 12px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			#good_name {
+				font-size: 14px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				line-height: 22px;
+				text-align: left;
+			}
+			
+			#order_status {
+				font-size: 12px;
+				color: #9b9b9b;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			#fee_for_order {
+				font-size: 14px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				line-height: 22px;
+				text-align: left;
+			}
+			
+			button {
+				background-image: linear-gradient(-180deg, #ffffff 0%, #fafafa 100%);
+				border-radius: 4px;
+				width: 91px;
+				height: 35px;
+				text-align: center;
+			}
+			/*选项卡选中颜色*/
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+				color: #FFB100;
+			}
+			
+			.multi_buy{
+				color: white;
+				background:#009963;
+				border-radius:2px;
+				padding: 1px 4px;
+			}
+			.border{
+				border: 1px solid red;
+				background: red;
+				color: #fff;
+				width: 15px;
+				height: 15px;
+				float: right;
+				line-height: 15px;
+				display: inline-block;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;">排行榜</h1>
+		</header>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<div class="mui-scroll" id="goods_catalog_list">
+						<a class="mui-control-item mui-active" href="#item1mobile">
+							推荐
+						</a>
+						<a class="mui-control-item" href="#item2mobile">
+							热点
+						</a>
+						<a class="mui-control-item" href="#item3mobile">
+							北京
+						</a>
+						<a class="mui-control-item" href="#item4mobile">
+							社会
+						</a>
+						<a class="mui-control-item" href="#item5mobile">
+							娱乐
+						</a>
+						<a class="mui-control-item" href="#item6mobile">
+							科技
+						</a>
+					</div>
+				</div>
+				<div class="mui-slider-group" id="goods_content">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="scroll1">
+									<li class="mui-table-view-cell">
+										第1个选项卡子项-1
+									</li>
+									<li class="mui-table-view-cell">
+										第1个选项卡子项-2
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="good_item" shop_id="11" good_id="1122">
+									<img class="good_img" src="img_tmp/favorites_good_pic1.png"/>
+									<div class="good_detail">
+										<div class='good_name'>德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</div>
+										<div class='good_price'>￥119.00</div>
+										<div class='good_rest'>
+											<span class='good_rest_text'>库存：99件</span>
+											<img src="images/ziying_kuang.png" />
+										</div>
+									</div>
+								</div>
+								<div class="good_item" shop_id="11" good_id="1122">
+									<img class="good_img" src="img_tmp/favorites_good_pic1.png"/>
+									<div class="good_detail">
+										<div class='good_name'>德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</div>
+										<div class='good_price'>￥119.00</div>
+										<div class='good_rest'>
+											<span class='good_rest_text'>库存：99件</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="item3mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="scroll3">
+									<li class="mui-table-view-cell">
+										第3个选项卡子项-1
+									</li>
+									<li class="mui-table-view-cell">
+										第3个选项卡子项-2
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item4mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="scroll4">
+									<li class="mui-table-view-cell">
+										第4个选项卡子项-1
+									</li>
+									<li class="mui-table-view-cell">
+										第4个选项卡子项-2
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item5mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view">
+									<li class="mui-table-view-cell">
+										第5个选项卡子项-1
+									</li>
+									<li class="mui-table-view-cell">
+										第5个选项卡子项-2
+									</li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item6mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view">
+									<li class="mui-table-view-cell">
+										第6个选项卡子项-1
+									</li>
+									<li class="mui-table-view-cell">
+										第6个选项卡子项-2
+									</li>
+						
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</body>
+</html>
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/mui.pullToRefresh.js"></script>
+		<script src="js/mui.pullToRefresh.material.js"></script>
+<script>
+mui.init();
+var catalog_list = null;
+var status_url = null;
+var aid = null;
+var page = 0;
+var is_down = true;
+var is_pullRefresh=true;
+var pullOj = null;
+
+(function($) {
+	//阻尼系数
+	var deceleration = mui.os.ios?0.003:0.0009;
+	$('.mui-scroll-wrapper').scroll({
+		bounce: false,
+		indicators: true, //是否显示滚动条
+		deceleration:deceleration
+	});
+	
+})(mui);
+
+mui.plusReady(function() {
+//		循环初始化所有下拉刷新，上拉加载。
+					mui.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+						mui(pullRefreshEl).pullToRefresh({
+							down: {
+								callback: function() {
+									pullOj = this;
+									is_down = true;
+									pullRefreshList(0);
+								}
+							},
+							up: {
+								callback: function() {
+									pullOj = this;
+									is_down = false;
+									pullRefreshList(0);
+								}
+							}
+						});
+					});
+		var createFragment = function(ul, index, count, reverse) {
+			var length = ul.querySelectorAll('li').length;
+			var fragment = document.createDocumentFragment();
+			var li;
+			for (var i = 0; i < count; i++) {
+				li = document.createElement('li');
+				li.className = 'mui-table-view-cell';
+				li.innerHTML = '第' + (index + 1) + '个选项卡子项-' + (length + (reverse ? (count - i) : (i + 1)));
+				fragment.appendChild(li);
+			}
+			return fragment;
+		};
+		
+		view = plus.webview.currentWebview();
+			view.addEventListener("show", function(e) {
+				console.log("Webview Showed：" + view.id);
+				mui.preload({
+					url: 'view_0003_good_detail.html',
+					id: 'view_0003_good_detail.html'
+				});
+				mui.preload({
+					url: 'view_0003_good_detail_groupbuy.html',
+					id: 'view_0003_good_detail_groupbuy.html'
+				});
+			}, false);
+			
+			getGoodsCatalogList()
+			document.addEventListener('searchGoodsByAd', function(e) {
+				aid  = e.detail.aid;
+				
+				pullRefreshList(0);
+			})
+		
+		
+		document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+			
+			console.log('切换----'+event.detail.slideNumber);
+			mui.each(catalog_list,function(index,catalog){
+					switch(event.detail.slideNumber){
+				  		case index:
+							status_url = index;
+					  	break;
+					  }
+			  	})
+//			switch(event.detail.slideNumber){
+			  	
+				
+//			  	case 1:
+//					status_url = catalog_list[1].tid;
+//			  	break;
+//			  	case 2:
+//					status_url = catalog_list[2].tid;
+//			  	break;
+//			  	case 3:
+//					status_url = catalog_list[3].tid;
+//			  	break;
+//			  	case 4:
+//					status_url = catalog_list[4].tid;
+//			  	break;
+//			  	case 5:
+//					status_url = catalog_list[0].tid;
+//			  	break;
+			  	
+			  	
+//			}	  	
+			page = 0;
+			
+			pullRefreshList(status_url);
+	
+		});
+		
+	});
+	
+	function pullRefreshList(status) {
+		page++;
+		getSearchGoods(status);			 
+	}
+
+	function getSearchGoods(status) {
+			var tid = catalog_list[status].tid;			
+			console.log(status);
+			var authToken = plus.storage.getItem('authToken');
+			mui.ajax(SERVER_HOST + 'goods/goods-lists', {
+				data: {
+					time: TIME,
+					token: TOKEN,
+					authToken:authToken,
+					page: page,
+					aid: aid,
+					type1:tid,
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						var is_more
+						if(page<data.data.totalPage){
+							is_more=false;
+						}else{
+							is_more=true
+						}
+						parseData_SearchGoods(data,is_more,status);
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					plus.ui.toast("网络请求超时");
+				}
+			});
+		}
+	
+	function parseData_SearchGoods(data,is_more,status) {
+			var id = status+1;
+			var goods_list = document.getElementById("scroll"+id);
+			var html_str = '';
+			if(data.data.models.length > 0) {
+				var fragment = document.createDocumentFragment();
+				for(var i = 0; i < data.data.models.length; i++) {
+					var div=document.createElement('div');
+					if(data.data.models.shop_id == 0) {
+						div.innerHTML = '<div class="good_item" shop_id="'+data.data.models[i].shop_id+'" good_id="'+data.data.models[i].gid+'">'+
+													'<img class="good_img" style="width:88px" src="'+staticUrl+'/'+data.data.models[i].img_path+'"/>'+
+													'<div class="good_detail">'+
+														'<div class="good_name">'+data.data.models[i].title+'</div>'+
+														'<div class="good_price">￥'+parseFloat(data.data.models[i].price_retail).toFixed(2) + '</div>'+
+														'<div class="good_rest">'+
+															'<span class="good_rest_text">库存：' + data.data.models[i].total_stock + '件</span>'+
+															'<img src="images/ziying_kuang.png" />'+
+														'</div>'+
+													'</div>'+
+												'</div>';
+					} else {
+						div.innerHTML = '<div class="good_item" shop_id="'+data.data.models[i].shop_id+'" good_id="'+data.data.models[i].gid+'">'+
+													'<img class="good_img" style="width:88px" src="'+staticUrl+'/'+data.data.models[i].img_path+'"/>'+
+													'<div class="good_detail">'+
+														'<div class="good_name">'+data.data.models[i].goods_name+'</div>'+
+														'<div class="good_price">￥'+parseFloat(data.data.models[i].price_retail).toFixed(2) + '</div>'+
+														'<div class="good_rest">'+
+															'<span class="good_rest_text">库存：' + data.data.models[i].total_stock + '件</span>'+
+															'<span class="border">' + (i+1) + '</span>'+
+														'</div>'+
+													'</div>'+
+												'</div>';;
+					}
+					fragment.appendChild(div);
+				}
+				
+				if(is_down){
+					goods_list.innerHTML = '';
+					goods_list.appendChild(fragment);
+				}else{
+					goods_list.innerHTML = '';
+					goods_list.appendChild(fragment);
+				}
+				
+				if(pullOj&&pullOj.loading) {
+					if(is_down){
+						console.log('1_1');
+						pullOj.endPullDownToRefresh();
+						pullOj.refresh(true);
+					}else{
+						console.log('2_2');
+						console.log('up----'+is_more)
+						pullOj.endPullUpToRefresh(is_more);
+						
+					}
+				}
+			} else {
+				html_str = '<div class="list_null">无搜索结果</div>';
+				goods_list.innerHTML = html_str;
+			}
+			
+			
+			
+		}
+	
+	function getGoodsCatalogList() {
+		var authToken = plus.storage.getItem('authToken');
+		mui.ajax(SERVER_HOST + 'goods/get-types', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: authToken,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					parseData_GoodsCatalog(data);
+				} else {
+					plus.ui.toast(data.msg);
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				plus.ui.toast("网络请求超时");
+			}
+		});
+	}
+	
+	function parseData_GoodsCatalog(data) {
+		catalog_list = data.data;
+		var goods_catalog_list = document.getElementById("goods_catalog_list");
+		var goods_content = document.getElementById("goods_content");
+		var html_str = '';
+		var html_str_con = '';
+		if(data.data.length > 0) {
+			for(var i = 0; i < data.data.length; i++) {
+					html_str = html_str + '<a class="mui-control-item ';
+					if(i==0){
+						html_str = html_str + 'mui-active';
+					}
+					html_str = html_str +'" href="#item'+(i+1)+'mobile">'+data.data[i].name+'</a>';
+					
+					html_str_con = html_str_con + '<div id="item'+(i+1)+'mobile" class="mui-slider-item mui-control-content mui-active">'+
+						'<div class="mui-scroll-wrapper">'+
+							'<div class="mui-scroll goods_list" id="scroll'+(i+1)+'">'+
+							'</div>'+
+						'</div>'+
+					'</div>';
+					
+			}
+		} else {
+			html_str = '<div class="list_null">暂无分类</div>';
+			html_str_con = '<div class="list_null">暂无分类</div>';
+		}
+
+		goods_catalog_list.innerHTML = html_str;
+		goods_content.innerHTML = html_str_con;
+	}
+			
+	</script>
+<script src="js/immersed.js"></script>

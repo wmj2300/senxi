@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>等待卖家发货</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<script src="js/mui.min.js"></script>
+	</head>
+
+	<body>
+		<style>
+			.left {
+				width: 75px;
+				float: left;
+				margin-right: 20px;
+			}
+			
+			.right {
+				width: 200px;
+				float: left;
+			}
+			.mui-content>.mui-table-view:first-child {
+				margin-top: 0px;
+			}
+			
+			#good_img {
+				width: 80px;
+				height: 80px;
+			}
+			
+			#shop_name {
+				font-family: MicrosoftYaHei;
+				font-size: 12px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			#good_name {
+				font-family: MicrosoftYaHei;
+				font-size: 14px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				line-height: 22px;
+				text-align: left;
+			}
+			#good_price{
+				color: #FFB100;
+				font-size: 18px;
+				margin-top: 5px;
+			}
+			#total_fee{
+				color: #FFB100;
+				font-size: 18px;
+			}
+			
+			#myorderstatus {
+				background-image:-webkit-linear-gradient(top, #ffd900 0%, #ffb100 100%);
+				height: 44px;
+			}
+			
+			#myorderstatus img {
+				width: 26px;
+				height: 22px;
+				vertical-align: middle;
+			}
+			
+			#myorderstatus span {
+				font-family: PingFangSC-Medium;
+				font-size: 16px;
+				color: #ffffff;
+				letter-spacing: 0px;
+				line-height: 20px;
+				text-align: left;
+			}
+			
+			button {
+				background-image: -webkit-linear-gradient(top, #ffffff 0%, #fafafa 100%);
+				border-radius: 4px;
+				width: 91px;
+				height: 35px;
+				text-align: center;
+			}
+			
+			#myorderstatus.mui-active{
+				background-image:-webkit-linear-gradient(top, #ffd900 0%, #ffb100 100%);
+			}
+		</style>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;">交易详情</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<div id="myorderstatus" class="mui-table-view-cell mui-media">
+					<p class="mui-pull-left"><span><span><img src="images/myorderstatus.png"/></span><span id="status_text" style="margin-bottom: 5px;margin-left: 10px;">已付款，请耐心等待卖家发货...</span></span>
+					</p>
+				</div>
+			</ul>
+			<ul class="mui-table-view">
+				<div class="mui-table-view-cell mui-media">
+						<div class="mui-pull-left">
+							<img src="images/dinwei.png" style="width: 14px;height: 18px;">
+						</div>
+						<div id="defualt_addr" style="padding-left: 33px;">
+							<p style="color: black;" id="addr_per">收货人：
+								<span id="addr_name">陈海</span>
+								<span id="addr_phone">15202188888</span>
+							</p>
+							<p style="font-size: 12px;" id="addr_detail">收货地址：
+								<span id="addr_province">上海市</span>
+								<span id="addr_city">黄浦区</span>
+								<span id="addr_district">老西门街道陆家浜路1139号</span>
+								<span id="addr_detail">六角大楼写字楼409室</span>
+							</p>
+						</div>
+				</div>
+				<div class="mui-table-view-cell mui-media" style="font-size: 14px;">
+						<div class="mui-pull-left">
+							<img src="images/liuyan.png" style="width: 16px;height: 16px;">
+						</div>
+						<div style="padding-left: 33px;">
+							<span id="note">留言备注：无</span>
+						</div>
+				</div>
+				<!--<div class="mui-table-view-cell mui-media" style="font-size: 14px;">
+						<div class="mui-pull-left">
+							<img src="images/wuliuxinxi_pic.png" style="width: 16px;height: 16px;">
+						</div>
+						<div style="padding-left: 33px;">
+							<span>物流信息：</span>
+							<span class="mui-pull-right" style="color: #FFB100;">点此查看 ></span>
+						</div>
+				</div>-->
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 8px;font-size: 14px;">
+				<li class="mui-table-view-cell mui-media" id="shop_name">
+					<p><span id="shop_name">GODVIA歌帝梵亚太总代</span></p>
+				</li>
+				<div class="mui-table-view-cell mui-media" id="goodsList">
+					
+				</div>
+				<li class="mui-table-view-cell">
+					<span>运费</span><span class="mui-pull-right" id="post-price">¥5.00</span>
+				</li>
+				<li class="mui-table-view-cell">
+						<span>实付款<span style="font-size: 12px;">(含运费)</span></span><span class="mui-pull-right" id="real_price">¥134.00</span>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 8px;" >
+				<div class="mui-table-view-cell mui-media mui-row" id="order_log">
+					
+				</div>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 8px;">
+				<div class="mui-table-view-cell mui-media">
+					<div class="mui-row">
+						<div class="mui-col-sm-6 mui-col-xs-6">
+							<button id="clearOrder" type="button" class="mui-btn mui-pull-left" style="color: #4a4a4a;">取消订单</button>
+						</div>
+						<div class="mui-col-sm-6 mui-col-xs-6">
+							<!--<button id="goto_sold_after" type="button" class="mui-btn mui-pull-right" style="color: #ffa641;">售后服务</button>-->
+						</div>
+					</div>
+				</div>
+			</ul>
+		</div>
+		<script src="js/const.js"></script>
+		<script src="js/mui.min.js"></script>
+		<script>
+			mui.init({
+				swipeBack: false
+			});
+			var order_id = '';
+			
+			mui.plusReady(function() {
+				
+				
+				var view = plus.webview.currentWebview();
+				view.addEventListener("show", function(e) {
+					console.log("Webview Showed：" + view.id);
+					mui.preload({
+						url: 'view_0015_order_backmoney.html',
+						id: 'view_0015_order_backmoney.html'
+					});
+				
+			}, false);
+		
+			document.addEventListener('refreshOrderData', function(event) {
+				if(!event.detail.order_id){
+					plus.ui.toast('缺少参数！');
+					mui.back();
+					return;
+				}
+				getOrderDetail(event.detail.order_id);
+				
+				order_id = event.detail.order_id;
+			});
+			
+			document.getElementById('clearOrder').addEventListener("tap",function(){
+					plus.nativeUI.confirm("确定取消该订单?", function(e) {
+						var tapIndex = e.index;
+						if(tapIndex == 0){
+					    		var authToken = plus.storage.getItem('authToken');
+							mui.ajax(SERVER_HOST + 'order/cancel-order', {
+							data: {
+								time: TIME,
+								token: TOKEN,
+								authToken:authToken,
+								order_id: order_id,
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'post', //HTTP请求类型
+							timeout: 10000, //超时时间设置为5秒；
+							success: function(data) {
+								console.log(JSON.stringify(data));
+								if(data.status == 1) {
+									plus.ui.toast(data.msg);
+									RefreshPage(data,order_id);
+//									location.reload();
+								} else {
+									if("authToken错误" == data.msg) {
+										gotoPage('view_0003_login.html');
+										return;
+									} else {
+										plus.ui.toast(data.msg);
+									}
+								}
+							},
+							error: function(xhr, type, errorThrown) {
+								if(pullOj&&pullOj.loading) {
+									pullOj.endPullDownToRefresh();
+								}
+								plus.ui.toast("网络请求超时");
+							}
+						}); 
+				    }else{
+				    		return false;
+				    		console.log('取消');
+				    }
+					}, "提示", ["确定", "取消"]);
+				})
+				
+			mui(".mui-content").on("tap","#goto_sold_after",function(){
+				var page = 'view_0015_order_backmoney.html';
+				var order_info = plus.webview.getWebviewById(page);
+				mui.fire(order_info, 'refreshOrderData', {
+					order_id: order_id
+				});
+				gotoPage(page);
+			});
+				
+			})
+			
+			function getOrderDetail(order_id){
+				var authToken = plus.storage.getItem('authToken');
+				mui.ajax(SERVER_HOST + 'order/order-detail', {
+					data: {
+						time: TIME,
+						token: TOKEN,
+						authToken: authToken,
+						order_id:order_id,
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					timeout: 10000, //超时时间设置为5秒；
+					success: function(data) {							
+							console.log(JSON.stringify(data));
+						
+						if(data.status == 1) {
+					
+							parseData(data)
+							
+						} else {
+							if("authToken错误" == data.msg) {
+								gotoPage('view_0003_login.html');
+								return;
+							} else {
+								plus.ui.toast(data.msg);
+							}
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+//						if(is_down){
+//								pullOj.endPullDownToRefresh();
+//						}else{
+//							pullOj.endPullUpToRefresh();
+//						}
+						plus.ui.toast("网络请求超时");
+					}
+				});
+				
+			}
+
+			function parseData(data){
+				console.log(data)
+				document.getElementById('shop_name').innerText = data.data.shop_name;
+//				document.getElementById('num').innerText = 'x'+ data.data.total_goods_num;
+//				document.getElementById('price').innerText = '￥'+data.data.real_price;
+				document.getElementById('real_price').innerText = '￥'+data.data.total_pay_price.toFixed(2);
+				document.getElementById('post-price').innerText = '￥'+data.data.post_price;
+				
+				document.getElementById('addr_per').innerText = '收货人： '+data.data.address_member+' '+data.data.address_mobile;
+				document.getElementById('addr_detail').innerText = '收货地址： '+data.data.address_str;
+				document.getElementById('note').innerText = '留言备注： '+data.data.note;
+				
+				var logList = document.getElementById('order_log');
+				html_str = '';
+				html_str = html_str+'<p>订单编号：'+data.data.order_sn+'</p>';
+				if(data.data.order_log.length>0){
+					mui.each(data.data.order_log,function(index,log){
+						html_str = html_str +'<p>'+log.order_status_title+'：'+TimeToData(log.created_at)+'</p>';
+					})
+				}
+				logList.innerHTML = html_str;
+				
+				var goodsList = document.getElementById('goodsList');
+				html_con = '';
+				if(data.data.orderInfo.length>0){
+					mui.each(data.data.orderInfo,function(index,info){
+						html_con = html_con +'<li class="mui-media mui-row">'+
+							'<div class="left">'+
+								'<img src="'+(staticUrl+info.goods_thumb)+'" id="img_path" width="75"></img>'+
+							'</div>'+
+							'<div class="right">'+
+								'<p><span id="good_name">'+info.goods_name+'</span></p>'+
+								'<p style="margin-top: 5px;"><span>规格：'+info.propertyTags+'</span></p>'+
+							'</div>'+
+							'<div style="float:right">'+
+								'<button id="goto_sold_after" type="button" class="mui-btn mui-pull-right" style="color: #ffa641;">售后服务</button>'+
+							'</div>'+
+							'</li>'+
+							'<li>'+
+								'<span>购买数量</span><span id="num" style="">x'+info.num+'</span><span class="mui-pull-right" id="price">¥'+info.real_price+'</span>'+
+							'</li>';
+					})
+				}
+				goodsList.innerHTML = html_con;
+					
+				
+			}
+
+			function gotoPage(url) {
+				mui.openWindow({
+					url: url,
+					id: url
+				});
+			}
+			
+			function TimeToData(time){
+				var date = new Date(time*1000);
+				Y = date.getFullYear() + '-';
+				M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+				D = date.getDate() < 10 ?'0'+date.getDate():date.getDate();
+				h = date.getHours() + ':';
+				m = date.getMinutes() + ':';
+				s = date.getSeconds(); 
+				return (Y+M+D+' '+h+m+s);
+			}
+
+		</script>
+
+	</body>
+
+</html>
+<script src="js/immersed.js"></script>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		
+		<!--环信-->
+		<script type='text/javascript' src='plugin/im/webim.config.js'></script>
+		<script type='text/javascript' src='plugin/im/strophe-1.2.8.min.js'></script>
+		<script type='text/javascript' src='plugin/im/websdk-1.4.5.min.js'></script>
+		
+		<script>
+			mui.init();
+		</script>
+
+		<style>
+			.mui-content{
+				font-size:14px;
+				color:#2a2a2a;
+			}
+			.closeOpen{
+				text-align: center;
+				color: #EC971F;
+				padding: 10PX;
+			}
+			#user_fun img {
+				width: 48px;
+				height: 48px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>设置</b></h1>
+		</header>
+		<div class="mui-content">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="#select_kind"  onclick="shareHref()">
+							分享给好友
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right goto-page" href_type="edit_pwd" href_data="view_0005_editpwd.html">
+							修改登录密码
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right goto-page" href_data="view_0010_setting_help.html">
+							帮助中心
+						</a>
+					</li>
+				</ul>
+				<div style="bottom: 100px;position:absolute ;width: 100%;">
+					<button type="button" id="btn_logout" class="mui-btn mui-btn-danger mui-btn-block" style="width: 80%;margin: 0 auto;background: #fa632d;">退出登录</button>
+				</div>
+		</div>
+		<div id="select_kind_pop" class="mui-popover mui-popover-action" style="background: white;">
+			<ul class="mui-table-view user_fun mui-grid-view mui-grid-9" id="user_fun" style="margin: 0;">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+					<a href="javascript:void(0);" class="goto-share" href_type="edit_pwd" href_data="weixin">
+						<img src="images/wechat.png" />
+						<div class="mui-media-body">微信</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+					<a href="javascript:void(0);" class="goto-share" href_type="edit_pwd" href_data="weixin">
+						<img src="images/pyq.png" />
+						<div class="mui-media-body">朋友圈</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+					<a href="javascript:void(0);" class="goto-share" href_type="edit_pwd" href_data="qq">
+						<img src="images/qq.png" />
+						<div class="mui-media-body">QQ</div>
+					</a>
+				</li>
+			</ul>
+			<div class="closeOpen" id="btn_conect_close" >取消</div>
+		</div>
+	</body>
+
+</html>
+<script src="js/hx_login.js"></script>
+<script>
+	function gotoPage(url){
+		mui.openWindow({
+		    url:url,
+		    id:url
+		});
+	}
+	var shares=null;
+	mui.plusReady(function(){
+		var view=plus.webview.currentWebview();
+		view.addEventListener("show", function(e){
+		    console.log( "Webview Showed："+view.id );
+		    mui.preload({
+				url:'view_0010_setting_help.html',
+				id:'view_0010_setting_help.html'
+			});
+			mui.preload({
+				url:'view_0003_login.html',
+				id:'view_0003_login.html'
+			});
+			mui.preload({
+				url:'view_0005_editpwd.html',
+				id:'view_0005_editpwd.html'
+			});
+			
+		});
+		
+		document.getElementById("btn_logout").addEventListener('tap',function(){
+			
+//			plus.storage.clear();
+			
+			var tab_mainPage = plus.webview.getWebviewById('view_0003_login.html');
+			var settting = plus.webview.getWebviewById('view_0010_setting.html');
+			mui.fire(tab_mainPage, 'goHomeTab');
+			setTimeout(function() {
+				tab_mainPage.show('pop-in');
+				settting.close('pop-in');
+			}, 100);
+        });
+        mui("body").on('tap','.goto-page',function(){
+	            var href_data = this.getAttribute('href_data');
+	            var href_type = this.getAttribute('href_type');
+	            if('edit_pwd'==href_type && !isLogin()){
+	            	gotoPage('view_0003_login.html');return;
+	            }
+	            gotoPage(href_data);
+	    });
+	    
+	    document.getElementById("btn_conect_close").addEventListener('tap', function() {
+			mui('#select_kind_pop').popover('hide');
+		});
+		
+//		document.getElementById("btn_share").addEventListener('tap', function() {
+//			mui('#select_kind_pop').popover('show');
+//		});
+		
+		plus.share.getServices(function(s) {
+			console.log(JSON.stringify(s))
+		   shares = {};
+                for (var i in s) {
+                    var t = s[i];
+                    shares[t.id] = t;
+                }
+                outSet('获取分享服务列表成功')
+		}, function(e) {
+		    		outSet("获取分享服务列表失败：" + e.message);
+		});
+		
+//		mui("body").on('tap','.goto-share',function(){
+//	            var href_data = this.getAttribute('href_data');
+//	            var href_type = this.getAttribute('href_type');
+//	            if('edit_pwd'==href_type && !isLogin()){
+//	            	gotoPage('view_0003_login.html');return;
+//	            }
+//	            var ids = [{
+//                  id: "weixin", 
+//                  ex: "WXSceneSession"  /*微信好友*/
+//              }, {
+//                  id: "weixin",
+//                  ex: "WXSceneTimeline" /*微信朋友圈*/
+//              }, {
+//                  id: "qq"   /*QQ好友*/
+//              }];
+//	            mui.each(shares,function(index,s){
+//	            		if(href_data == s.id){
+//	            			shareAction(s)
+//	            		}
+//	            })
+//	    });
+	});
+	
+	var isLogin = function(){
+		var authToken = plus.storage.getItem('authToken');
+		var hx_account = plus.storage.getItem('hx_account');
+				if(!hx_account||!authToken){
+					return false;
+				}else{
+					return true;
+				}
+	}
+	/**
+ * 分享操作
+ * @param {plus.share.ShareService} s
+ */
+function shareAction(id, ex) {
+	var s = null;
+	if (!id || !(s = shares[id])) {
+	    outLine("无效的分享服务！");
+	    return;
+	}
+	if (s.authenticated) {
+	    outSet("---已授权---");
+	    shareMessage(s, ex);
+	} else {
+	    outSet("---未授权---");
+	    s.authorize(function() {
+	        shareMessage(s, ex);
+	    }, function(e) {
+	        outLine("认证授权失败");
+	    });
+	}
+}
+/**
+ * 发送分享消息
+ * @param {plus.share.ShareService} s
+ */
+function shareMessage(s,ex){
+	var msg = {
+        content: '分享-详情',
+        href: 'http://blog.csdn.net/zhuming3834',
+        title: 'HGDQ-分享测试-title',
+        content: 'HGDQ-分享测试-content',
+        thumbs: ['http://img3.3lian.com/2013/v10/4/87.jpg'],
+        pictures: ['http://img3.3lian.com/2013/v10/4/87.jpg'],
+        extra: {
+            scene: ex
+        }
+    };
+    s.send(msg, function() {
+        outLine("分享成功!");
+    }, function(e) {
+        outLine("分享失败!");
+    });
+}
+/**
+         * 分享按钮点击事件
+         */
+        function shareHref() {
+            var ids = [{
+                    id: "weixin", 
+                    ex: "WXSceneSession"  /*微信好友*/
+                }, {
+                    id: "weixin",
+                    ex: "WXSceneTimeline" /*微信朋友圈*/
+                }, {
+                    id: "qq"   /*QQ好友*/
+                }],
+                bts = [{
+                    title: "发送给微信好友"
+                }, {
+                    title: "分享到微信朋友圈"
+                }, {
+                    title: "分享到QQ"
+                }];
+            plus.nativeUI.actionSheet({
+                    cancel: "取消",
+                    buttons: bts
+                },
+                function(e) {
+                    var i = e.index;
+                    if (i > 0) {
+                        shareAction(ids[i - 1].id, ids[i - 1].ex);
+                    }
+                }
+            );
+        } 
+		// 控制台输出日志
+        function outSet(msg) {
+            console.log(msg);
+        }
+        // 界面弹出吐司提示
+        function outLine(msg) {
+            mui.toast(msg);
+        }
+</script>
+<script src="js/immersed.js"></script>

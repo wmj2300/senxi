@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>购物车</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script>
+			mui.init();
+		</script>
+		
+		<style>
+			.mui-content>.mui-table-view:first-child {
+			    margin-top: 0px;
+			}
+			.good_detail{
+				margin-left: 100px;
+			}
+			.good_img{
+				width: 88px;
+				height: 88px;
+				float: left;
+			}
+			.good_name{
+				font-size: 14px;
+				color:#4a4a4a;
+			}
+			.good_standard_des{
+				margin-top: 5px;
+			}
+			.good_price{
+				color:#ffb100;
+				font-size: 20px;
+			}
+			.good_standard{
+				font-size:12px;
+				color:#4a4a4a;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>全部订单</b></h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-left">
+					猪猪进口食品专营店
+				</li>
+				<li class="mui-table-view-cell mui-left">
+					<div class="good">
+						<img class="good_img" src="img_tmp/shooping_cart_pic1.png"/>
+						<div class="good_detail">
+							<div class='good_name'>德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</div>
+							<p class='good_standard_des'>规格：24听/箱</p>
+							<p class='good_price'>￥119.00</p>
+						</div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell" style="padding-left: 58px;">
+					<div class="good_standard">
+						<span>蓝色包装</span>
+						<span style="float: right;">×1</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+		
+	</body>
+	
+</html>
+<script src="js/immersed.js"></script>
+	

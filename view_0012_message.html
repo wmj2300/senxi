@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>收藏</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		
+		<link href="css/mui.pullToRefresh.css" rel="stylesheet" />
+		<script src="js/mui.pullToRefresh.js"></script>
+		<script src="js/mui.pullToRefresh.material.js"></script>
+		
+		<script src="js/websql.js"></script>
+		
+		<!--环信-->
+		<script type='text/javascript' src='plugin/im/webim.config.js'></script>
+		<script type='text/javascript' src='plugin/im/strophe-1.2.8.min.js'></script>
+		<script type='text/javascript' src='plugin/im/websdk-1.4.5.min.js'></script>
+		
+		<script>
+			mui.init();
+		</script>
+		
+		<style>
+			#mui-segmented-control{
+				border: none;
+			}
+			#mui-control-item-left,#mui-control-item-right{
+			    border:1px solid white;
+			    color: white;
+			    border-radius:10px;
+			    line-height: 30px;
+		    }
+			#mui-control-item-left{
+				border-top-right-radius:0px;
+				border-bottom-right-radius:0px;
+			}
+			#mui-control-item-right{
+				border-top-left-radius:0px;
+				border-bottom-left-radius:0px;
+			}
+			#mui-segmented-control .mui-control-item.mui-active {
+			    color: green;
+			    background-color: white;
+			}
+			.msg_time{
+				float: right;
+				font-size:12px;
+				color:#9b9b9b;
+			}
+			.line{
+				position: absolute;
+				right:-6px;
+				top:-2px;
+				width: 8px;
+				height: 8px;
+				padding: 0;
+				display: none;
+			}
+			#spot{
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;height: 40px;">
+				<div id="mui-segmented-control" class="mui-segmented-control" style="">
+					<a class="mui-control-item mui-active" id="mui-control-item-left" href="#chat" ><span style="position: relative;">聊天<span id="spot" class="mui-badge mui-badge-danger line"></span></span></a>
+					<a class="mui-control-item" id="mui-control-item-right" href="#system"><span style="position: relative;">系统<span class="mui-badge mui-badge-danger line" id="systemPart"></span></span></a>
+				</div>
+			</h1>
+		</header>
+		<div class="mui-content">
+				<div id="chat" class="mui-control-content mui-active">
+						<ul class="mui-table-view" id="chatList">
+							<!--<li class="msg_item mui-table-view-cell mui-media" fid="sx_13761468669">
+									<img class="mui-media-object mui-pull-left" src="img_tmp/message_chat_pic1.png">
+									<div class="mui-media-body">
+										GODIVA
+										<span class="msg_time">2016-05-01 12:00</span>
+										<p class='mui-ellipsis'>亲，请问我有什么事可以帮您的？亲，请问我有什么事可以帮您的？</p>
+									</div>
+							</li>
+							<li class="msg_item mui-table-view-cell mui-media" fid="sx_18701751705">
+									<img class="mui-media-object mui-pull-left" src="img_tmp/message_chat_pic2.png">
+									<div class="mui-media-body">
+										老倪
+										<span class="msg_time">2016-05-01 12:00</span>
+										<p class='mui-ellipsis'>亲，最新辣条半价哦</p>
+									</div>
+							</li>
+							<li class="msg_item mui-table-view-cell mui-media">
+									<img class="mui-media-object mui-pull-left" src="img_tmp/message_chat_pic3.png">
+									<div class="mui-media-body">
+										志鹏辣条<span class="mui-badge mui-badge-danger">新</span>
+										<span class="msg_time">2016-05-01 12:00</span>
+										<p class='mui-ellipsis'>亲，请问我有什么可以帮您的？</p>
+									</div>
+							</li>-->
+						</ul>
+				</div>
+				<div id="system" class="mui-control-content">
+						<ul class="mui-table-view">
+							<li id="msg_order" class="mui-table-view-cell mui-media">
+									<img class="mui-media-object mui-pull-left" src="images/message_system_pic1.png">
+									<div class="mui-media-body" style="overflow: initial;">
+										<span style="position: relative;">订单消息<span class="mui-badge mui-badge-danger line" id="order_msg"></span></span>
+										<span id="msg_order_time" class="msg_time">2016-05-01 12:00</span>
+										<p id="msg_order_content" class='mui-ellipsis'>您的订单17880635990已完成，感谢您对我们的支持</p>
+									</div>
+							</li>
+							<li id="msg_sys" class="mui-table-view-cell mui-media">
+									<img class="mui-media-object mui-pull-left" src="images/message_system_pic2.png">
+									<div class="mui-media-body" style="overflow: initial;">
+										<span style="position: relative;">系统消息<span class="mui-badge mui-badge-danger line" id="system_msg"></span></span>
+										<span id="msg_sys_time" class="msg_time">2016-05-01 12:00</span>
+										<p id="msg_sys_content" class='mui-ellipsis'>您关注的产品降价啦！</p>
+									</div>
+							</li>
+						</ul>
+				</div>
+		</div>
+	</body>
+	
+</html>
+<script src="js/const.js"></script>
+<script src="js/hx_login.js"></script>
+<script>
+	 var is_msg = false;
+//	 
+//		    userInfo();
+	function gotoPage(url){
+		mui.openWindow({
+		    url:url,
+		    id:url,
+		    show:{
+		      aniShow:'pop-in'
+		    }
+		});
+	}
+	function preloadPage(){
+		mui.preload({
+			url:'view_0003_chat_window.html',
+			id:'view_0003_chat_window.html'
+		});
+		mui.preload({
+			url:'view_0012_message_order.html',
+			id:'view_0012_message_order.html'
+		});
+		mui.preload({
+			url:'view_0012_message_sys.html',
+			id:'view_0012_message_sys.html'
+		});
+		
+	}
+		
+	
+		
+mui.plusReady(function(){
+			initHX(function(message){
+				plus.storage.setItem('is_msg',true);
+			},'message');
+	
+		var view=plus.webview.currentWebview();
+		view.addEventListener("show", function(e){
+		    console.log( "Webview Showed："+view.id );
+		    
+		    
+		    
+		    preloadPage();
+		    CreateDataBase('myData');
+		    userInfo();
+		  	var arr = [];
+			if(plus.storage.getItem('messageList')){
+		    		arr = JSON.parse(plus.storage.getItem('messageList'))
+		    }
+		  	getMessageList(arr);
+		  	
+		  	if(plus.storage.getItem('is_msg')){
+		  		is_msg = plus.storage.getItem('is_msg');
+		  	}
+		  	
+		  	if(is_msg){
+		  		document.getElementById('spot').style.display = 'block';
+		  	}
+		}, false );
+		mui("body").on('tap','.msg_item',function(){
+//	        gotoPage('view_0003_chat_window.html');
+	        var fid = this.getAttribute('fid');
+			if(!fid){
+				return;
+			}
+			var fromName = plus.webview.getWebviewById('view_0003_chat_window.html');
+			mui.fire(fromName, 'refreshData', {
+				fid: fid
+			});
+			fromName.show('pop-in');
+	   });
+	   
+	   document.getElementById('msg_order').addEventListener('tap',function(){
+		document.getElementById('system_msg').style.display = 'none';
+		if(document.getElementById('order_msg').style.display == 'none'){
+			document.getElementById('systemPart').style.display = 'none';
+		}
+		gotoPage('view_0012_message_order.html');
+	});
+	
+	document.getElementById('msg_sys').addEventListener('tap',function(){
+		document.getElementById('order_msg').style.display = 'none';
+		if(document.getElementById('system_msg').style.display == 'none'){
+			document.getElementById('systemPart').style.display = 'none';
+		}
+		gotoPage('view_0012_message_sys.html');
+		
+	});
+
+});
+function getMessageList(data){
+	var chatList = document.getElementById('chatList');
+	var html_list = '';
+	if(data.length>0){
+		mui.each(data,function(index,chat){
+			html_list = html_list+ '<li class="msg_item mui-table-view-cell mui-media" fid="'+chat.fromName+'">'+
+										'<img class="mui-media-object mui-pull-left" src="img_tmp/message_chat_pic1.png">'+
+										'<div class="mui-media-body" style="overflow: initial;">'+
+										'<span style="position: relative;">'+chat.fromName;
+										if(is_msg){
+											html_list = html_list+'<span class="mui-badge mui-badge-danger line"></span>';
+										}
+										html_list = html_list+'</span>'+
+											'<span class="msg_time">'+chat.content[chat.content.length-1].time+'</span>'+
+											'<p class="mui-ellipsis">'+chat.content[chat.content.length-1].text+'</p>'+
+										'</div>'+
+								'</li>';
+		})
+	}else{
+		html_list = html_list+'<div>暂无记录</div>';
+	}
+	chatList.innerHTML = html_list;
+	
+}
+
+function userInfo(){
+		var authToken = plus.storage.getItem('authToken');
+		mui.ajax(SERVER_HOST + 'user/info', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: authToken,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					if(data.data.have_new_msg_system == 2){
+						document.getElementById('systemPart').style.display = 'block';
+						document.getElementById('system_msg').style.display = 'block';
+					}else if(data.data.have_new_msg_order == 2){
+						document.getElementById('systemPart').style.display = 'block';
+						document.getElementById('order_msg').style.display = 'block';
+					}
+				} else {
+					plus.ui.toast(data.msg);
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				plus.ui.toast("网络请求超时");
+			}
+		});
+		
+	}
+</script>
+<script src="js/immersed.js"></script>

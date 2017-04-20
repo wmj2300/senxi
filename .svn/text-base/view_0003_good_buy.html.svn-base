@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>确认订单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		
+		<script>
+			mui.init();
+		</script>
+
+		<style>
+			.change_line {
+				white-space: normal!important;
+				text-overflow: ellipsis;
+				word-wrap: break-word;
+			}
+			
+			.mui-checkbox>input {
+				pointer-events: none;
+			}
+			
+			#good_img {
+				width: 80px;
+				height: 80px;
+			}
+			
+			#shop_name {
+				font-family: MicrosoftYaHei;
+				font-size: 12px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				text-align: left;
+			}
+			
+			#good_name {
+				font-family: MicrosoftYaHei;
+				font-size: 14px;
+				color: #4a4a4a;
+				letter-spacing: 0px;
+				line-height: 22px;
+				text-align: left;
+			}
+			#good_price{
+				color: #FFB100;
+				font-size: 18px;
+				margin-top: 5px;
+			}
+			#total_fee{
+				color: #FFB100;
+				font-size: 18px;
+			}
+			#btn_sure_pay {
+				background: #ffb100;
+				border-radius: 3px;
+				width: 104px;
+				height: 40px;
+			}
+			.mui-checkbox input[type=checkbox]:checked:before{
+				color: #07985B;
+			}
+			#pay_way{
+				color: #9b9b9b;
+				font-size: 16px;
+			}
+			#good_numbox_tobuy,#deliver_fee,#select_coupon{
+				font-size: 14px;
+			}
+			.address_null{
+				padding: 10px 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a id="goback" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>确认订单</b></h1>
+		</header>
+		<div class="mui-content">
+			<img src="images/dizhilan.png" class="mui-pull-top-tips" style="width: 100%;" />
+			<div>
+				<ul id="select_address" class="mui-table-view">
+					<div class="mui-table-view-cell mui-media">
+						<a class="mui-navigate-right">
+							<div class="mui-row">
+								<div class="mui-col-sm-2 mui-col-xs-2">
+									<img src="images/dinwei.png" style="width: 14px;height: 18px;margin: 10px;">
+								</div>
+								<div id="defualt_addr" class="mui-col-sm-10 mui-col-xs-10 change_line">
+									<p style="color: black;">收货人：
+										<span id="addr_name">...</span>
+										<span id="addr_phone">...</span>
+									</p>
+									<p style="font-size: 12px;">收货地址：
+										<span id="addr_province">...</span>
+										<span id="addr_city">...</span>
+										<span id="addr_district">...</span>
+										<span id="addr_detail">...</span>
+									</p>
+								</div>
+							</div>
+						</a>
+					</div>
+				</ul>
+				<div id="goodsAll">
+					<ul class="mui-table-view" style="margin-top: 8px;">
+						<li class="mui-table-view-cell mui-media">
+							<p><span id="shop_name">...</span></p>
+						</li>
+						<li class="mui-table-view-cell mui-media mui-row">
+							<div class="mui-col-sm-4 mui-col-xs-4">
+								<img id="good_img" src="images/lazyloadimg.jpg"></img>
+							</div>
+							<div class="mui-col-sm-8 mui-col-xs-8">
+								<p><span id="good_name">...</span></p>
+								<p style="margin-top: 5px;">规格：<span id="good_kind_tobuy">...</span></p>
+								<p id="good_price">...</p>
+							</div>
+						</li>
+					</ul>
+					<ul id="good_numbox_tobuy" class="mui-table-view">
+						<div class="mui-table-view-cell">
+								<span>购买数量</span><span class="mui-pull-right">× <span id="good_num_tobuy">...</span></span>
+						</div>
+					</ul>
+					<ul id="deliver_fee" class="mui-table-view">
+						<div class="mui-table-view-cell">
+							<span>运费</span><span class="mui-pull-right">¥ <span id="goods_post_price">...</span></span>
+						</div>
+					</ul>
+					<ul class="mui-table-view">
+						<div class="mui-table-view-cell">
+							<input type="text" id="note_input" style="width:100%;" placeholder="备注留言"/>
+						</div>
+					</ul>
+				</div>
+			<ul class="mui-table-view" style="margin-top: 8px;">
+				<div>
+					<form id="pay_way" class="mui-input-group" style="padding: 0 10px;">
+						<div class="mui-input-row mui-radio mui-left">
+							<label><img src="images/purse_recharge_wxpay.png" style="width: 24px;height: 24px; margin:0 20px;vertical-align: middle;" /><span style="vertical-align: middle;">微信支付</span></label>
+							<input name="radio" type="radio" value="2" checked style="vertical-align: middle;"/>
+						</div>
+						<div class="mui-input-row mui-radio mui-left">
+							<label><img src="images/purse_recharge_alipay.png" style="width: 24px;height: 24px;margin:0 20px; vertical-align: middle;"/><span style="vertical-align: middle;">支付宝支付</span></label>
+							<input name="radio" type="radio" value="1"  style="vertical-align: middle;"/>
+						</div>
+						<div class="mui-input-row mui-radio mui-left">
+							<label><img src="images/pay_qianbao.png" style="width: 24px;height: 24px;margin:0 20px; vertical-align: middle;"/><span style="vertical-align: middle;">余额支付</span></label>
+							<input name="radio" type="radio" value="3"  style="vertical-align: middle;"/>
+						</div>
+					</form>
+				</div>
+			</ul>
+			
+			<ul id="select_coupon" class="mui-table-view" style="margin-top: 8px;">
+				<div class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="mui-pull-left">优惠券</span><span style="float:right;margin-right: 20px;"><span id="coupon_num">请选择</span></span>
+					</a>
+				</div>
+			</ul>
+			<!--<div class="mui-table-view">
+					<div class="mui-table-view-cell">
+						<p class="mui-row" style="margin-right: 30px;color: black;margin-top: 10px;">
+							<span class="mui-pull-left">发票类型</span>
+							<span class="mui-pull-right">
+							<button type="button" class="mui-btn" style="border-radius: 15px;width: 72px;">个人</button>
+							<button type="button" class="mui-btn" style="border-radius: 15px;width:72px;border-color: #FFB100;">公司</button>
+						</span>
+						</p>
+					</div>
+				</div>
+				<ul class="mui-table-view">
+					<div class="mui-table-view-cell">
+						<p style="margin-right: 30px;color: black;">
+							<span class="mui-pull-left" style="margin-top: 10px;">发票抬头</span>
+							<input type="text" placeholder="请输入" class="mui-pull-right" style="text-align: right;width: 80%;border:0px" />
+						</p>
+					</div>
+				</ul>-->
+			<ul class="mui-table-view" style="margin-top: 8px;">
+				<div class="mui-table-view-cell">
+						<span class="mui-pull-left" style="margin-top: 5px;">总计：<span id="total_fee">...</span></span>
+						<button id="btn_sure_pay" type="button" class="mui-btn mui-btn-warning mui-pull-right">确认结算</button>
+				</div>
+			</ul>
+		</div>
+	</body>
+
+</html>
+<script>
+	function gotoPage(url,order_id) {
+		mui.openWindow({
+			url: url,
+			id: url,
+			show: {
+				aniShow: 'pop-in'
+			},
+			
+		});
+	}
+	var order_type = 1;
+	var pay_type = '2'
+	var order_id = '';
+	var order_ids = [];
+	var cids = '';
+	var addr_list_id = '';
+	var is_back=false;
+	mui.plusReady(function() {
+		view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+			mui.preload({
+				url: 'view_0013_coupon.html',
+				id: 'view_0013_coupon.html'
+			});
+			mui.preload({
+				url: 'view_0008_address_manager.html',
+				id: 'view_0008_address_manager.html'
+			});
+			
+		}, false);
+		
+		document.addEventListener('refreshData', function(event) {
+			if(!event.detail.data_good){
+				mui.toast("缺少参数");
+				mui.back();
+				return;
+			}
+			console.log(JSON.stringify(event.detail.data_good.orders));
+//			var data = event.detail.data_good;
+			if(event.detail.cids){
+				cids = event.detail.cids;
+				order_type = 2;
+				console.log(cids);
+			}
+			order_id = event.detail.data_good.orders[0].order_id;
+			for(var i=0;i<event.detail.data_good.orders.length;i++){
+				order_ids.push(event.detail.data_good.orders[i].order_id);
+			}
+			parseData_GoodDetail(event.detail.data_good);
+			getAddressList();
+		});
+		document.addEventListener('refreshDataCoupon',function(event){
+			if(!event.detail.dec_money){
+				return;
+			}
+			document.getElementById('coupon_num').innerHTML = event.detail.dec_money + '元';
+			document.getElementById('total_fee').innerHTML = '¥' + parseFloat(event.detail.total_pay_price).toFixed(2);
+		});
+		document.addEventListener('refreshDataAddr', function(event) {
+			var addr_list=document.getElementById("defualt_addr");
+			var html_str='';
+			html_str='<p style="color: black;">收货人：'+
+										'<span id="addr_name">'+event.detail.addr_name+'</span>'+
+										'<span id="addr_phone">'+event.detail.addr_phone+'</span>'+
+									'</p>'+
+									'<p style="font-size: 12px;">收货地址：'+
+										'<span id="addr_province">'+event.detail.addr_province+'</span>'+
+										'<span id="addr_city">'+event.detail.addr_city+'</span>'+
+										'<span id="addr_district">'+event.detail.addr_district+'</span>'+
+										'<span id="addr_detail">'+event.detail.addr_detail+'</span>'+
+									'</p>';
+			addr_list.innerHTML = html_str
+			
+			
+//			document.getElementById("addr_name").innerText=event.detail.addr_name;
+//			document.getElementById("addr_phone").innerText=event.detail.addr_phone;
+//			document.getElementById("addr_province").innerText=event.detail.addr_province;
+//			document.getElementById("addr_city").innerText=event.detail.addr_city;
+//			document.getElementById("addr_district").innerText=event.detail.addr_district;
+//			document.getElementById("addr_detail").innerText=event.detail.addr_detail;
+			addr_list_id:event.detail.addr_list_id
+		});
+			
+		document.getElementById('select_address').addEventListener('tap', function() {
+			plus.storage.setItem('select_addr_url',view.id);
+			gotoPage('view_0008_address_manager.html');
+		});
+		
+		document.getElementById('goback').addEventListener('tap',function(){
+			if(is_back){
+				deleteCart();
+			}else{
+				mui.back();
+			}
+		})
+			
+		document.getElementById('select_coupon').addEventListener('tap', function() {
+			var wv=plus.webview.getWebviewById('view_0013_coupon.html');
+			mui.fire(wv,'orderId',{
+				order_id:order_id,
+				order_ids:order_ids.join(','),
+			})
+			plus.storage.setItem('select_coupon_url',view.id);
+			gotoPage('view_0013_coupon.html');
+		});
+		document.getElementById('btn_sure_pay').addEventListener('click', function() {
+//			gotoPage('view_0015_myorder_trade_done.html');
+			var notes_json = [];
+			var notes =document.getElementsByName("input_note"); 
+			for(var i=0;i<notes.length;i++){
+				notes_json.push({"order_id":notes[i].getAttribute('order_id'),"note":notes[i].value});
+			}
+			console.log(notes_json);
+			confirmOrder(notes_json);
+		});
+		
+		mui('#pay_way').on('change', 'input', function(){
+			var is_checked = this.checked;
+			console.log(this.value);
+			pay_type = this.value;
+		})
+		
+	});
+	
+	function parseData_GoodDetail(data) {
+			
+			document.getElementById('total_fee').innerText = '¥'+ parseFloat(data.total_pay_price).toFixed(2);
+			
+			var goodsList = document.getElementById("goodsAll");
+			html_str = '';
+			for(var i=0;i<data.orders.length;i++){
+				html_str = html_str +'<ul class="mui-table-view" style="margin-top: 8px;">'+
+						'<li class="mui-table-view-cell mui-media">'+
+							'<p><span id="shop_name">'+data.orders[i].shop_name+'</span></p>'+
+						'</li>';
+						for(var j=0;j<data.orders[i].orderInfo.length;j++){
+							html_str = html_str +'<li class="mui-table-view-cell mui-media mui-row">'+
+							'<div class="mui-col-sm-4 mui-col-xs-4">'+
+								'<img id="good_img" src="'+staticUrl + data.orders[i].orderInfo[j].goods_thumb+'"></img>'+
+							'</div>'+
+							'<div class="mui-col-sm-8 mui-col-xs-8">'+
+								'<p><span id="good_name">'+data.orders[i].orderInfo[j].goods_name+'</span></p>'+
+								'<p style="margin-top: 5px;">规格：<span id="good_kind_tobuy">'+data.orders[i].orderInfo[j].propertyTags+'</span></p>'+
+								'<p id="good_price">'+'¥'+ parseFloat(data.orders[i].orderInfo[j].real_price).toFixed(2)+'</p>'+
+							'</div>'+
+						'</li>';
+						}
+					html_str = html_str +'</ul>'+
+					'<ul id="good_numbox_tobuy" class="mui-table-view">'+
+						'<div class="mui-table-view-cell">'+
+								'<span>购买数量</span><span class="mui-pull-right">× <span id="good_num_tobuy">'+data.orders[i].total_goods_num+'</span></span>'+
+						'</div>'+
+					'</ul>'+
+					'<ul id="deliver_fee" class="mui-table-view">'+
+						'<div class="mui-table-view-cell">'+
+							'<span>运费</span><span class="mui-pull-right">¥ <span id="goods_post_price">'+parseFloat(data.orders[i].post_price).toFixed(2)+'</span></span>'+
+						'</div>'+
+					'</ul>'+
+					'<ul class="mui-table-view">'+
+						'<div class="mui-table-view-cell">'+
+							'<input type="text" name="input_note" id="note_input" order_id="'+data.orders[i].order_id+'" style="width:100%;" placeholder="备注留言"/>'+
+						'</div>'+
+					'</ul>'
+			}
+			
+			goodsList.innerHTML = html_str;
+	}
+	
+	function deleteCart(){
+		var authToken = plus.storage.getItem('authToken');
+            mui.ajax(SERVER_HOST+'order/return-del-order',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken,
+					order_ids:order_ids
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						mui.back();
+					}else{
+						if("authToken错误" == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							mui.toast(data.msg);
+						}
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	
+	function getAddressList(){
+		var authToken = plus.storage.getItem('authToken');
+            mui.ajax(SERVER_HOST+'user/address-list',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						parseData_AddressList(data.data);
+					}else{
+						if("authToken错误" == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							mui.toast(data.msg);
+						}
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	function parseData_AddressList(data) {
+		var addr_list=document.getElementById("defualt_addr");
+		var html_str='';
+		
+		if(data.length>0){
+			for(var i = 0; i < data.length; i++) {
+				if(data[i].is_default==1){
+					document.getElementById("addr_name").innerText=data[i].uname;
+					document.getElementById("addr_phone").innerText=data[i].mobile;
+					document.getElementById("addr_province").innerText=data[i].province;
+					document.getElementById("addr_city").innerText=data[i].city;
+					document.getElementById("addr_district").innerText=data[i].town;
+					document.getElementById("addr_detail").innerText=data[i].street;
+					addr_list_id=data[i].address_id;
+				}else{
+					html_str='<div class="address_null">您尚未设置默认地址</div>';
+					addr_list.innerHTML = html_str;
+				}
+		}
+		}else{
+			html_str='<div class="address_null">您尚未添加地址</div>';
+			addr_list.innerHTML = html_str;
+		}
+	}
+	
+	
+	function confirmOrder(notes_json){
+		
+		var authToken = plus.storage.getItem('authToken');
+            mui.ajax(SERVER_HOST+'order/confirm-order',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken,
+					order_ids:order_ids.join(','),
+					note_json:JSON.stringify(notes_json),   
+					pay_type:pay_type,
+					type:order_type,
+					cids:cids
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					plus.ui.toast("支付发起中");
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						if(pay_type == 1){
+							pay('alipay',data.data);
+						}else{
+							pay('wxpay',data.data);
+						}
+					}else{
+						if("authToken错误" == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							mui.toast(data.msg);
+						}
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	var channel=null;
+	var channels_arr = [];
+	var payArr=[{"id":"alipay","description":"支付宝","serviceReady":true},{"id":"wxpay","description":"微信","serviceReady":true}]
+// 1. 获取支付通道
+function plusReady(){
+    // 获取支付通道
+    plus.payment.getChannels(function(channels){
+        
+        channels_arr = channels;
+//      console.log(JSON.stringify(channels));
+    },function(e){
+        alert("获取支付通道失败："+e.message);
+    });
+}
+document.addEventListener('plusready',plusReady,false);
+
+//var ALIPAYSERVER='http://demo.dcloud.net.cn/helloh5/payment/alipay.php?total=';
+//var WXPAYSERVER='http://demo.dcloud.net.cn/helloh5/payment/wxpay.php?total=';
+// 2. 发起支付请求
+function pay(id,data){
+    // 从服务器请求支付订单
+//  var PAYSERVER='';
+    
+    var statement = null;
+    
+    if(id=='alipay'){
+//      PAYSERVER=ALIPAYSERVER;
+        channel=channels_arr[0];
+        
+        statement = data['params'];
+    }else if(id=='wxpay'){
+//      PAYSERVER=WXPAYSERVER;
+        channel=channels_arr[1];
+
+        statement = JSON.stringify(data);
+        
+    }else{
+        plus.nativeUI.alert("不支持此支付通道！",null,"捐赠");
+        return;
+    }
+    
+    console.log(statement);
+
+    plus.payment.request(channel,statement,function(result){
+        plus.nativeUI.alert("支付成功！",function(){
+//                      back();
+            gotoPage('view_0015_myorder_trade_done.html');
+        });
+    },function(error){
+    	
+    	
+    	console.log(JSON.stringify(error));
+    		if(error.code == '-100'){
+    			plus.ui.toast("放弃支付！");
+    		}else{
+    			plus.nativeUI.alert("支付失败：" + error.code);
+    		}
+    });
+}
+</script>
+<script src="js/immersed.js"></script>

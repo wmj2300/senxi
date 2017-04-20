@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>购物车</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="plugin/layer/layer.css" rel="stylesheet" />
+		<script src="plugin/layer/layer.js"></script>
+		
+		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		
+		<link href="css/mui.pullToRefresh.css" rel="stylesheet" />
+		<script src="js/mui.pullToRefresh.js"></script>
+		<script src="js/mui.pullToRefresh.material.js"></script>
+		
+
+		<style>
+			
+			.mui-scroll-wrapper{
+				bottom: 50px;
+			}
+			.mui-card {
+				margin: 0px;
+			}
+			
+			.mui-content>.mui-card:first-child {
+				margin-top: 0px;
+			}
+			
+			.mui-checkbox>input {
+				pointer-events: none;
+			}
+			
+			#good_item {
+				height: 110px;
+				background-color: #f6f6f6;
+				margin-bottom: 3px;
+			}
+			
+			.good_img {
+				height: 88px;
+				width: 88px;
+			}
+			.good_name {
+				font-size: 14px;
+				color: #4a4a4a;
+				line-height: 18px;
+			}
+			
+			.good_standard_des {
+				margin-top: 5px;
+			}
+			
+			.num_plus,
+			.good_num {
+				color: black;
+			}
+			.good_num{
+				min-width: 20px;
+				text-align: center;
+				display: inline-block;
+			}
+			
+			.good_price {
+				color: #ffb100;
+				font-size: 20px;
+			}
+			.multi_buy{
+				color: white;
+				background:#009963;
+				border-radius:2px;
+				padding: 3px 2px 0px;
+			}
+			.status_timeout{
+				color: white;
+				background:gray;
+				border-radius:2px;
+				padding: 2px;
+			}
+			.mui-input-group .mui-input-row:after {
+				height: 0px;
+			}
+			/*checkbox选中颜色*/
+			
+			.mui-checkbox input[type=checkbox]:checked:before {
+				color: #ffb100;
+			}
+			
+			.mui-checkbox input[name=select_good]{
+				margin-top: 35px;
+			}
+			
+			.mui-icon-minus,
+			.mui-icon-plus {
+				color: #069a5c;
+			}
+			#shopping_car_empty{
+				text-align: center;
+				margin-top: 140px;
+			}
+			.shopping_car_empty_text{
+				margin-top: 26px;
+				font-size:18px;
+				color:#9b9b9b;
+			}
+			#btn_shoppingcar_add{
+				margin-top: 15px;
+				font-size:18px;
+				color:#ffa641;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav" style="background-color: #069a5c;">
+			<h1 id="title" class="mui-title" style="color: white;"><b>购物车</b></h1>
+			<a id="all_edit" class="mui-btn mui-btn-link mui-pull-right" style="color: white;">编辑</a>
+		</header>
+		<div class="mui-content mui-scroll-wrapper">
+		<div id="pull_to_refresh" class="mui-scroll">
+			<!--<div id="shopping_car_empty" class="mui-hidden">
+						<img src="images/shopping_car_empt.png"/>
+						<div class="shopping_car_empty_text">购物车里空空如也</div>
+						<div id="btn_shoppingcar_add">去添加</div>
+				</div>
+				<form class="mui-input-group mui-card ">
+					<div class="mui-input-row mui-checkbox mui-left">
+						<label>
+							<p><span class="shop_name">猪猪进口食品专营店</span></p>
+						</label>
+						<input name="select_shop" shop_id='1' type="checkbox">
+					</div>
+
+					<div class="mui-input-row mui-checkbox mui-left" id="good_item">
+							<div class="mui-col-xs-10 mui-col-sm-10 mui-pull-right">
+								<div class="mui-row">
+								<div class="mui-col-xs-4 mui-col-sm-4">
+									<img class="good_img" src="img_tmp/favorites_good_pic1.png"/>
+								</div> 
+								<div class="mui-col-xs-8 mui-col-sm-8 good_detail">
+										<p class="good_name">德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</p>
+										<p class="good_standard_des">
+											规格：24听/箱
+											<span  class="mui-pull-right"><span class="num_plus">× </span>
+												<span class="mui-icon mui-icon-minus mui-hidden" id="shop_1_good_1_minus"></span>
+												<span class="good_num" id="shop_1_good_1_num">1</span>
+												<span class="mui-icon mui-icon-plus mui-hidden" id="shop_1_good_1_plus"></span>
+											</span>
+										</p>
+										<p style="color:#ffb100;font-size:20px">￥<span class="good_price" id="shop_1_good_1_price">119.00</span></p>
+									</div>
+								</div>
+							</div>							
+						<input class="mui-col-xs-2 mui-col-sm-2 mui-pull-left" name="select_good" shop_id='shop_1' id="shop_1_good_1_select" type="checkbox" >
+					</div>-->
+
+					<!--<div class="mui-input-row mui-checkbox mui-left" id="good_item">
+						<label>
+							<div class="mui-row">
+								<div class="mui-col-xs-4 mui-col-sm-4">
+									<img class="good_img" src="img_tmp/favorites_good_pic1.png"/>
+								</div> 
+								<div class="mui-col-xs-8 mui-col-sm-8 good_detail">
+										<p class="good_name">德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</p>
+										<p class="good_standard_des">
+											规格：24听/箱
+											<span  class="mui-pull-right"><span class="num_plus">×</span>
+												<span class="mui-icon mui-icon-minus mui-hidden" id="shop_1_good_2_minus"></span>
+												<span class="good_num" id="shop_1_good_2_num">2</span>
+												<span class="mui-icon mui-icon-plus mui-hidden" id="shop_1_good_2_plus"></span>
+											</span>
+										</p>
+										<p>￥<span class="good_price" id="shop_1_good_2_price">119.00</span><span class="multi_buy mui-pull-right">团</span></p>
+								</div>
+							</div>							
+						</label>
+						<input name="select_good" shop_id='shop_1' id="shop_1_good_2_select" type="checkbox">
+					</div>
+					<div class="mui-input-row mui-checkbox mui-left" id="good_item">
+						<label>
+							<div class="mui-row">
+								<div class="mui-col-xs-4 mui-col-sm-4" style="position:relative">
+									<img class="good_img" src="img_tmp/favorites_good_pic1.png"/>
+									<span id="shop_1_good_3_status" class="status_timeout">已失效</span>
+								</div> 
+								<div class="mui-col-xs-8 mui-col-sm-8 good_detail">
+										<p class="good_name">德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</p>
+										<p class="good_standard_des">
+											规格：24听/箱
+											<span  class="mui-pull-right"><span class="num_plus">×</span>
+												<span class="mui-icon mui-icon-minus mui-hidden" id="shop_1_good_3_minus"></span>
+												<span class="good_num" id="shop_1_good_3_num">1</span>
+												<span class="mui-icon mui-icon-plus mui-hidden" id="shop_1_good_3_plus"></span>
+											</span>
+										</p>
+										<p>￥<span class="good_price" id="shop_1_good_3_price">119.00</span><span id="shop_1_good_3_status" class="status_timeout mui-pull-right" style="font-size:14px">已失效</span></p>
+								</div>
+							</div>							
+						</label>
+						<input name="select_good" shop_id='shop_1' id="shop_1_good_3_select" type="checkbox" >
+					</div>
+
+					<div class="mui-input-row mui-checkbox mui-left">
+						<label>
+							<p><span class="shop_name">猪猪进口食品专营店2</span></p>
+						</label>
+						<input name="select_shop" shop_id='2' type="checkbox">
+					</div>
+
+					<div class="mui-input-row mui-checkbox mui-left" id="good_item">
+						<label>
+							<div class="mui-row">
+								<div class="mui-col-xs-4 mui-col-sm-4">
+									<img class="good_img" src="img_tmp/favorites_good_pic1.png"/>
+								</div> 
+								<div class="mui-col-xs-8 mui-col-sm-8 good_detail">
+										<p class="good_name">德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</p>
+										<p class="good_standard_des">
+											规格：24听/箱
+											<span  class="mui-pull-right"><span class="num_plus">×</span>
+												<span class="mui-icon mui-icon-minus mui-hidden" id="shop_2_good_1_minus"></span>
+												<span class="good_num" id="shop_2_good_1_num">1</span>
+												<span class="mui-icon mui-icon-plus mui-hidden" id="shop_2_good_1_plus"></span>
+											</span>
+										</p>
+										<p>￥<span class="good_price" id="shop_2_good_1_price">119.00</span></p>
+								</div>
+							</div>							
+						</label>
+						<input name="select_good" shop_id='shop_2' id="shop_2_good_1_select" type="checkbox" >
+					</div>
+
+					<div class="mui-input-row mui-checkbox mui-left" id="good_item">
+						<label>
+							<div class="mui-row">
+								<div class="mui-col-xs-4 mui-col-sm-4">
+									<img class="good_img" src="img_tmp/favorites_good_pic1.png"/>
+								</div> 
+								<div class="mui-col-xs-8 mui-col-sm-8 good_detail">
+										<p class="good_name">德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</p>
+										<p class="good_standard_des">
+											规格：24听/箱
+											<span class="mui-pull-right"><span class="num_plus">×</span>
+												<span class="mui-icon mui-icon-minus mui-hidden" id="shop_2_good_2_minus"></span>
+												<span class="good_num" id="shop_2_good_2_num">2</span>
+												<span class="mui-icon mui-icon-plus mui-hidden" id="shop_2_good_2_plus"></span>
+											</span>
+										</p>
+										<p>￥<span class="good_price" id="shop_2_good_2_price">119.00</span></p>
+								</div>
+							</div>							
+						</label>
+						<input name="select_good" shop_id='shop_2' id="shop_2_good_2_select" type="checkbox" >
+					</div>
+					<div class="mui-input-row mui-checkbox mui-left" id="good_item">
+						<label>
+							<div class="mui-row">
+								<div class="mui-col-xs-4 mui-col-sm-4">
+									<img class="good_img" src="img_tmp/favorites_good_pic1.png"/>
+								</div> 
+								<div class="mui-col-xs-8 mui-col-sm-8 good_detail">
+										<p class="good_name">德国进口（Eichbaum） 爱士堡小麦黑啤 500ml*24 听</p>
+										<p class="good_standard_des">
+											规格：24听/箱
+											<span  class="mui-pull-right"><span class="num_plus">×</span>
+												<span class="mui-icon mui-icon-minus mui-hidden" id="shop_2_good_3_minus"></span>
+												<span class="good_num" id="shop_2_good_3_num">1</span>
+												<span class="mui-icon mui-icon-plus mui-hidden" id="shop_2_good_3_plus"></span>
+											</span>
+										</p>
+										<p>￥<span class="good_price" id="shop_2_good_3_price">119.00</span></p>
+								</div>
+							</div>			
+						</label>
+						<input name="select_good" shop_id='shop_2' id="shop_2_good_3_select" type="checkbox" >
+					</div>
+				</form>-->
+			</div>
+			<div style="height: 1px;"></div>
+		</div>
+
+		<nav id="state_block" class="mui-bar mui-bar-tab mui-row">
+			<div class="mui-input-row mui-checkbox mui-left mui-col-sm-5 mui-col-xs-5" style="padding-top:7px;">
+				<label>全选
+				<input id="chebox" name="select_all" type="checkbox" style="padding-top:9px;"></label>
+			</div>
+			<div class="mui-col-sm-4 mui-col-xs-4" style="text-align: right;" id="total_fee">
+				<div id="">
+					<span style="font-size:12px;color:#4a4a4a;position:relative;top:1px;">合计:</span>
+					<span class='good_price' style="position:relative;top:5px;">￥<span id="all_price">0.00</span></span>
+				</div>
+				<div style="font-size:12px;color:#9b9b9b;">
+					不含运费
+				</div>
+			</div>
+			<div class="mui-col-sm-3 mui-col-xs-3" style="text-align: right;padding-right: 10px;" id="buy_now">
+				<button class="mui-btn mui-btn-warning">结算</button>
+			</div>
+			<div id="btn_delete" class="mui-hidden">
+				<img id="delete_btn" style="height: 100%;" src="images/delete.png" class="mui-pull-right" />
+			</div>
+		</nav>
+
+	</body>
+
+</html>
+<script>
+	mui.init();
+	
+	var is_first=true;		
+	var pullOj=null;
+	var cartList = [];
+	mui(document.getElementById("pull_to_refresh")).pullToRefresh({
+		down: {
+			callback: function() {
+				pullOj = this;
+				getGoodList();
+			}
+		}
+	});
+	
+	function preloadPage(){
+		mui.preload({
+			url: 'view_0003_login.html',
+			id: 'view_0003_login.html'
+		});
+		mui.preload({
+			url: 'view_0003_good_buy.html',
+			id: 'view_0003_good_buy.html'
+		}
+		);
+	}
+	
+	mui('.mui-scroll-wrapper').scroll();
+	
+	mui.plusReady(function(){
+		var view = plus.webview.currentWebview();
+		view.addEventListener("show", function(e) {
+			console.log("Webview Showed：" + view.id);
+			plus.nativeUI.showWaiting();
+			preloadPage();
+			if(is_first) {
+				is_first=false;			
+			}
+			getGoodList();
+			plus.nativeUI.closeWaiting();
+			if(!isLogin()){
+				gotoPage('view_0003_login.html');
+				return;
+			}
+			cartList = []
+		}, false);
+
+		
+	document.getElementById('all_edit').addEventListener('tap', function() {
+		if(document.getElementById('all_edit').innerHTML == '编辑') {
+			document.getElementById('all_edit').innerHTML = '完成';
+			document.getElementById('btn_delete').classList.remove('mui-hidden');
+			document.getElementById('buy_now').classList.add('mui-hidden');
+			document.getElementById('total_fee').classList.add('mui-hidden');
+
+			mui(".mui-icon-minus").each(function() {
+				var id=this.getAttribute('id');
+				if(!document.getElementById(id.replace('minus','status'))){//未失效
+					this.classList.remove('mui-hidden');
+				}
+			});
+			mui(".mui-icon-plus").each(function() {
+				var id=this.getAttribute('id');
+				if(!document.getElementById(id.replace('plus','status'))){//未失效
+					this.classList.remove('mui-hidden');
+				}
+			});
+			mui(".num_plus").each(function() {
+				this.classList.add('mui-hidden');
+			});
+		} else {
+			document.getElementById('all_edit').innerHTML = '编辑';
+			document.getElementById('btn_delete').classList.add('mui-hidden');
+			document.getElementById('buy_now').classList.remove('mui-hidden');
+			document.getElementById('total_fee').classList.remove('mui-hidden');
+
+			mui(".mui-icon-minus").each(function() {
+				this.classList.add('mui-hidden');
+			});
+			mui(".mui-icon-plus").each(function() {
+				this.classList.add('mui-hidden');
+			});
+			mui(".num_plus").each(function() {
+				this.classList.remove('mui-hidden');
+			});
+			updatePrice();
+		}
+	});
+
+	document.getElementById("btn_delete").addEventListener('tap', function() {
+		if(cartList == []){
+			plus.ui.toast('请选择需要删除的商品~');	
+			return false;
+		}
+		plus.nativeUI.confirm("确定删除选择的商品?", function(e) {
+			console.log(cartList)
+			var authToken = plus.storage.getItem('authToken');
+			mui.ajax(SERVER_HOST + 'order/del-cart', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken:authToken,
+				cids:cartList.join(','),
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				if(pullOj&&pullOj.loading) {
+					pullOj.endPullDownToRefresh();
+				}
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					plus.ui.toast(data.msg);			
+					cartList = [];
+				} else {
+					if("authToken错误" == data.msg) {
+						gotoPage('view_0003_login.html');
+						return;
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				if(pullOj&&pullOj.loading) {
+					pullOj.endPullDownToRefresh();
+				}
+				plus.ui.toast("网络请求超时");
+			}
+		});
+			if(e.index == 0) {
+				mui("input[type='checkbox']").each(function() {
+					if(this.checked && (this.name == 'select_shop' || this.name == 'select_good')) {
+						this.parentNode.parentNode.removeChild(this.parentNode);
+					}
+				});
+				updatePrice();
+			}
+		}, "", ["确定", "取消"]);
+
+	});
+
+	document.getElementById('buy_now').addEventListener('tap', function() {
+		console.log(cartList);
+		if(cartList.join() == ''){
+			plus.ui.toast('请选择需要购买的商品~');	
+			return false;
+		}
+		var authToken = plus.storage.getItem('authToken');
+		
+		mui.ajax(SERVER_HOST + 'order/place-order-by-cart', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+				authToken: authToken,
+				cids:cartList.join(','),
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				if(pullOj&&pullOj.loading) {
+					pullOj.endPullDownToRefresh();
+				}
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					plus.ui.toast(data.msg);
+					var good_buy=plus.webview.getWebviewById('view_0003_good_buy.html');
+					mui.fire(good_buy,'refreshData',{
+						data_good:data.data,
+						cids:cartList.join(','),
+					});
+					good_buy.show('pop-in');
+					cartList = [];
+					
+				} else {
+					if("authToken错误" == data.msg) {
+						gotoPage('view_0003_login.html');
+						return;
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				if(pullOj&&pullOj.loading) {
+					pullOj.endPullDownToRefresh();
+				}
+				console.log(JSON.stringify(xhr));
+				plus.ui.toast("网络请求超时");
+			}
+		});
+		
+
+	});
+	
+	
+	mui('.mui-checkbox').on('tap', '.shop_name', function(e) {
+		e.stopPropagation();
+		console.log('sss');
+	});
+	mui('.mui-checkbox').on('tap', '.good_detail', function(e) {
+		e.stopPropagation();
+	});
+
+	mui('body').on('tap', '.mui-icon-minus', function(e) {
+		e.stopPropagation();
+		var id = this.getAttribute('id');
+		var cid = this.getAttribute('cid');
+		goodsNumChange(id,cid,-1);
+	});
+
+	mui('body').on('tap', '.mui-icon-plus', function(e) {
+		e.stopPropagation();
+		var id = this.getAttribute('id');
+		var cid = this.getAttribute('cid');
+		goodsNumChange(id,cid,1);
+	});
+
+	mui('.good_standard_des').on('tap', '.good_num', function(e) {
+		if(document.getElementById('all_edit').innerHTML == '完成') { //编辑状态
+			e.stopPropagation();
+			var et_to_edit = this;
+			layerOpen({
+				"title": "请输入购买数量",
+				"content": "<input id='good_num_tobuy' type='number' value='" + et_to_edit.innerText + "'/>",
+				"btn": ["取消", "确定"],
+				"event": [null, function() {
+					var et = document.getElementById("good_num_tobuy");
+					if(et.value) {
+						et_to_edit.innerText = et.value;
+						var id = et_to_edit.getAttribute('id');
+						var select_em = document.getElementById(id.replace('num', 'select'));
+						if(select_em.checked) {
+							updatePrice();
+						}
+					}
+				}]
+			});
+		}
+	});
+	
+	mui('body').on('change', 'input', function() {
+		var is_checked = this.checked;
+		console.log(this.name);
+		
+		if(this.name == 'select_all') {
+			console.log('select_all');
+			cartList = [];
+			mui("input[name='select_shop']").each(function() {
+				this.checked = is_checked;
+			});
+			mui("input[name='select_good']").each(function() {
+				this.checked = is_checked;
+				var cid = this.getAttribute('cid');
+				if(this.checked == true){
+					cartList.push(this.getAttribute('cid'));
+				}else{
+					removeByValue(cartList,this.getAttribute('cid'))
+				}
+			});
+		} else if(this.name == 'select_shop') {
+			var shop_id = this.getAttribute('shop_id');
+			mui("input[name='select_good']").each(function() {
+				if(this.getAttribute('shop_id') == 'shop_' + shop_id) {
+					this.checked = is_checked;
+					var cid = this.getAttribute('cid');
+					if(this.checked == true){
+						if(this.getAttribute('cid') == cid){
+							var is_cart = true;
+							mui.each(cartList,function(index,cart){
+								if(this.getAttribute('cid') == cart){
+									return is_cart = false;
+								}
+							})
+							if(is_cart){
+								cartList.push(this.getAttribute('cid'));
+							}
+						}
+					}else{
+						if(this.getAttribute('cid') == cid){
+							removeByValue(cartList,this.getAttribute('cid'))
+						}
+					}
+				}
+			});
+			
+			var cart_all_selected = true;
+			mui("input[name='select_shop']").each(function() {
+				if(!this.checked) {
+						cart_all_selected = false;
+				}
+			});
+			mui("input[name='select_all']").each(function() {
+				this.checked = cart_all_selected;
+			});
+		} else if(this.name == 'select_good') {
+			var shop_id = this.getAttribute('shop_id');
+			var shop_all_selected = true;
+			var all_selected = true;
+			mui("input[name='select_good']").each(function() {
+				if(this.getAttribute('shop_id') == shop_id) {
+					if(!this.checked) {
+						shop_all_selected = false;
+						all_selected = false;
+					}
+				}
+			});
+			mui("input[name='select_shop']").each(function() {
+				if(this.getAttribute('shop_id') == shop_id.replace('shop_', '')) {
+					this.checked = shop_all_selected;
+				}
+				if(!this.checked){
+					all_selected = false;
+				}
+			});
+			mui("input[name='select_all']").each(function() {
+				this.checked = all_selected;
+			});
+			var cid = this.getAttribute('cid');
+			if(this.checked == true){
+				if(this.getAttribute('cid') == cid){
+					cartList.push(this.getAttribute('cid'));
+				}
+			}else{
+				if(this.getAttribute('cid') == cid){
+					removeByValue(cartList,this.getAttribute('cid'))
+				}
+			}
+			
+		}
+		updatePrice();
+				console.log(this.checked);
+	});
+		
+});
+
+	function removeByValue(arr, val) {
+	  for(var i=0; i<arr.length; i++) {
+	    if(arr[i] == val) {
+	      arr.splice(i, 1);
+	      break;
+	    }
+	  }
+	}
+
+	function updatePrice() {
+		var all_price = 0;
+		mui("input[name='select_good']").each(function() {
+			if(this.checked) {
+				var id = this.getAttribute('id');
+				if(document.getElementById(id.replace('select', 'status'))){//已失效
+					return;
+				}
+				var price = parseFloat(document.getElementById(id.replace('select', 'price')).innerText);
+				var num = parseInt(document.getElementById(id.replace('select', 'num')).innerText);
+				console.log(id.replace('select', 'price'));
+				if(price && num) {
+					all_price = all_price + price * num;
+				}
+
+			}
+		});
+
+		document.getElementById("all_price").innerText = all_price.toFixed(2);
+	}
+
+	function gotoPage(url) {
+		mui.openWindow({
+			url: url,
+			id: url,
+			show: {
+				aniShow: 'pop-in'
+			}
+		});
+	}
+	
+	var isLogin = function(){
+		var authToken = plus.storage.getItem('authToken');
+		var hx_account = plus.storage.getItem('hx_account');
+			if(!hx_account||!authToken){
+				return false;
+			}else{
+				return true;
+			}
+	}
+	
+	function goodsNumChange(id,cid,count){
+		var numEm = '';
+		if(count == 1){
+			numEm = document.getElementById(id.replace('plus', 'num'));
+		}else{
+			numEm = document.getElementById(id.replace('minus', 'num'));
+		}
+		
+		var num = parseInt(numEm.innerText);
+		if(num && num + count > 0) {
+			num = num + count;
+			var authToken = plus.storage.getItem('authToken');
+			mui.ajax(SERVER_HOST + 'order/modify-cart-num', {
+				data: {
+					time: TIME,
+					token: TOKEN,
+					cid: cid,
+					num: num,
+					authToken: authToken
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为5秒；
+				success: function(data) {
+					console.log(JSON.stringify(data));
+					if(data.status == 1) {
+						numEm.innerText = num;
+					}else{
+						if("authToken错误" == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							plus.ui.toast(data.msg);
+						}
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					if(pullOj&&pullOj.loading) {
+						pullOj.endPullDownToRefresh();
+					}
+					plus.ui.toast("网络请求超时");
+				}
+			});	
+		}
+		
+	}
+	
+	function getGoodList(){
+		var authToken = plus.storage.getItem('authToken');
+		
+		mui.ajax(SERVER_HOST + 'order/cart-list', {
+			data: {
+				time: TIME,
+				token: TOKEN,
+//				phone: u_phone,
+				authToken: authToken
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为5秒；
+			success: function(data) {
+				if(pullOj&&pullOj.loading) {
+					pullOj.endPullDownToRefresh();
+				}
+				console.log(JSON.stringify(data));
+				if(data.status == 1) {
+					parseData_GoodsList(data.data)
+					
+				}else{
+					if("authToken错误" == data.msg) {
+						gotoPage('view_0003_login.html');
+						return;
+					} else {
+						plus.ui.toast(data.msg);
+					}
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				if(pullOj&&pullOj.loading) {
+					pullOj.endPullDownToRefresh();
+				}
+				plus.ui.toast("网络请求超时");
+			}
+		});
+	}
+	
+	function parseData_GoodsList(data){
+		console.log(JSON.stringify(data.carts));
+		var goodsList = document.getElementById('pull_to_refresh');
+		var content = '';
+			var div=document.createElement('div');
+		if(data.carts.length>0){
+			
+			content = content + '<form class="mui-input-group mui-card ">';
+			for(var i=0;i<data.carts.length;i++){
+				content = content + '<div class="mui-input-row mui-checkbox mui-left">'+
+									'<label>'+
+									'<p><span class="shop_name">'+data.carts[i].shop_name+'</span></p>'+
+									'</label>'+
+									'<input name="select_shop" shop_id="'+data.carts[i].shop_id+'" type="checkbox">'+
+									'</div>';
+				if(data.carts[i].goods.length>0){
+					for(var j=0;j<data.carts[i].goods.length;j++){
+						content = content + '<div class="mui-input-row mui-checkbox mui-left" id="good_item">'+
+											'<label>'+
+											'<div class="mui-row">'+
+											'<div class="mui-col-xs-4 mui-col-sm-4">'+
+											'<img class="good_img" src="'+(staticUrl+data.carts[i].goods[j].goods_thumb)+'"/>'+
+											'</div>'+
+											'<div class="mui-col-xs-8 mui-col-sm-8 good_detail" style="padding:6px">'+
+											'<p class="good_name">'+data.carts[i].goods[j].goods_name+'</p>'+
+											'<p class="good_standard_des">'+
+											'规格：'+data.carts[i].goods[j].propertyTags+
+											'<span  class="mui-pull-right"><span class="num_plus">×</span>'+
+											'<span class="mui-icon mui-icon-minus mui-hidden" cid="'+data.carts[i].goods[j].cid+'" id="shop_'+data.carts[i].shop_id+'_good_'+data.carts[i].goods[j].gid+'_minus"></span>'+
+											'<span class="good_num" id="shop_'+data.carts[i].shop_id+'_good_'+data.carts[i].goods[j].gid+'_num">'+data.carts[i].goods[j].num+'</span>'+
+											'<span class="mui-icon mui-icon-plus mui-hidden" cid="'+data.carts[i].goods[j].cid+'" id="shop_'+data.carts[i].shop_id+'_good_'+data.carts[i].goods[j].gid+'_plus"></span>'+
+											'</span>'+
+											'</p>'+
+											'<p style="color:#ffb100;font-size:20px">￥<span class="good_price" id="shop_'+data.carts[i].shop_id+'_good_'+data.carts[i].goods[j].gid+'_price">'+data.carts[i].goods[j].price+'</span>'+
+//										'<span class="multi_buy mui-pull-right">团</span>'+
+											'</p>'+
+											'</div>'+
+											'</div>'+	
+											'</label>'+
+											'<input name="select_good"  cid="'+data.carts[i].goods[j].cid+'" shop_id="shop_'+data.carts[i].shop_id+'" id="shop_'+data.carts[i].shop_id+'_good_'+data.carts[i].goods[j].gid+'_select" type="checkbox">'+
+											'</div>';
+						}
+				}
+			}
+			content = content+'</form>';
+		}else{
+			content = '<div id="shopping_car_empty" class="mui-hidden">'+
+					'<img src="images/shopping_car_empt.png"/>'+
+					'<div class="shopping_car_empty_text">购物车里空空如也</div>'+
+					'<div id="btn_shoppingcar_add">去添加</div>'+
+					'</div>';
+		}
+		console.log(content)
+		div.innerHTML = content;
+		goodsList.innerHTML = content;
+
+	}
+	
+</script>
+<script src="js/immersed.js"></script>

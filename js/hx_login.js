@@ -1,0 +1,125 @@
+
+var conn;
+
+function initHX(callBack,user){
+	if(conn){
+		console.log('1')
+		return conn;
+	}else{
+			conn = new WebIM.connection({
+			    https: WebIM.config.https,
+			    url: WebIM.config.xmppURL,
+			    isAutoLogin: WebIM.config.isAutoLogin,
+			    isMultiLoginSessions: WebIM.config.isMultiLoginSessions
+			});
+			
+			var hx_account = plus.storage.getItem('hx_account');
+			console.log(hx_account);
+			if(hx_account){
+				var options = { 
+							apiUrl: WebIM.config.apiURL,
+							user: hx_account,
+							pwd: 'sx123456',
+							appKey: WebIM.config.appkey
+						};
+						conn.open(options);
+			}
+			
+			conn.listen({
+		    onOpened: function ( message ) {          //连接成功回调
+		    		console.log(JSON.stringify(message));
+		    		conn.setPresence();
+		    },
+	    	    onClosed: function ( message ) {console.log('onClosed:'+JSON.stringify(message));},         //连接关闭回调
+		    onTextMessage: function ( message ) {
+		    		console.log(JSON.stringify(message));
+		    		var arr = [];
+		    		var is_self = true;
+		    		if(user == 'self'){
+		    			is_self = false;
+		    		}
+		if(plus.storage.getItem("messageList")){
+			arr = JSON.parse(plus.storage.getItem("messageList"));
+		}
+		console.log(plus.storage.getItem("messageList"))
+		var msg_content = JSON.parse(message.data);
+		if(arr.length>0){
+		    			for(var i=0;i<arr.length;i++){
+			    			if(arr[i].fromName == message.from){
+			    				arr[i].content.push({
+			    					text:msg_content.msg,
+			    					avatar:msg_content.avatar,
+			    					from:message.from,
+			    					to:message.to,
+			    					id:message.id,
+			    					time:date(),
+			    					is_new:is_self,
+			    				});
+			    			}else{
+			    				var data = {
+			    					fromName:message.from,
+			    					content:[],
+			    				}
+			    				data.content.push({
+			    					text:msg_content.msg,
+			    					avatar:msg_content.avatar,
+			    					from:message.from,
+			    					to:message.to,
+			    					id:message.id,
+			    					time:date(),
+			    					is_new:is_self,
+			    				});
+			    				arr.push(data);
+			    			}
+			    		}
+		    		}else{
+		    			var data = {
+	    					fromName:message.from,
+	    					content:[],
+	    				}
+	    				data.content.push({
+	    					text:msg_content.msg,
+	    					avatar:msg_content.avatar,
+	    					from:message.from,
+	    					to:message.to,
+	    					id:message.id,
+		    				time:date(),
+		    				is_new:is_self,
+	    				});
+	    				arr.push(data);
+		    		}
+		    		 plus.storage.setItem("messageList",JSON.stringify(arr));
+		    		callBack(message);
+		    },    //收到文本消息
+		    onEmojiMessage: function ( message ) {console.log('onEmojiMessage:'+JSON.stringify(message));},   //收到表情消息
+		    onPictureMessage: function ( message ) {console.log('onPictureMessage:'+JSON.stringify(message));}, //收到图片消息
+		    onCmdMessage: function ( message ) {console.log('onCmdMessage:'+JSON.stringify(message));},     //收到命令消息
+		    onAudioMessage: function ( message ) {console.log('onAudioMessage:'+JSON.stringify(message));},   //收到音频消息
+		    onLocationMessage: function ( message ) {console.log('onLocationMessage:'+JSON.stringify(message));},//收到位置消息
+		    onFileMessage: function ( message ) {console.log('onFileMessage:'+JSON.stringify(message));},    //收到文件消息
+		    onVideoMessage: function ( message ) {console.log('onVideoMessage:'+JSON.stringify(message));},   //收到视频消息
+		    onPresence: function ( message ) {console.log('onPresence:'+JSON.stringify(message));},       //收到联系人订阅请求、处理群组、聊天室被踢解散等消息
+		    onRoster: function ( message ) {console.log('onRoster:'+JSON.stringify(message));},         //处理好友申请
+		    onInviteMessage: function ( message ) {console.log('onInviteMessage:'+JSON.stringify(message));},  //处理群组邀请
+		    onOnline: function (message) {console.log('onOnline:'+JSON.stringify(message));},                  //本机网络连接成功
+		    onOffline: function (message) {console.log('onOffline:'+JSON.stringify(message));},                 //本机网络掉线
+		    onError: function ( message ) {
+		    	console.log('onError:'+JSON.stringify(message));
+		    },          //失败回调
+		    onBlacklistUpdate: function (list) {       //黑名单变动
+		        // 查询黑名单，将好友拉黑，将好友从黑名单移除都会回调这个函数，list则是黑名单现有的所有好友信息
+		        console.log(list);
+		    }
+      
+	});
+		return conn;
+		
+	}
+}
+function date(){
+    var d = new Date();
+    var Hours = d.getHours(); // 获取当前小时数(0-23)
+    var Minutes = d.getMinutes(); // 获取当前分钟数(0-59)
+    var Seconds = d.getSeconds() ;// 获取当前秒数(0-59)
+    return (Hours < 10 ? '0' + Hours : Hours) + ':' + (Minutes < 10 ? '0' + Minutes : Minutes) + ':' + (Seconds < 10 ? '0' + Seconds : Seconds) + ' '
+  }

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>地址管理</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		
+		<style>
+			.address_name_phone {
+				font-size: 14px;
+				color: #2a2a2a;
+			}
+			.default_address_text{
+				font-size:12px;
+				color:#ffb100;
+				float: right;
+			}
+			.default_address_setbtn{
+				font-size:12px;
+				color:#c6c6c6;
+				float: right;
+			}
+			.address_edit{
+				font-size:12px;
+				color:#c6c6c6;
+				float: right;
+				margin-right: -50px;
+			}
+			.address_text{
+				font-size:12px;
+				color:rgba(0,0,0,0.48);
+				padding-right: 50px;
+			}
+			.address_name{
+				width: 80px;
+				display:inline-block;
+				 
+			}
+			.list_null{
+				font-size:18px;
+				line-height:24px;
+				height: 24px;
+				color:rgba(0,0,0,0.48);
+				text-align: center;
+				background-color: #efeff4;
+			}
+			.default_address_text,.default_address_setbtn{
+				font-size:.9rem;
+			}
+			.address_edit{
+				font-size:.9rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>地址管理</b></h1>
+			<a id="btn_add_address" class="mui-btn mui-btn-link mui-pull-right" style="color: white;">新增</a>
+		</header>
+		<div class="mui-content">
+			<div>
+				<ul id="addr_list" class="mui-table-view">
+					<div class="list_null">加载中...</div>
+					<!--<li class="mui-table-view-cell">
+						<div class="address_name_phone">
+							<span id="addr_name_1" class="address_name">收货人：陈海</span>
+							<span id="addr_phone_1">15502188888</span>
+							<span addr_id="1" class="default_address_text">默认</span>
+						</div>
+						<div class="address_text">收货地址：
+							<span id="addr_province_1">上海市</span>
+							<span id="addr_city_1">上海市</span>
+							<span id="addr_district_1">黄浦区</span>
+							<span id="addr_detail_1">老西门街道陆家浜路1139号 六角大楼写字楼409室</span>
+							<span addr_id="1" class="address_edit">修改</span>
+						</div>
+						
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="address_name_phone">
+							<span class="address_name">收货人：陈海洋</span>
+							<span >15502188888</span>
+							<span class="default_address_setbtn" id="addr_2">设为默认</span>
+						</div>
+						<div class="address_text">收货地址：上海市黄浦区老西门街道陆家浜路1139号 六角大楼写字楼409室</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="address_name_phone">
+							<span class="address_name">收货人：诸葛孔明</span>
+							<span >15502188888</span>
+							<span class="default_address_setbtn" id="addr_3">设为默认</span>
+						</div>
+						<div class="address_text">收货地址：上海市黄浦区老西门街道陆家浜路1139号 六角大楼写字楼409室</div>
+					</li>-->
+				</ul>
+			</div>
+		</div>
+	</body>
+
+</html>
+<script>
+
+	mui.init({
+	  gestureConfig:{
+	   longtap: true, //默认为false
+	  }
+	});
+
+	var is_select=false;//是否选择地址
+	function gotoPage(url){
+		mui.openWindow({
+		    url:url,
+		    id:url,
+		    show:{
+		      aniShow:'pop-in'
+		    }
+		});
+	}
+	
+	
+	mui.plusReady(function(){
+		view=plus.webview.currentWebview();
+		view.addEventListener("show", function(e){
+		    console.log( "Webview Showed："+view.id );
+		    getAddressList();
+		    mui.preload({
+				url:'view_0009_address_add.html',
+				id:'view_0009_address_add.html'
+			});
+			mui.preload({
+				url:'view_0009_address_edit.html',
+				id:'view_0009_address_edit.html'
+			});
+			mui.preload({
+				url:'view_0006_pointmarket_buy.html',
+				id:'view_0006_pointmarket_buy.html'
+			});
+			mui.preload({
+				url: 'view_0003_login.html',
+				id: 'view_0003_login.html'
+			});
+		});
+		document.addEventListener('refreshList',getAddressList);
+		document.getElementById("btn_add_address").addEventListener('tap',function(){
+			gotoPage('view_0009_address_add.html');
+        });
+        
+		mui("body").on('tap','.default_address_setbtn',function(e){
+			e.stopPropagation();
+		    var old_defualt=document.getElementsByClassName("default_address_text")[0];
+		    setDefualtAddr(old_defualt,this);
+		});
+		
+		mui("body").on('tap','.addr_item',function(e){
+			e.stopPropagation();
+			var addr_item=this;
+			var addr_list_id=addr_item.querySelector('.address_edit').getAttribute('addr_list_id');
+			
+			var select_addr_url=plus.storage.getItem('select_addr_url');
+			if(select_addr_url!=null){
+				var wv=plus.webview.getWebviewById(select_addr_url);
+				mui.fire(wv,'refreshDataAddr',{
+					addr_name:document.getElementById("addr_name_"+addr_list_id).innerText,
+					addr_phone:document.getElementById("addr_phone_"+addr_list_id).innerText,
+					addr_province:document.getElementById("addr_province_"+addr_list_id).innerText,
+					addr_city:document.getElementById("addr_city_"+addr_list_id).innerText,
+					addr_district:document.getElementById("addr_district_"+addr_list_id).innerText,
+					addr_detail:document.getElementById("addr_detail_"+addr_list_id).innerText,
+					addr_list_id:addr_list_id,
+				});
+				mui.back();
+			}
+			
+		});
+		
+		mui("body").on('tap','.address_edit',function(e){
+			e.stopPropagation();
+			var addr_list_id=this.getAttribute('addr_list_id');
+			var wv=plus.webview.getWebviewById('view_0009_address_edit.html');
+			mui.fire(wv,'refreshData',{
+				addr_name_old:document.getElementById("addr_name_"+addr_list_id).innerText,
+				addr_phone_old:document.getElementById("addr_phone_"+addr_list_id).innerText,
+				addr_province_old:document.getElementById("addr_province_"+addr_list_id).innerText,
+				addr_city_old:document.getElementById("addr_city_"+addr_list_id).innerText,
+				addr_district_old:document.getElementById("addr_district_"+addr_list_id).innerText,
+				addr_detail_old:document.getElementById("addr_detail_"+addr_list_id).innerText,
+				addr_list_id:addr_list_id,
+			});
+			wv.show('pop-in');
+		});
+		
+		mui('body').on('longtap', '.mui-table-view-cell', function(e) {
+			var em_to_delete=this;
+			e.stopPropagation();
+			plus.nativeUI.confirm("确定删除此地址?", function(e) {
+				if(e.index == 0) {
+					var addr_list_id=em_to_delete.getAttribute('addr_list_id');
+					var authToken = plus.storage.getItem('authToken');
+			        var u_phone = plus.storage.getItem('u_phone');
+			        var time=Date.parse(new Date())/1000;
+					var token=CryptoJS.MD5('SenXi'+time).toString();
+			        mui.ajax(SERVER_HOST+'user/delete-address',{
+						data:{
+							time:TIME,
+							token:TOKEN,
+//							phone:u_phone,
+							authToken:authToken,
+							address_id:addr_list_id,
+//							name:document.getElementById("addr_name_"+addr_list_id).innerText,
+//							addressPhone:document.getElementById("addr_phone_"+addr_list_id).innerText,
+//							postcode:'000000',
+//							province:document.getElementById("addr_province_"+addr_list_id).innerText,
+//							city:document.getElementById("addr_city_"+addr_list_id).innerText,
+//							district:document.getElementById("addr_district_"+addr_list_id).innerText,
+//							detail:document.getElementById("addr_detail_"+addr_list_id).innerText
+						},
+						dataType:'json',//服务器返回json格式数据
+						type:'post',//HTTP请求类型
+						timeout:10000,//超时时间设置为5秒；
+						success:function(data){
+							console.log(JSON.stringify(data));
+							if(data.status==1){
+								em_to_delete.parentNode.removeChild(em_to_delete);
+								plus.ui.toast('删除成功');
+							}else{
+								if("authToken错误" == data.msg) {
+									gotoPage('view_0003_login.html');
+									return;
+								} else {
+									mui.toast(data.msg);
+								}
+							}
+						},
+						error:function(xhr,type,errorThrown){
+							plus.ui.toast("网络请求超时");
+						}
+					});
+				}
+			}, "", ["确定", "取消"]);
+		});
+		
+	});
+	
+	
+	function getAddressList(){
+		var authToken = plus.storage.getItem('authToken');
+            var u_phone = plus.storage.getItem('u_phone');
+            var time=Date.parse(new Date())/1000;
+			var token=CryptoJS.MD5('SenXi'+time).toString();
+            mui.ajax(SERVER_HOST+'user/address-list',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						parseData(data.data);
+					}else{
+						if("authToken错误" == data.msg) {
+							gotoPage('view_0003_login.html');
+							return;
+						} else {
+							mui.toast(data.msg);
+						}
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+	
+	function parseData(data){
+		var addr_id='';
+		var addr_list=document.getElementById("addr_list");
+		var html_str='';
+		if(data.length<1){
+			html_str='<div class="list_null">您尚未添加地址</div>';
+		}
+		for(var i = 0; i < data.length; i++) {
+			addr_id=data[i].address_id;
+			if(data[i].is_default==1){
+				html_str=html_str+'<li addr_list_id="'+addr_id+'" class="addr_item mui-table-view-cell">'+
+									'<div class="address_name_phone">收货人：'+
+										'<span id="addr_name_'+addr_id+'" class="address_name">'+data[i].uname+'</span>'+
+										'<span id="addr_phone_'+addr_id+'">'+data[i].mobile+'</span>'+
+										'<span addr_list_id="'+addr_id+'" class="default_address_text">默认</span>'+
+									'</div>'+
+									'<div class="address_text">收货地址：'+
+										'<span id="addr_province_'+addr_id+'">'+data[i].province+'</span>'+
+										'<span id="addr_city_'+addr_id+'">'+data[i].city+'</span>'+
+										'<span id="addr_district_'+addr_id+'">'+data[i].town+'</span>'+
+										'<span id="addr_detail_'+addr_id+'">'+data[i].street+'</span>'+
+										'<span addr_list_id="'+addr_id+'" class="address_edit">修改</span>'+
+									'</div>'+
+								'</li>';
+			}
+		}
+			for(var i = 0; i < data.length; i++) {
+				addr_id=data[i].address_id;
+				if(data[i].is_default!=1){
+					html_str=html_str+'<li addr_list_id="'+addr_id+'" class="addr_item mui-table-view-cell">'+
+									'<div class="address_name_phone">收货人：'+
+										'<span id="addr_name_'+addr_id+'" class="address_name">'+data[i].uname+'</span>'+
+										'<span id="addr_phone_'+addr_id+'">'+data[i].mobile+'</span>'+
+										'<span addr_list_id="'+addr_id+'" class="default_address_setbtn">设为默认</span>'+
+									'</div>'+
+									'<div class="address_text">收货地址：'+
+										'<span id="addr_province_'+addr_id+'">'+data[i].province+'</span>'+
+										'<span id="addr_city_'+addr_id+'">'+data[i].city+'</span>'+
+										'<span id="addr_district_'+addr_id+'">'+data[i].town+'</span>'+
+										'<span id="addr_detail_'+addr_id+'">'+data[i].street+'</span>'+
+										'<span addr_list_id="'+addr_id+'" class="address_edit">修改</span>'+
+									'</div>'+
+								'</li>';
+				}
+				
+			}
+			addr_list.innerHTML=html_str;
+	}
+	
+	function setDefualtAddr(old_emobj,new_emobj){
+		var addr_list_id=new_emobj.getAttribute('addr_list_id');
+//		console.log(addr_list_id)
+		
+	    var authToken = plus.storage.getItem('authToken');
+        var u_phone = plus.storage.getItem('u_phone');
+        var time=Date.parse(new Date())/1000;
+		var token=CryptoJS.MD5('SenXi'+time).toString();
+        mui.ajax(SERVER_HOST+'user/set-default-address',{
+			data:{
+				time:TIME,
+				token:TOKEN,
+				phone:u_phone,
+				authToken:authToken,
+				address_id:addr_list_id,
+//				name:document.getElementById("addr_name_"+addr_list_id).innerText,
+//				addressPhone:document.getElementById("addr_phone_"+addr_list_id).innerText,
+//				postcode:'000000',
+//				province:document.getElementById("addr_province_"+addr_list_id).innerText,
+//				city:document.getElementById("addr_city_"+addr_list_id).innerText,
+//				district:document.getElementById("addr_district_"+addr_list_id).innerText,
+//				detail:document.getElementById("addr_detail_"+addr_list_id).innerText
+			},
+			dataType:'json',//服务器返回json格式数据
+			type:'post',//HTTP请求类型
+			timeout:10000,//超时时间设置为5秒；
+			success:function(data){
+				console.log(JSON.stringify(data));
+				if(data.status==1){
+					getAddressList();
+//					old_emobj.setAttribute("class","default_address_setbtn");
+//				    old_emobj.innerText="设为默认";
+//				    new_emobj.setAttribute("class","default_address_text");
+//				    new_emobj.innerText="默认";
+				}else{
+					if("authToken错误" == data.msg) {
+						gotoPage('view_0003_login.html');
+						return;
+					} else {
+						mui.toast(data.msg);
+					}
+				}
+			},
+			error:function(xhr,type,errorThrown){
+				plus.ui.toast("网络请求超时");
+			}
+		});
+	}
+</script>
+<script src="js/immersed.js"></script>

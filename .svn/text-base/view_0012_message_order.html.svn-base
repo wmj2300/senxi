@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>系统消息</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script>
+			mui.init();
+		</script>
+		
+		<style>
+			.list_null{
+				text-align: center;
+				font-size:14px;
+				color:#4a4a4a;
+				margin: 10px;
+			}
+			.mui-card-header{
+				color: gray;
+				font-size: 14px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>订单消息</b></h1>
+		</header>
+		<div class="mui-content">
+			<div id="msg_list">
+				<div class="list_null">加载中...</div>
+				<!--<div class="mui-card">
+					<div class="mui-card-header">2016.12.30 12:00</div>
+					<div class="mui-card-content">
+						<div class="mui-card-content-inner">
+							您的订单17880635990已完成，感谢您对我们的支持
+						</div>
+					</div>
+				</div>
+				<div class="mui-card">
+					<div class="mui-card-header">2016.12.30 12:00</div>
+					<div class="mui-card-content">
+						<div class="mui-card-content-inner">
+							您的订单17880635990已完成，感谢您对我们的支持
+						</div>
+					</div>
+				</div>
+				<div class="mui-card">
+					<div class="mui-card-header">2016.12.30 12:00</div>
+					<div class="mui-card-content">
+						<div class="mui-card-content-inner">
+							您的订单17880635990已完成，感谢您对我们的支持
+						</div>
+					</div>
+				</div>-->
+			</div>
+		</div>
+	</body>
+	
+</html>
+<script>
+	function gotoPage(url){
+		mui.openWindow({
+		    url:url,
+		    id:url,
+		    show:{
+		      aniShow:'pop-in'
+		    }
+		});
+	}
+	function preloadPage(){
+		mui.preload({
+			url:'view_0014_coupon_dateout.html',
+			id:'view_0014_coupon_dateout.html'
+		});
+		mui.preload({
+			url:'view_0014_coupon_useinfo.html',
+			id:'view_0014_coupon_useinfo.html'
+		});
+	}
+
+	mui.plusReady(function(){
+			var view=plus.webview.currentWebview();
+			view.addEventListener("show", function(e){
+			    console.log( "Webview Showed："+view.id );
+			    preloadPage();
+			    getMessageList()
+			}, false );
+	});
+	
+	function getMessageList(){
+		var authToken = plus.storage.getItem('authToken');
+            data_dgra={
+					time:TIME,
+					token:TOKEN,
+					authToken:authToken,
+				}
+            
+            console.log(JSON.stringify(data_dgra));
+            mui.ajax(SERVER_HOST+'user/order-message',{
+				data:data_dgra,
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						parseData(data)
+					}else{
+						if("authToken错误" == data.msg) {
+								gotoPage('view_0003_login.html');
+								return;
+						} else {
+							mui.toast(data.msg);
+						}
+					}
+				},
+				error:function(xhr,type,errorThrown,data){
+					console.log(JSON.stringify(xhr))
+					plus.ui.toast("网络请求超时");
+				}
+			});
+	}
+
+	function parseData(data){
+		var coupon_list=document.getElementById("msg_list");
+		var html_str='';
+			if(data.data.length>0){
+				for(var i = 0; i < data.data.length; i++) {
+					html_str=html_str+'<div class="mui-card">'+
+					'<div class="mui-card-header">'+TimeToData(data.data[i].created_at)+'</div>'+
+					'<div class="mui-card-content">'+
+						'<div class="mui-card-content-inner">'+data.data[i].content+'</div>'+
+					'</div></div>';
+				}
+			}else{
+				html_str='<div class="list_null">系统消息为空</div>';
+			}
+			coupon_list.innerHTML=html_str;
+	}
+	
+	function TimeToData(time){
+		var date = new Date(time*1000);
+		Y = date.getFullYear() + '.';
+		M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '.';
+		D = date.getDate() < 10 ?'0'+date.getDate():date.getDate()+' ';
+		h = date.getHours() + ':';
+		m = date.getMinutes() + ':';
+		s = date.getSeconds(); 
+		return (Y+M+D+h+m+s);
+	}
+</script>
+<script src="js/immersed.js"></script>

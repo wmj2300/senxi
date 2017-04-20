@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>注册</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/const.js"></script>
+		<script src="js/md5.js"></script>
+		
+		<script>
+			mui.init();
+		</script>
+		<style>
+			
+			a:hover{
+				text-decoration: none;
+			}
+			.phone_pwd_div{
+				background:#ffffff;
+				border-radius:4px;
+				width:80%;
+				height:50px;
+				margin: 0px auto;
+				margin-top: 24px;
+				padding: 8px 0px;
+			}
+			#btn_sure{
+				width:80%;
+				margin: 0 auto;
+				margin-top: 56px;
+			}
+			#phone_input{
+				background: url(images/login_phone.png) no-repeat 10px;
+				padding-left: 30px;
+				border: 0px;
+			}
+			#pwd_input,#pwd_input_repeat{
+				background: url(images/login_pwd.png) no-repeat 10px;
+				padding-left: 30px;
+				border: 0px;
+			}
+			#verify_input{
+				padding-left: 30px;
+				border: 0px;
+				width: 60%;
+			}
+			.mui-btn-success{
+			    color: #fff;
+			    border: 1px solid #07985B;
+			    background-color: #07985B;
+			}
+			.mui-btn-success:enabled:active, .mui-btn-success.mui-active:enabled{
+			    color: #fff;
+			    border: 1px solid #06693F;
+			    background-color: #06693F;
+			}
+			.read_me{
+				width:80%;
+				margin: 0 auto;
+				margin-top: 24px;
+				font-size:17px;
+				color:#9b9b9b;
+			}
+			#user_agree_book{
+				color: #FEAF00;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #07985B;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="title" class="mui-title" style="color: white;"><b>忘记密码</b></h1>
+		</header>
+		<div class="mui-content">
+			<div class="phone_pwd_div">
+				<input id="phone_input" class="mui-input-clear" type="text" placeholder="请输入您的手机号" maxlength="11"/>
+			</div>
+			<div class="phone_pwd_div">
+				<input id="verify_input" class="mui-input-clear" type="text" placeholder="请输入验证码" maxlength="6"/>
+				<button id="btn_findpwd_getverify" class="mui-btn mui-btn-success">发送验证码</button>
+			</div>
+			<div class="phone_pwd_div">
+				<input id="pwd_input" class="mui-input-clear" type="password" placeholder="请输入您的密码" maxlength="20"/>
+			</div>
+			<div class="phone_pwd_div">
+				<input id="pwd_input_repeat" class="mui-input-clear" type="password" placeholder="确认您的密码" maxlength="20"/>
+			</div>
+			<button id="btn_sure" class="mui-btn mui-btn-warning mui-btn-block" onclick="return false;">确定</button>
+		</div>
+	</body>
+</html>
+
+<script>
+	function gotoPage(url){
+		mui.openWindow({
+		    url:url,
+		    id:url
+		});
+	}
+	
+	var countdown = 60;
+    function timedown(obj) {
+        if (countdown == 0) {
+            obj.removeAttribute("disabled");
+            obj.innerText = "获取验证码";
+            return clearTimeout();//清除定时，没有的话会导致后面每次减一越来越快
+        } else {
+            obj.setAttribute("disabled", true);
+            obj.innerText = "重新发送(" + countdown + ")";
+            countdown--;
+        }
+        setTimeout(function() {
+                timedown(obj);
+        }, 1000);//定时每秒减1
+    }
+    
+    
+	mui.plusReady(function(){
+		
+		document.getElementById('btn_sure').addEventListener('tap',function(){
+            var check_phone_number = /^1[3458]\d{9}$/;
+            var phone_input=document.getElementById("phone_input").value;
+            if (phone_input.length != 11 || !phone_input.match(check_phone_number)) {
+                plus.ui.toast("请输入有效的手机号！");
+                return;
+            }
+            var verify_input=document.getElementById("verify_input").value;
+            if(verify_input.length!=6){
+				plus.ui.toast("验证码长度为6");
+				return;
+			}
+            var pwd_input=document.getElementById("pwd_input").value;
+			if(pwd_input.length<6){
+				plus.ui.toast("密码长度不能小于6");
+				return;
+			}
+			var pwd_input_repeat=document.getElementById("pwd_input_repeat").value;
+			if(pwd_input_repeat!=pwd_input){
+				plus.ui.toast("两次密码不一样");
+				return;
+			}
+//			var time=Date.parse(new Date())/1000;
+//			var token=CryptoJS.MD5('SenXi'+time).toString();
+			mui.ajax(SERVER_HOST+'user/forget-password',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:'',
+					mobile:phone_input,
+					password:pwd_input,
+					code:verify_input
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					if(data.status==1){
+						plus.ui.toast(data.msg);
+						document.getElementById("phone_input").value='';
+						document.getElementById("verify_input").value='';
+						document.getElementById("pwd_input").value='';
+						document.getElementById("pwd_input_repeat").value='';
+						var url = plus.storage.getItem("login_will_goto_url");
+						if(url){
+							gotoPage(url);
+						}else{
+							mui.back();
+						}
+					}else{
+						plus.ui.toast(data.msg);
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+				}
+			});
+				
+		});
+		
+		document.getElementById('btn_findpwd_getverify').addEventListener('tap',function(){
+            var check_phone_number = /^1[3458]\d{9}$/;
+            var phone_input=document.getElementById("phone_input").value;
+            if (phone_input.length != 11 || !phone_input.match(check_phone_number)) {
+                plus.ui.toast("请输入有效的手机号！");
+                return;
+            }
+//          var time=Date.parse(new Date())/1000;
+//			var token=CryptoJS.MD5('SenXi'+time).toString();
+//			console.log("time:"+time+" token:"+token+" "+SERVER_HOST+'/api/app/v1/get-phone-code');
+            mui.ajax(SERVER_HOST+'user/send-sms',{
+				data:{
+					time:TIME,
+					token:TOKEN,
+					authToken:'',
+					mobile:phone_input,
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为5秒；
+				success:function(data){
+					console.log(JSON.stringify(data));
+					if(data.status==1){
+						plus.ui.toast(data.msg);
+					}else{
+						plus.ui.toast(data.msg);
+						countdown = 0;
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.ui.toast("网络请求超时");
+					countdown = 0;
+				}
+			});
+            countdown = 60;
+            timedown(this);
+		});
+		
+	});
+</script>
+<script src="js/immersed.js"></script>
